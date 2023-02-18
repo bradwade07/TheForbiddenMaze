@@ -14,4 +14,8 @@ Computing ID: tsa140
 
 Student Number: 301540828
 
+Name: Rahul Naterwala
 
+Computing ID: rna24
+
+Student Number: 301410108
