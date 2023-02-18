@@ -23,3 +23,10 @@ Computing ID: rna24
 Student Number: 301410108
 
 -----------------------------------
+Name: Josh L.
+
+Computing ID: jla797
+
+Student Number: 301472967
+
+----------------------------------
