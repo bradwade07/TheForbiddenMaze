@@ -1,5 +1,30 @@
-//Files
-.jar
+# IntelliJ IDEA
+.idea
+*.iml
+*.iws
 
-//Directories
-/Design/
+# Logs
+logs
+*.log
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# IntelliJ Plugin-specific files
+deploy/
+out/
+gen/
+*.png
+*.icns
+.idea-test
+
+# Other
+node_modules/
+.DS_Store
+.pdf
+.jar
