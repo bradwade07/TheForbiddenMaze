@@ -1,4 +1,4 @@
-package Entities;
+﻿package Entities;
 
 public class Player extends Entity implements DynamicEntity{
     private int hp;
