@@ -1,12 +1,19 @@
 ﻿package Entities;
 
+import Map.Point;
+
+/**
+ * Player class that represents the Player entity
+ * Class includes HP of the player and other dynamic entity
+ */
 public class Player extends Entity implements DynamicEntity{
     private int hp;
 //    TODO:
 //    private Spell currSpell;
 
-    Player(int x, int y){
-        super(x, y);
+
+    public Player(Point location){
+        super(location);
         hp = 100;
     }
 
@@ -31,9 +38,7 @@ public class Player extends Entity implements DynamicEntity{
     }
 
     @Override
-    public void move(int x, int y){
-        location.setX(x);
-        location.setY(y);
+    public void move(Point location) {
+        this.location = location;
     }
-
 }

@@ -6,6 +6,8 @@ package Map;
  * @author  Tawheed Sarker Aakash
  * */
 
+import Entities.Entity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,6 +38,15 @@ public class Maze {
 			maze[ROWS - 1][i].setCellType(CellType.wall);
 		}
 	}
+
+	// Static factory method to create maze
+	public static Maze generateRandomizedMaze(){
+		Maze maze = new Maze();
+		maze.createMaze();
+		return maze;
+	}
+
+
 	public void createMaze(){ //Using Randomized Prim's Algorithm to generate the maze
 		createCanvas();
 		List<Cell> neighborCells = new ArrayList<>();
@@ -183,12 +194,41 @@ public class Maze {
 		maze[x][y] = cell;
 	}
 
+	private boolean outOfRange(Point location){
+		int x = location.getX();
+		int y = location.getY();
+		boolean outOfRangeX = (x < 0) || (x >= ROWS);
+		boolean outOfRangeY = (y < 0) ||  (y >= COLS);
+		return (outOfRangeX || outOfRangeY);
+	}
+
+	public boolean isCellWall(Point location){
+		if(outOfRange(location)){
+			return false;
+		}
+		int x = location.getX();
+		int y = location.getY();
+
+		return (maze[x][y].getCellType() == CellType.wall);
+	}
+
+	public boolean isCellOpen(Point location){
+		if(outOfRange(location)){
+			return false;
+		}
+
+		int x = location.getX();
+		int y = location.getY();
+		return !(isCellWall(location));
+	}
+
+
 	//TODO: update based on entity package (4)
-//	public void setEntity(Entity entity){
-//		int x = entity.getLocation().getX();
-//		int y =  entity.getLocation().getY();
-//		maze[x][y].setEntity(entity);
-//	}
+	public void setEntity(Entity entity){
+		int x = entity.getLocation().getX();
+		int y =  entity.getLocation().getY();
+		maze[x][y].setEntity(entity);
+	}
 	public CellType getCellType(int x, int y){
 		return maze[x][y].getCellType();
 	}
