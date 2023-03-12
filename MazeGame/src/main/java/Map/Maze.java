@@ -1,13 +1,12 @@
-package Map;
 /**
  * A class that creates maze using Randomized Prim's Algorithm
  * @see {@link https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim's_algorithm} Maze
  *
  * @author  Tawheed Sarker Aakash
  * */
+package Map;
 
 import Entities.Entity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,8 +15,8 @@ public class Maze {
 	private Cell[][] maze;
 
 	//TODO: update ROWS and COLS based on screen ratio values
-	private final int ROWS = 15;
-	private final int COLS = 20;
+	private final int ROWS = 32;
+	private final int COLS = 18;
 
 	public Maze() {
 		this.maze = new Cell[ROWS][COLS];
@@ -91,34 +90,30 @@ public class Maze {
 			while(status){ //This loop chooses from 1 of the 4 neighboring cells of the chosen neighborCell and connects tries to connect back to the generated maze structure
 				choice2 = Math.abs( random.nextInt()) % 4;
 				switch (choice2) {
-					case 0: {
+					case 0 -> {
 						if ((currentCellLocation.getY() + 2 < COLS - 1) && maze[currentCellLocation.getX()][currentCellLocation.getY() + 2].getCellType().equals(CellType.path)) {
 							maze[currentCellLocation.getX()][currentCellLocation.getY() + 1].setCellType(CellType.path);
 							status = false;
 
 						}
-						break;
 					}
-					case 1:{
+					case 1 -> {
 						if ((currentCellLocation.getY() - 2 > 0) && maze[currentCellLocation.getX()][currentCellLocation.getY() - 2].getCellType().equals(CellType.path)) {
 							maze[currentCellLocation.getX()][currentCellLocation.getY() - 1].setCellType(CellType.path);
 							status = false;
 						}
-						break;
 					}
-					case 2:{
+					case 2 -> {
 						if ((currentCellLocation.getX() + 2 < ROWS - 1) && maze[currentCellLocation.getX() + 2][currentCellLocation.getY()].getCellType().equals(CellType.path)) {
 							maze[currentCellLocation.getX() + 1][currentCellLocation.getY()].setCellType(CellType.path);
 							status = false;
 						}
-						break;
 					}
-					case 3:{
+					case 3 -> {
 						if ((currentCellLocation.getX() - 2 > 0) && maze[currentCellLocation.getX() - 2][currentCellLocation.getY()].getCellType().equals(CellType.path)) {
 							maze[currentCellLocation.getX() - 1][currentCellLocation.getY()].setCellType(CellType.path);
 							status = false;
 						}
-						break;
 					}
 				}
 			}
@@ -149,7 +144,7 @@ public class Maze {
 				southNeighbor = null;
 			}
 
-			//this set of 4 if statements checks if the potential neighbors can be added by checking conditions required before adding
+			//this set of 4 if statements check if the potential neighbors can be added by checking conditions required before adding
 			if (northNeighbor != null && !northNeighbor.getCellType().equals(CellType.path)) {
 				if (!northNeighbor.getCellType().equals(CellType.wall) || !northNeighbor.getCellType().equals(CellType.barricade)) {
 					neighborCells.add(northNeighbor);
