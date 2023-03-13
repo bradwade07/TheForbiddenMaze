@@ -9,11 +9,9 @@ import State.Game;
  */
 public class Enemy extends Entity implements DynamicEntity{
 
-    private final Game gameManager;
 
-    Enemy(Game game, Point location){
+    Enemy(Point location){
         super(location);
-        this.gameManager = game;
     }
 
     @Override
