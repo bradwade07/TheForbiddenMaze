@@ -7,7 +7,7 @@ public class GameStart extends State{
 
     public GameStart() {
         super();
-        setNexState(NextState.gameStart);
+        setNexState(GameState.gameStart);
     }
 
     @Override

@@ -7,34 +7,37 @@ import Map.Point;
  * Class includes HP of the player and other dynamic entity
  */
 public class Player extends Entity implements DynamicEntity{
-    private int hp;
+    private int score;
 //    TODO:
 //    private Spell currSpell;
 
+    public int getScore() {
+        return score;
+    }
 
     public Player(Point location){
         super(location);
-        hp = 100;
+        score = 100;
     }
 
     // decrement hp by amt and return new HP
-    public int decrementHP(int amt){
-        hp -= amt;
+    public int decrementScore(int amt){
+        score -= amt;
         // cant let health go below 0
-        if (hp < 0){
-            hp = 0;
+        if (score < 0){
+            score = 0;
         }
-        return hp;
+        return score;
     }
 
     // increment hp by amt and return new HP
-    public int incrementHP(int amt){
-        hp += amt;
+    public int incrementScore(int amt){
+        score += amt;
         // cant overheal
-        if (hp > 100){
-            hp = 100;
+        if (score > 100){
+            score = 100;
         }
-        return hp;
+        return score;
     }
 
     @Override

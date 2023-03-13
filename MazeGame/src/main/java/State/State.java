@@ -1,7 +1,5 @@
 package State;
 
-import Map.Maze;
-
 /**
  * Master State class that handles the current state of gameplay
  */
@@ -11,7 +9,7 @@ public abstract class State {
 
 //    protected UI ui;
 
-    public NextState nexState;
+    public GameState nexState;
 
     public State(){
 
@@ -25,7 +23,7 @@ public abstract class State {
     }
 
 
-    public void setNexState(NextState nexState) {
+    public void setNexState(GameState nexState) {
         this.nexState = nexState;
     }
 }
