@@ -19,6 +19,9 @@ public class Maze {
 	private final int ROWS = 32;
 	private final int COLS = 18;
 
+	private Point exitCell;
+
+
 	public Maze() {
 		this.maze = new Cell[ROWS][COLS];
 	}
@@ -37,6 +40,28 @@ public class Maze {
 			maze[0][i].setCellType(CellType.wall);
 			maze[ROWS - 1][i].setCellType(CellType.wall);
 		}
+
+		// choose a random outer wall and set as exit cell
+		Random random = new Random();
+		int x = random.nextInt(ROWS);
+		random = new Random();
+		int y =random.nextInt(COLS);
+		random = new Random();
+		int side = random.nextInt(2);
+
+		switch(side){
+			case(0):
+				maze[x][0].setCellType(CellType.exit_cell);
+				exitCell = maze[x][0].getLocation();
+				break;
+			case(1):
+				maze[0][y].setCellType(CellType.exit_cell);
+				exitCell = maze[0][y].getLocation();
+				break;
+			default:
+				throw new RuntimeException("Maze.java createCanvas(): Exit cell not created");
+		}
+
 	}
 
 	// Static factory method to create maze
@@ -223,6 +248,11 @@ public class Maze {
 		int y = location.getY();
 		return maze[x][y].getEntity();
 	}
+
+	public Point getExitCell() {
+		return exitCell;
+	}
+
 	public void setEntity(Entity entity, Point location){
 		int x = location.getX();//entity.getLocation().getX();
 		int y =  location.getY();//entity.getLocation().getY();
@@ -238,4 +268,5 @@ public class Maze {
 		maze[x2][y2].setEntity(temp);
 
 	}
+
 }

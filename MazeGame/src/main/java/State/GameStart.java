@@ -5,14 +5,16 @@ package State;
  */
 public class GameStart extends State{
 
+
     public GameStart() {
         super();
-        setNexState(NextState.gameStart);
+        setNexState(GameState.gameStart);
     }
 
     @Override
     public void renderState() {
 
     }
+
 }
 

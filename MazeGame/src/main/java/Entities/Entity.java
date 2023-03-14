@@ -2,10 +2,11 @@ package Entities;
 
 import Map.Point;
 
-public abstract class Entity {
+public class Entity{
 
     protected EntityType entityType;
     protected Point location;
+
 
 
     public Entity(EntityType entityType, Point location){
@@ -28,4 +29,5 @@ public abstract class Entity {
     public void setLocation(Point location) {
         this.location = location;
     }
+
 }

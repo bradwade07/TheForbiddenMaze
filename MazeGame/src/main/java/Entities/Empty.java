@@ -2,24 +2,16 @@ package Entities;
 
 import Map.Point;
 
-public class Trap extends Entity{
+/**
+ * A enemy class that creates the enemy entity
+ * Enemies randomly move towards the player
+ */
+public class Empty extends Entity{
 
-    private boolean active;
-    private int damage;
+    //private final Game gameManager;
 
-    public Trap(EntityType entityType, Point location, int damage){
+    public Empty(EntityType entityType, Point location){
         super(entityType, location);
-        active = true;
-        this.damage = damage;
-    }
-
-    public void dealDamage(Player player){
-        active = false;
-        player.decrementScore(damage);
-    }
-
-    public boolean trapStatus(){
-        return active;
     }
 
     public EntityType getEntityType() {
@@ -37,5 +29,5 @@ public class Trap extends Entity{
     public void setLocation(Point location) {
         super.setLocation(location);
     }
-
 }
+

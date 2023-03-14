@@ -72,4 +72,5 @@ public class Point {
 		}
 		return new Point(newX,newY);
 	}
+
 }

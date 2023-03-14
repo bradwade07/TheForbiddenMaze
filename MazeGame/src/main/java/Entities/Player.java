@@ -8,17 +8,27 @@ import Map.Point;
  */
 public class Player extends Entity {
     private int score;
+    private boolean alive;
 //    TODO:
 //    private Spell currSpell;
 
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
     public Player(EntityType entityType, Point location){
         super(entityType,location);
         score = 100;
+        alive = true;
     }
 
     // decrement hp by amt and return new HP
-    public int decrementHP(int amt){
+    public int decrementScore(int amt){
         score -= amt;
         // cant let health go below 0
         if (score < 0){
@@ -28,7 +38,7 @@ public class Player extends Entity {
     }
 
     // increment hp by amt and return new HP
-    public int incrementHP(int amt){
+    public int incrementScore(int amt){
         score += amt;
         // cant overheal
         if (score > 100){
@@ -60,4 +70,5 @@ public class Player extends Entity {
     public void setLocation(Point location) {
         super.setLocation(location);
     }
+
 }

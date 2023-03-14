@@ -2,12 +2,12 @@ package Entities;
 
 import Map.Point;
 
-public class Cheese extends Entity{
+public class Reward extends Entity{
 
     private boolean active;
     private int score;
 
-    public Cheese(EntityType entityType, Point location, int score){
+    public Reward(EntityType entityType, Point location, int score){
         super(entityType, location);
         active = true;
         this.score = score;
@@ -15,7 +15,7 @@ public class Cheese extends Entity{
 
     public void obtainCheese(Player player){
         active = false;
-        player.incrementHP(score);
+        player.incrementScore(score);
     }
 
     public boolean cheeseStatus(){

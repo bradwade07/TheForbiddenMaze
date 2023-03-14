@@ -11,21 +11,22 @@ public abstract class State {
 
 //    protected UI ui;
 
-    public NextState nexState;
+    public GameState nexState;
 
-    public State(){
-
-    }
-
-    public void renderState(){
-
-    }
-    public void handleInput(){
+    public State() {
 
     }
 
+    public void renderState() {
 
-    public void setNexState(NextState nexState) {
+    }
+
+    public void handleInput() {
+
+    }
+
+
+    public void setNexState(GameState nexState) {
         this.nexState = nexState;
     }
 }

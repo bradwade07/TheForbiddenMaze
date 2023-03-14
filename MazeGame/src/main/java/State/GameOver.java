@@ -5,7 +5,7 @@ package State;
  */
 public class GameOver extends State{
     public GameOver() {
-        setNexState(NextState.gameOver);
+        setNexState(GameState.gameOver);
     }
 
     @Override
@@ -17,3 +17,4 @@ public class GameOver extends State{
 
     }
 }
+
