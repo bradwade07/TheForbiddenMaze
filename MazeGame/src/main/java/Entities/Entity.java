@@ -2,7 +2,7 @@ package Entities;
 
 import Map.Point;
 
-public class Entity implements DynamicEntity{
+public abstract class Entity {
 
     protected EntityType entityType;
     protected Point location;
