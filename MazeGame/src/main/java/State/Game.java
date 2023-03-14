@@ -17,18 +17,17 @@ public class Game {
 
     private Player player;
     private List<Enemy> enemyList = new ArrayList<>();
+    private List<Reward> rewardList = new ArrayList<>();
+    private List<Trap> trapList = new ArrayList<>();
     private Maze maze;
 
 
-    public void start(Stage stage, int enemyCount) {
+    public void start(Stage stage, int enemyCount, int rewardCount, int trapCount) {
 
         maze = Maze.generateRandomizedMaze();
         player = new Player(EntityType.player, new Point(1, 1));
-        for (int i = 0; i < enemyCount; i++) {
-            enemyGenerator();
-        }
+        entityGenrator(enemyCount,rewardCount,trapCount);
         placeEntitiesOnMap();
-
     }
 
     public void runGame() {
@@ -166,7 +165,7 @@ public class Game {
             Point newLocation = new Point(x, y);
             if (maze.isCellOpen(newLocation)) {
                 if (enemyList.size() == 0) {
-                    entityMaker(EntityType.enemy, newLocation);
+                    entityMaker(EntityType.enemy, newLocation, 0);
                     break;
                 } else {
                     boolean canPlace = true;
@@ -177,7 +176,61 @@ public class Game {
                         }
                     }
                     if (canPlace) {
-                        entityMaker(EntityType.enemy, newLocation);
+                        entityMaker(EntityType.enemy, newLocation, 0);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    public void entityGenrator(int enemyCount, int rewardCount, int trapCount){ //calls entityMaker and checks if the entity is placeable
+        List<Point> usedPoints = new ArrayList<>();
+        Random random;
+        int x, y;
+        Point newPoint;
+        while(enemyList.size()< enemyCount){
+            while(true){
+                random = new Random();
+                x = random.nextInt();
+                random = new Random();
+                y = random.nextInt();
+                newPoint = new Point(x,y);
+                for(int j = 0; j < usedPoints.size(); j++){
+                    if (!usedPoints.get(j).equals(newPoint)){
+                        entityMaker(EntityType.enemy, newPoint, 0);
+                        usedPoints.add(newPoint);
+                        break;
+                    }
+                }
+            }
+        }
+        while(rewardList.size()< rewardCount){
+            while(true){
+                random = new Random();
+                x = random.nextInt();
+                random = new Random();
+                y = random.nextInt();
+                newPoint = new Point(x,y);
+                for(int j = 0; j < usedPoints.size(); j++){
+                    if (!usedPoints.get(j).equals(newPoint)){
+                        entityMaker(EntityType.reward, newPoint, 0); //set to zero but planned to hardcode it
+                        usedPoints.add(newPoint);
+                        break;
+                    }
+                }
+            }
+        }
+        while(trapList.size()< trapCount){
+            while(true){
+                random = new Random();
+                x = random.nextInt();
+                random = new Random();
+                y = random.nextInt();
+                newPoint = new Point(x,y);
+                for(int j = 0; j < usedPoints.size(); j++){
+                    if (!usedPoints.get(j).equals(newPoint)){
+                        entityMaker(EntityType.trap, newPoint, 0);//set to zero but planned to hardcode it
+                        usedPoints.add(newPoint);
                         break;
                     }
                 }
@@ -185,10 +238,19 @@ public class Game {
         }
     }
 
-    public void entityMaker(EntityType entityType, Point location) {//has flexibility for cheese
+    public void entityMaker(EntityType entityType, Point location, int score) {
         if (entityType.equals(EntityType.enemy)) {
             Enemy newEnemy = new Enemy(EntityType.enemy, location);
             enemyList.add(newEnemy);
+        }
+        else if(entityType.equals((EntityType.reward))){
+            Reward newReward = new Reward(EntityType.reward, location, score);
+            rewardList.add(newReward);
+
+        }
+        else if(entityType.equals((EntityType.trap))){
+            Trap newTrap = new Trap(EntityType.trap, location, score);
+            trapList.add(newTrap);
         }
     }
 
