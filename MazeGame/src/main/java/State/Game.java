@@ -4,11 +4,9 @@ package State;
 import Entities.*;
 import Map.*;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Game class that handles all the gameplay
@@ -30,9 +28,6 @@ public class Game {
         placeEntitiesOnMap();
 
     }
-
-
-
 
     public void runGame() {
         boolean keepRunning = true;
@@ -96,7 +91,7 @@ public class Game {
 
     private void placeEntitiesOnMap() {
         maze.setEntity(player, player.getLocation());
-        for(int i =0; i < enemyList.size();i++){
+        for (int i = 0; i < enemyList.size(); i++) {
             maze.setEntity(enemyList.get(i), enemyList.get(i).getLocation());
         }
     }
@@ -149,24 +144,50 @@ public class Game {
         int expectedX = newLocation.getX();
         int expectedY = newLocation.getY();
 
-        maze.swapEntity(playerX,playerY,expectedX,expectedY);
-
+        maze.swapEntity(playerX, playerY, expectedX, expectedY);
 
     }
-//
+
     private boolean isPlayerMoveValid(MoveDirection move) {
         Point playerLocation = player.getLocation();
         return maze.isCellOpen(playerLocation.newMoveLocation(move));
     }
 
-
+//    public void enemyGenerator() {
+//        while (true) {
+//            Random random = new Random();
+//            int x = (Math.abs(random.nextInt()) % maze.getROWS() - 5) + 5;
+//            random = new Random();
+//            int y = (Math.abs(random.nextInt()) % maze.getCOLS() - 5) + 5;
+//            Point newLocation = new Point(x, y);
+//            if (maze.isCellOpen(newLocation)) {
+//                if (enemyList.size() == 0) {
+//                    entityMaker(EntityType.enemy, newLocation, 0);
+//                    break;
+//                } else {
+//                    boolean canPlace = true;
+//                    for (Enemy enemy : enemyList) {
+//                        if (enemy.getLocation().equals(newLocation)) {
+//                            canPlace = false;
+//                            break;
+//                        }
+//                    }
+//                    if (canPlace) {
+//                        entityMaker(EntityType.enemy, newLocation, 0);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//    }
 	private void entityGenerator(int enemyCount, int rewardCount, int trapCount){ //calls entityMaker and checks if the entity is placeable
 		List<Point> usedPoints = new ArrayList<>();
 		Random random;
 		int x, y;
 		Point newPoint;
 		while(enemyList.size()< enemyCount){
-			while(true){
+			boolean status = true;
+			while(status){
 				random = new Random();
 				x = random.nextInt();
 				random = new Random();
@@ -176,13 +197,15 @@ public class Game {
 					if (!usedPoints.get(j).equals(newPoint)){
 						entityMaker(EntityType.enemy, newPoint, 0);
 						usedPoints.add(newPoint);
+						status = false;
 						break;
 					}
 				}
 			}
 		}
 		while(rewardList.size()< rewardCount){
-			while(true){
+			boolean status = true;
+			while(status){
 				random = new Random();
 				x = random.nextInt();
 				random = new Random();
@@ -192,13 +215,15 @@ public class Game {
 					if (!usedPoints.get(j).equals(newPoint)){
 						entityMaker(EntityType.reward, newPoint, 0); //set to zero but planned to hardcode it
 						usedPoints.add(newPoint);
+						status = false;
 						break;
 					}
 				}
 			}
 		}
 		while(trapList.size()< trapCount){
-			while(true){
+			boolean status = true;
+			while(status){
 				random = new Random();
 				x = random.nextInt();
 				random = new Random();
@@ -208,6 +233,7 @@ public class Game {
 					if (!usedPoints.get(j).equals(newPoint)){
 						entityMaker(EntityType.trap, newPoint, 0);//set to zero but planned to hardcode it
 						usedPoints.add(newPoint);
+						status = false;
 						break;
 					}
 				}
@@ -284,6 +310,5 @@ public class Game {
         int oldY = entityLocation.getY();
         maze.swapEntity(oldX, oldY, oldX + addX, oldY + addY);
     }
-
 }
 
