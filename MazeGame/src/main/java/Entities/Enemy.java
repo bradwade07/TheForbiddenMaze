@@ -7,15 +7,28 @@ import State.Game;
  * A enemy class that creates the enemy entity
  * Enemies randomly move towards the player
  */
-public class Enemy extends Entity implements DynamicEntity{
+public class Enemy extends Entity{
 
+    //private final Game gameManager;
 
-    Enemy(Point location){
-        super(location);
+    public Enemy(EntityType entityType, Point location){
+        super(entityType, location);
     }
 
-    @Override
-    public void move(Point location) {
+    public EntityType getEntityType() {
+        return super.getEntityType();
+    }
 
+    public void setEntityType(EntityType entityType) {
+        super.setEntityType(entityType);
+    }
+
+    public Point getLocation() {
+        return super.getLocation();
+    }
+
+    public void setLocation(Point location) {
+        super.setLocation(location);
     }
 }
+

@@ -1,6 +1,6 @@
 package Map;
 
-import Entities.Entity;
+import Entities.*;
 
 /**
  * A class that creates the cells for the maze
@@ -10,7 +10,6 @@ import Entities.Entity;
 public class Cell {
 	private Point location;
 	private CellType cellType;
-	//TODO: update based on entity package
 	private Entity entity;
 
 
@@ -32,11 +31,10 @@ public class Cell {
 
 	public void setCellType(CellType cellType) {this.cellType = cellType;}
 
-//  TODO: update based on entity package (3)
-//	public Entity getEntity() {
-//		return entity;
-//	}
-//
+	public Entity getEntity() {
+		return entity;
+	}
+
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}

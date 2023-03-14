@@ -1,12 +1,13 @@
 /**
  * A class that creates maze using Randomized Prim's Algorithm
- * @see {@link https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim's_algorithm} Maze
+ * @see {@link https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim's_algorithm}
  *
  * @author  Tawheed Sarker Aakash
  * */
 package Map;
 
 import Entities.Entity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -222,15 +223,15 @@ public class Maze {
 		return (outOfRangeX || outOfRangeY);
 	}
 
-	public boolean isCellWall(Point location){
-		if(outOfRange(location)){
-			return false;
-		}
-		int x = location.getX();
-		int y = location.getY();
-
-		return (maze[x][y].getCellType() == CellType.wall);
-	}
+//	public boolean isCellWall(Point location){ depricated by Tawheed. used for isCellOpen method
+//		if(outOfRange(location)){
+//			return false;
+//		}
+//		int x = location.getX();
+//		int y = location.getY();
+//
+//		return (maze[x][y].getCellType() == CellType.wall);
+//	}
 
 	public boolean isCellOpen(Point location){
 		if(outOfRange(location)){
@@ -239,24 +240,32 @@ public class Maze {
 
 		int x = location.getX();
 		int y = location.getY();
-		return !(isCellWall(location));
+		return (maze[x][y].getCellType() == CellType.path);
 	}
 
+	public Entity getEntity(Point location){
+		int x = location.getX();
+		int y = location.getY();
+		return maze[x][y].getEntity();
+	}
 
 	public Point getExitCell() {
 		return exitCell;
 	}
 
-	//TODO: update based on entity package (4)
-	public void setEntity(Entity entity){
-		int x = entity.getLocation().getX();
-		int y =  entity.getLocation().getY();
+	public void setEntity(Entity entity, Point location){
+		int x = location.getX();//entity.getLocation().getX();
+		int y =  location.getY();//entity.getLocation().getY();
 		maze[x][y].setEntity(entity);
 	}
 	public CellType getCellType(int x, int y){
 		return maze[x][y].getCellType();
 	}
 
-	//TODO: update based on entity package (5)
-	//public Entity getEntity(int x, int y){return maze[x][y].getEntity();}
+	public void swapEntity(int x1, int y1, int x2, int y2){
+		Entity temp = maze[x1][y1].getEntity();
+		maze[x1][y1].setEntity(maze[x2][y2].getEntity());
+		maze[x2][y2].setEntity(temp);
+
+	}
 }
