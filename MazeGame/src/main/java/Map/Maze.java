@@ -19,6 +19,8 @@ public class Maze {
 	private final int ROWS = 32;
 	private final int COLS = 18;
 
+	private int exitCellX = 0;
+	private int exitCellY = 0;
 	private Point exitCell;
 
 
@@ -49,19 +51,33 @@ public class Maze {
 		random = new Random();
 		int side = random.nextInt(2);
 
+		// randomly chooses side that exit cell well appear on
 		switch(side){
 			case(0):
-				maze[x][0].setCellType(CellType.exit_cell);
+				exitCellX = x;
 				exitCell = maze[x][0].getLocation();
 				break;
 			case(1):
-				maze[0][y].setCellType(CellType.exit_cell);
+				exitCellY = y;
 				exitCell = maze[0][y].getLocation();
 				break;
+
 			default:
 				throw new RuntimeException("Maze.java createCanvas(): Exit cell not created");
 		}
 
+	}
+
+	public void setExitCellOpen(){
+		if(exitCellY != 0){
+			maze[0][exitCellY].setCellType(CellType.exit_cell);
+		}
+		else if(exitCellX != 0){
+			maze[exitCellX][0].setCellType(CellType.exit_cell);
+		}
+		else{
+			throw new RuntimeException("Maze.java setExitCellOpen(): Exit cell not open");
+		}
 	}
 
 	// Static factory method to create maze
