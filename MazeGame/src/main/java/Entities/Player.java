@@ -13,13 +13,6 @@ public class Player extends Entity {
 //    private Spell currSpell;
 
 
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
 
     public Player(EntityType entityType, Point location){
         super(entityType,location);
@@ -45,6 +38,13 @@ public class Player extends Entity {
             score = 100;
         }
         return score;
+    }
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public int getScore() {
