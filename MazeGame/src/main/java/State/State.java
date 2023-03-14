@@ -11,14 +11,15 @@ public abstract class State {
 
     public GameState nexState;
 
-    public State(){
+    public State() {
 
     }
 
-    public void renderState(){
+    public void renderState() {
 
     }
-    public void handleInput(){
+
+    public void handleInput() {
 
     }
 

@@ -70,4 +70,5 @@ public class Player extends Entity {
     public void setLocation(Point location) {
         super.setLocation(location);
     }
+
 }

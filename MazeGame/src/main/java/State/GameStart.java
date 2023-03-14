@@ -5,6 +5,7 @@ package State;
  */
 public class GameStart extends State{
 
+
     public GameStart() {
         super();
         setNexState(GameState.gameStart);
@@ -14,5 +15,6 @@ public class GameStart extends State{
     public void renderState() {
 
     }
+
 }
 

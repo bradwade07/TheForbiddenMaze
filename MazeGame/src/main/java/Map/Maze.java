@@ -268,4 +268,5 @@ public class Maze {
 		maze[x2][y2].setEntity(temp);
 
 	}
+
 }

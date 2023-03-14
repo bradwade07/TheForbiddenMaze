@@ -30,3 +30,4 @@ public class Empty extends Entity{
         super.setLocation(location);
     }
 }
+
