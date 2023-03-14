@@ -62,9 +62,9 @@ public class Game {
     private MoveDirection getUserInput() {
         Scanner userInput = new Scanner(System.in);
         MoveDirection move;
-        boolean formatValid;
+
         char input;
-        System.out.print("Enter your move [WASD?]: ");
+//        System.out.print("Enter your move [WASD?]: ");
         input = userInput.next().trim().charAt(0);
         input = Character.toLowerCase(input);
 
