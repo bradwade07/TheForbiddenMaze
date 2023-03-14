@@ -4,8 +4,6 @@ package State;
 import Entities.*;
 import Map.*;
 
-import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,7 +20,7 @@ public class Game {
 	private Maze maze;
 
 
-    public void start(Stage stage, int enemyCount, int rewardCount, int trapCount) {
+    public void start(int enemyCount, int rewardCount, int trapCount) {
 
         maze = Maze.generateRandomizedMaze();
         player = new Player(EntityType.player, new Point(1, 1));
