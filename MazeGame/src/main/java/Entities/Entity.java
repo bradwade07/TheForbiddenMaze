@@ -8,6 +8,7 @@ public class Entity implements DynamicEntity{
     protected Point location;
 
 
+
     public Entity(EntityType entityType, Point location){
         this.entityType = entityType;
         this.location = location;
@@ -28,4 +29,5 @@ public class Entity implements DynamicEntity{
     public void setLocation(Point location) {
         this.location = location;
     }
+
 }

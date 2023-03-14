@@ -15,17 +15,14 @@ import java.util.Scanner;
 /**
  * Game class that handles all the gameplay
  */
-public class Game extends Application {
+public class Game {
 
     private Player player;
     private List<Enemy> enemyList = new ArrayList<>();
     private Maze maze;
 
-    //private int score;
-    // add Cheese
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage, int enemyCount) {
 
         maze = Maze.generateRandomizedMaze();
         player = new Player(EntityType.player, new Point(1,1));
@@ -51,7 +48,7 @@ public class Game extends Application {
                     // no movement
                     break;
                 default:
-                    movePlayer(selection);
+//                    movePlayer(selection);
             }
 
             // other entities move
@@ -59,11 +56,6 @@ public class Game extends Application {
         } while (keepRunning);
 
     }
-
-
-
-
-
 
 
     // pass in an KeyEvent Handler and returns MoveDirection
@@ -88,7 +80,7 @@ public class Game extends Application {
     }
 
     public boolean hasPlayerLost(){
-        return (getPlayerScore() < 0);
+        return (getPlayerScore() < 0 || !player.isAlive());
     }
 
     public boolean hasPlayerWon(){
@@ -107,75 +99,67 @@ public class Game extends Application {
         }
     }
 
-//    private void loadPlayer(){ 1 line of code, deprecated by Tawheed
-//        // arbritrary values
-//        player = new Player(new Point(1,1));
-//    }
-
-//    private void loadMaze(){ 1 line of code, deprecated by Tawheed
-//        maze = Maze.generateRandomizedMaze();
-//    }
-
-    //public int getScore() {
-//        return score;
-//    }
-
-
-    public boolean checkEnemyCollision(){
-        return isEnemyAtLocation(player.getLocation());
+    public CollisionType entityCollision(Point location1){ // subject to change based on other entities.
+        Entity entity1 = maze.getEntity(location1);
+        if(entity1.getEntityType().equals(EntityType.empty)){
+            return CollisionType.noCollision;
+        }
+        else if(entity1.getEntityType().equals(EntityType.enemy)){
+            return CollisionType.playerEnemy;
+        }
+        else if (entity1.getEntityType().equals(EntityType.reward)){
+            return CollisionType.playerReward;
+        }
+        else if(entity1.getEntityType().equals(EntityType.trap)){
+            return CollisionType.playerTrap;
+        }
+        else{
+            throw new RuntimeException("Game.java entityCollision(): collision with non-allowed entity1");
+        }
     }
 
-    // should be called whenever a movement occurs
+    public void movePlayer(MoveDirection move){
+        if(!isPlayerMoveValid(move)){
+            return; // throw a message maybe? or just bounce back
+        }
 
-    //TODO: get back to it
-//    private void moveAndUpdateMap(Point newPos, Entity entity) {
-//        if(!maze.isCellOpen(newPos)){
-//            return; // cell is not open so don't move
-//        }
-//        // Remove entity from old position
-//        int oldRow = entity.getLocation().getX();
-//        int oldCol = entity.getLocation().getY();
-//        // this seems like a bad idea setting it to null
-//        maze.getMaze()[oldRow][oldCol].setEntity(null);
+        Point newLocation = player.getLocation().newMoveLocation(move);
+        CollisionType collision = entityCollision(newLocation);
+        Entity entity = maze.getEntity(newLocation);
+
+        switch(collision){
+            case empty:
+                break;
+            case playerEnemy:
+                player.setAlive(false);
+                // todo animation for death maybe?
+                return;
+            case playerReward:
+                maze.setEntity(new Empty(EntityType.empty, newLocation), newLocation);
+//   TODO             player.incrementScore();
+                break;
+            case playerTrap:
+                maze.setEntity(new Empty(EntityType.empty, newLocation), newLocation);
+//  TODO              player.decrementScore();
+                break;
+            default:
+                throw new RuntimeException("Game.java movePlayer(): collision type is invalid");
+
+        }
+        int playerX = player.getLocation().getX();
+        int playerY = player.getLocation().getY();
+        int expectedX = newLocation.getX();
+        int expectedY = newLocation.getY();
+
+        maze.swapEntity(playerX,playerY,expectedX,expectedY);
+
+    }
 //
-//        // Place entity in new position
-//        int newRow = newPos.getX();
-//        int newCol = newPos.getY();
-//        //TODO: fix
-//        //maze.getMaze()[newRow][newCol].setEntity(entity);
 //
-//        entity.setLocation(newPos);
-//    }
-//
-//
-//    public void movePlayer(MoveDirection move){
-//        if(!isPlayerMoveValid(move)){
-//            return; // throw a message maybe? or just bounce back
-//        }
-//
-//        Point newLocation = player.getLocation().newMoveLocation(move);
-//        moveAndUpdateMap(newLocation, player);
-//    }
-//
-//
-//    public boolean isPlayerMoveValid(MoveDirection move){
-//        Point playerLocation = player.getLocation();
-//        return maze.isCellOpen(playerLocation.newMoveLocation(move));
-//    }
-    //TODO: make comparator
-//    public boolean isPlayerAtLocation(Point location){
-//        return player.getLocation().equals(location);
-//    }
-//
-//    public boolean isEnemyAtLocation(Point location){
-//        for(Enemy enemy : enemyList){
-//            Point enemyCoords = enemy.getLocation();
-//            if(enemyCoords.equals(location)){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    public boolean isPlayerMoveValid(MoveDirection move){
+        Point playerLocation = player.getLocation();
+        return maze.isCellOpen(playerLocation.newMoveLocation(move));
+    }
 
     public void enemyGenerator(){
         while (true){

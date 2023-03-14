@@ -1,5 +1,5 @@
 package Entities;
 
 public enum EntityType {
-	player, enemy, cheese
+	player, enemy, reward, empty, trap
 }
