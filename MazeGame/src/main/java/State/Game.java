@@ -79,16 +79,16 @@ public class Game {
         return move;
     }
 
-    public boolean hasPlayerLost(){
+    private boolean hasPlayerLost(){
         return (getPlayerScore() < 0 || !player.isAlive());
     }
 
-    public boolean hasPlayerWon(){
+    private boolean hasPlayerWon(){
         // TODO: and rewards are collected
         return (player.getLocation().equals(maze.getExitCell()));
     }
 
-    public int getPlayerScore(){
+    private int getPlayerScore(){
         return player.getScore();
     }
 
@@ -99,7 +99,7 @@ public class Game {
         }
     }
 
-    public CollisionType entityCollision(Point location1){ // subject to change based on other entities.
+    private CollisionType entityCollision(Point location1){ // subject to change based on other entities.
         Entity entity1 = maze.getEntity(location1);
         if(entity1.getEntityType().equals(EntityType.empty)){
             return CollisionType.noCollision;
@@ -118,7 +118,7 @@ public class Game {
         }
     }
 
-    public void movePlayer(MoveDirection move){
+    private void movePlayer(MoveDirection move){
         if(!isPlayerMoveValid(move)){
             return; // throw a message maybe? or just bounce back
         }
@@ -156,12 +156,12 @@ public class Game {
     }
 //
 //
-    public boolean isPlayerMoveValid(MoveDirection move){
+    private boolean isPlayerMoveValid(MoveDirection move){
         Point playerLocation = player.getLocation();
         return maze.isCellOpen(playerLocation.newMoveLocation(move));
     }
 
-    public void enemyGenerator(){
+    private void enemyGenerator(){
         while (true){
             Random random = new Random();
             int x = (Math.abs(random.nextInt()) % maze.getROWS() - 5) + 5;
@@ -189,14 +189,14 @@ public class Game {
             }
         }
     }
-    public void entityMaker(EntityType entityType,Point location){//has flexibility for cheese
+    private void entityMaker(EntityType entityType,Point location){//has flexibility for cheese
         if(entityType.equals(EntityType.enemy)){
             Enemy newEnemy =new Enemy(EntityType.enemy, location);
             enemyList.add(newEnemy);
         }
     }
 
-    public void enemyMovement(){
+    private void enemyMovement(){
         for(int i =0; i < enemyList.size(); i++){
             Enemy currentEnemy = enemyList.get(i);
             Point playerLocation = player.getLocation();
@@ -228,7 +228,7 @@ public class Game {
 
         }
     }
-    public boolean isPlayerinRange(Point playerlocation, Point enemyLocation){
+    private boolean isPlayerinRange(Point playerlocation, Point enemyLocation){
         int playerX = playerlocation.getX();
         int playerY = playerlocation.getY();
         int enemyX = enemyLocation.getX();
@@ -236,7 +236,7 @@ public class Game {
         return (Math.abs(playerX - enemyX) == 5 || Math.abs(playerY - enemyY) == 5);//checks if player is in 5 cell of every direction
 
     }
-    public void moveEntity(Point entityLocation,int addX,int addY){ // takes entity position and changes by adding X and/or Y
+    private void moveEntity(Point entityLocation,int addX,int addY){ // takes entity position and changes by adding X and/or Y
         int oldX = entityLocation.getX();
         int oldY = entityLocation.getY();
         maze.swapEntity(oldX, oldY, oldX + addX, oldY + addY);
