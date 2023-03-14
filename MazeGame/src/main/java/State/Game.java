@@ -80,6 +80,13 @@ public class Game {
         return (getPlayerScore() < 0 || !player.isAlive());
     }
 
+    public Point getExitCellLocation(){
+        return maze.getExitCell();
+    }
+    public void openExitCell(){
+        maze.setExitCellOpen();
+    }
+
     public boolean hasPlayerWon() {
         // TODO: and rewards are collected
         return (player.getLocation().equals(maze.getExitCell()));
