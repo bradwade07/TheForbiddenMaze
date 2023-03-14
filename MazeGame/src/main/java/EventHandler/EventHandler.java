@@ -2,8 +2,12 @@ package EventHandler;
 
 import UI.GameRenderer;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -18,25 +22,43 @@ public class EventHandler {
     public List<ChangeGameEvent> gameChangeListeners;
     public List<KeyEvents> keyEventsListeners;
 
-    public GameRenderer gameRenderer;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+    private Image edge;
+    private GraphicsContext graphicsContext;
+    private Canvas canvas;
 
-    public EventHandler(Stage stage) {
+    private double screenWidth;
+    private double screenHeight;
+
+    public EventHandler(Stage stage_p) {
         this.menuChangeListeners = new ArrayList<>();
         this.gameChangeListeners = new ArrayList<>();
         this.keyEventsListeners = new ArrayList<>();
-        gameRenderer = new GameRenderer(stage, newScene());
+
+        Rectangle2D screen = Screen.getPrimary().getBounds();
+
+        screenWidth = screen.getMaxX();
+        screenHeight = screen.getMaxY();
+
+        stage = stage_p;
+
+        edge = new Image("/pit.png", 120, 120, false, false);
+
+        RenderMenu();
     }
 
     public void startGameButton() {
-        gameRenderer.Render_Terrain(newScene());
+
         for (ChangeGameEvent listener: gameChangeListeners) {
-            listener.onGameChange(gameRenderer);
+
         }
     }
 
     public void startMenuButton() {
         for (ChangeMenuEvent listener: menuChangeListeners) {
-            listener.onMenuChange(gameRenderer);
+
         }
     }
 
@@ -46,38 +68,26 @@ public class EventHandler {
         }
     }
 
-    public Scene newScene() {
-        Rectangle2D screen = Screen.getPrimary().getBounds();
+    // Sets new Canvas and new scene up for a different scene
+    // Also prepares listener for input
+    public void newScene() {
 
-        double screenWidth = screen.getMaxY();
-        double screenHeight = screen.getMaxX();
-        Canvas canvas = new Canvas(screenWidth, screenHeight);
-        Scene newScene = new Scene(new StackPane(canvas), screenWidth, screenHeight);
-        newScene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode() == KeyCode.ENTER) {
-                startGameButton();
-                System.out.println("Enter Pressed");
+        canvas = new Canvas(screenWidth, screenHeight);
+        scene = new Scene(new StackPane(canvas), screenWidth, screenHeight);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            Render_Game();
+            if(key.getCode() == KeyCode.W) {
+                keyPressed('w');
+            } else if (key.getCode() == KeyCode.A) {
+                keyPressed('a');
+            } else if (key.getCode() == KeyCode.S) {
+                keyPressed('s');
+            } else if (key.getCode() == KeyCode.D) {
+                keyPressed('d');
             }
 
-            switch (key.getCode()) {
-                case KeyCode.W:
-                    keyPressed('w');
-                    break;
-                case KeyCode.A:
-                    keyPressed('a');
-                    break;
-                case KeyCode.S:
-                    keyPressed('s');
-                    break;
-                case KeyCode.D:
-                    keyPressed('d');
-                    break;
-                default:
-                    // code block
-            }
         });
 
-        return newScene;
     }
 
     // Key press
@@ -93,6 +103,44 @@ public class EventHandler {
 
     public void addKeyListener(KeyEvents keyEvent) {keyEventsListeners.add(keyEvent); }
 
+    // Graphics Methods
+    public void RenderMenu() {
+        newScene();
+        graphicsContext = canvas.getGraphicsContext2D();
+        stage.setScene(scene);
+        stage.setFullScreen(true);
+        stage.show();
+    }
 
+    public void Render_Game() {
+        newScene();
+        graphicsContext = canvas.getGraphicsContext2D();
+        stage.setScene(scene);
+        stage.setFullScreen(true);
+        Render_Terrain();
+        stage.show();
+    }
+    public void Render_Terrain() {
+
+        System.out.println("Toby Apples");
+        double cellWidth =  screenHeight / 18;
+
+        // Set top and bottom edge
+       for (int i = 0; i < 32; i++) {
+            // Top Edge
+         graphicsContext.drawImage(edge, i * cellWidth, 0);
+
+            // Bottom Edge
+           // graphicsContext.drawImage(edge, i * cellWidth, cellWidth * 17);
+        //}
+
+        // Set left and right edges
+        // Start at 1 and end at 15 to avoid redrawing corners
+        //for (int i = 1; i < 15; i++) {
+            //graphicsContext.drawImage(edge, 0 ,cellWidth * i);
+          //  graphicsContext.drawImage(edge, cellWidth * 15 ,cellWidth * i);
+        //}
+
+    }
 
 }
