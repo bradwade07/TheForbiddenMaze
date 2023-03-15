@@ -1,8 +1,6 @@
 package EventHandler;
 
-import UI.GameRenderer;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import State.Game;
 
 public class EventHandler {
     public List<ChangeMenuEvent> menuChangeListeners;
@@ -31,11 +30,14 @@ public class EventHandler {
 
     private double screenWidth;
     private double screenHeight;
+    private final Game myGame;
 
     public EventHandler(Stage stage_p) {
         this.menuChangeListeners = new ArrayList<>();
         this.gameChangeListeners = new ArrayList<>();
         this.keyEventsListeners = new ArrayList<>();
+        myGame = new Game();
+        myGame.start(1,1,1); //TODO based on levels
 
         Rectangle2D screen = Screen.getPrimary().getBounds();
 
@@ -64,7 +66,7 @@ public class EventHandler {
 
     public void keyPressed(char keycode) {
         for (KeyEvents listener: keyEventsListeners) {
-            listener.onKeyPress(keycode);
+            listener.onKeyPress(keycode, myGame);
         }
     }
 
@@ -123,24 +125,24 @@ public class EventHandler {
     public void Render_Terrain() {
 
         System.out.println("Toby Apples");
-        double cellWidth =  screenHeight / 18;
+        double cellWidth = screenHeight / 18;
 
         // Set top and bottom edge
-       for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < 32; i++) {
             // Top Edge
-         graphicsContext.drawImage(edge, i * cellWidth, 0);
+            graphicsContext.drawImage(edge, i * cellWidth, 0);
 
             // Bottom Edge
-           // graphicsContext.drawImage(edge, i * cellWidth, cellWidth * 17);
-        //}
+            // graphicsContext.drawImage(edge, i * cellWidth, cellWidth * 17);
+            //}
 
-        // Set left and right edges
-        // Start at 1 and end at 15 to avoid redrawing corners
-        //for (int i = 1; i < 15; i++) {
+            // Set left and right edges
+            // Start at 1 and end at 15 to avoid redrawing corners
+            //for (int i = 1; i < 15; i++) {
             //graphicsContext.drawImage(edge, 0 ,cellWidth * i);
-          //  graphicsContext.drawImage(edge, cellWidth * 15 ,cellWidth * i);
-        //}
+            //  graphicsContext.drawImage(edge, cellWidth * 15 ,cellWidth * i);
+            //}
 
+        }
     }
-
 }

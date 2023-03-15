@@ -13,16 +13,22 @@ import java.util.Random;
  */
 public class Game {
 
-	private Player player = new Player(EntityType.player, new Point(1, 1));
-	private List<Enemy> enemyList = new ArrayList<>();
-	private List<Reward> rewardList = new ArrayList<>();
-	private List<Trap> trapList = new ArrayList<>();
+	private Player player;
+	private List<Enemy> enemyList;
+	private List<Reward> rewardList;
+	private List<Trap> trapList;
 	private Maze maze;
 
+	public Game() {
+		this.player =  new Player(EntityType.player, new Point(1, 1));
+		this.enemyList =new ArrayList<>();
+		this.rewardList = new ArrayList<>();
+		this.trapList = new ArrayList<>();
+		this.maze =Maze.generateRandomizedMaze();
+	}
 
 	public void start(int enemyCount, int rewardCount, int trapCount) {
 
-		maze = Maze.generateRandomizedMaze();
 		entityGenrator(enemyCount,rewardCount,trapCount);
 		placeEntitiesOnMap();
 
@@ -110,9 +116,10 @@ public class Game {
 		}
 	}
 
-	public void movePlayer(MoveDirection move) {
+	public void movePlayer(char move) {
+		move = Character.toLowerCase(move);
 		if (!isPlayerMoveValid(move)) {
-			return; // throw a message maybe? or just bounce back
+			return;
 		}
 
 		Point newLocation = player.getLocation().newMoveLocation(move);
@@ -147,7 +154,7 @@ public class Game {
 
 	}
 
-	public boolean isPlayerMoveValid(MoveDirection move) {
+	public boolean isPlayerMoveValid(char move) {
 		Point playerLocation = player.getLocation();
 		return maze.isCellOpen(playerLocation.newMoveLocation(move));
 	}
