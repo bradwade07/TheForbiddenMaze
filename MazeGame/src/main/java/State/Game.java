@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class Game {
 
-	private Player player;
+	private Player player = new Player(EntityType.player, new Point(1, 1));
 	private List<Enemy> enemyList = new ArrayList<>();
 	private List<Reward> rewardList = new ArrayList<>();
 	private List<Trap> trapList = new ArrayList<>();
@@ -23,13 +23,12 @@ public class Game {
 	public void start(int enemyCount, int rewardCount, int trapCount) {
 
 		maze = Maze.generateRandomizedMaze();
-		player = new Player(EntityType.player, new Point(1, 1));
 		entityGenrator(enemyCount,rewardCount,trapCount);
 		placeEntitiesOnMap();
 
 	}
 
-	public void runGame() {
+	public void runGame(char move) {
 		boolean keepRunning = true;
 		do {
 			// get Player input
@@ -66,10 +65,10 @@ public class Game {
 //            input = Character.toLowerCase(input);
 
 		switch (input) {
-			case ('w') -> move = MoveDirection.UP;
-			case ('a') -> move = MoveDirection.LEFT;
-			case ('s') -> move = MoveDirection.DOWN;
-			case ('d') -> move = MoveDirection.RIGHT;
+			case ('w'),('W') -> move = MoveDirection.UP;
+			case ('a'),('A') -> move = MoveDirection.LEFT;
+			case ('s'),('S') -> move = MoveDirection.DOWN;
+			case ('d'),('D') -> move = MoveDirection.RIGHT;
 			default -> throw new RuntimeException("MazeGame movePlayer(): Invalid input");
 		}
 
@@ -281,4 +280,6 @@ public class Game {
 		int oldY = entityLocation.getY();
 		maze.swapEntity(oldX, oldY, oldX + addX, oldY + addY);
 	}
+
+
 }

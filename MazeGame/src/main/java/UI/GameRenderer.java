@@ -1,5 +1,6 @@
 package UI;
 
+import State.Game;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -21,6 +22,7 @@ public class GameRenderer {
 
 	private double screenWidth;
 	private double screenHeight;
+	private Game myGame;
 	public GameRenderer(Stage stage_p, Scene scene_p) {
 		Rectangle2D screen = Screen.getPrimary().getBounds();
 
@@ -33,6 +35,8 @@ public class GameRenderer {
 		edge = new Image("/pit.png", 60, 60, false, false);
 
 		RenderMenu();
+		myGame = new Game();
+		myGame.start(1,1,1);
 	}
 
 	public void RenderMenu() {
@@ -73,8 +77,14 @@ public class GameRenderer {
 		stage.show();
 	}
 
-	public void Render_Entities() {
-
+	public void execution() {
+		//listener;
+		myGame.enemyMovement();
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);//TODO check this exception
+		}
 	}
 
 }
