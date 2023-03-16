@@ -34,25 +34,8 @@ public class Game {
 	}
 
 
-	// pass in an KeyEvent Handler and returns MoveDirection
-	private MoveDirection getUserInput() {
-//            Scanner userInput = new Scanner(System.in);
-		MoveDirection move;
-
-		char input = 'w';
-//        System.out.print("Enter your move [WASD?]: ");
-//            input = userInput.next().trim().charAt(0);
-//            input = Character.toLowerCase(input);
-
-		switch (input) {
-			case ('w'),('W') -> move = MoveDirection.UP;
-			case ('a'),('A') -> move = MoveDirection.LEFT;
-			case ('s'),('S') -> move = MoveDirection.DOWN;
-			case ('d'),('D') -> move = MoveDirection.RIGHT;
-			default -> throw new RuntimeException("MazeGame movePlayer(): Invalid input");
-		}
-
-		return move;
+	public boolean isPlayerAlive(){
+		return player.isAlive();
 	}
 
 	public boolean hasPlayerLost() {
@@ -98,10 +81,10 @@ public class Game {
 
 		Point newLocation = player.getLocation().newMoveLocation(move);
 		CollisionType collision = entityCollision(newLocation);
-		Entity entity = myMaze.getEntity(newLocation);
 
+		System.out.println(collision);
 		switch (collision) {
-			case empty:
+			case noCollision:
 				break;
 			case playerEnemy:
 				player.setAlive(false);
