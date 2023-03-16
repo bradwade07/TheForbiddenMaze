@@ -76,13 +76,14 @@ public class Game {
 	public void movePlayer(char move) {
 		move = Character.toLowerCase(move);
 		if (!isPlayerMoveValid(move)) {
+			System.out.println("Game.java movePlayer(): Player move not valid, bounce back");
 			return;
 		}
 
 		Point newLocation = player.getLocation().newMoveLocation(move);
 		CollisionType collision = entityCollision(newLocation);
 
-		System.out.println(collision);
+		System.out.println("Collision Type: " + collision);
 		switch (collision) {
 			case noCollision:
 				break;
@@ -102,12 +103,15 @@ public class Game {
 				throw new RuntimeException("Game.java movePlayer(): collision type is invalid");
 
 		}
+
+
 		int playerX = player.getLocation().getX();
 		int playerY = player.getLocation().getY();
 		int expectedX = newLocation.getX();
 		int expectedY = newLocation.getY();
 
 		myMaze.swapEntity(playerX, playerY, expectedX, expectedY);
+		player.setLocation(newLocation);
 
 	}
 
