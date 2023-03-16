@@ -17,14 +17,6 @@ public class Display {
 		RUNNING
 	}
 
-	public enum Collision {
-		ENEMY,
-		WALL,
-		REWARD,
-		TRAP
-	}
-
-
 	public Display(){
 		game = new Game();
 	}
@@ -53,7 +45,7 @@ public class Display {
 					}
 				}
 			}
-			//game.moveEnemiesRandom(); //TODO
+			game.enemyMovement();
 
 		} while (keepRunning);
 	}
