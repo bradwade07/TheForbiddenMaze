@@ -18,8 +18,8 @@ public class Maze {
 	private Cell[][] maze;
 
 	//TODO: update ROWS and COLS based on screen ratio values
-	private final int ROWS = 32;
-	private final int COLS = 18;
+	private final int ROWS = 18;
+	private final int COLS = 32;
 	private Point exitCell;
 
 
