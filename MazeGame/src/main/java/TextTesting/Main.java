@@ -8,6 +8,7 @@ public class Main {
 		Game myGame = new Game();
 		myGame.start(1,1,1);
 		Display.print(myGame);
+		//System.out.println(myGame.getMyMaze().getMaze()[30][16].getCellType());
 //		ReturnType returnType = null;
 //		while((myMazeGame.getCheeseToCollect() > myMazeGame.getCheeseCollected())){
 //			boolean breakLoop = true;
