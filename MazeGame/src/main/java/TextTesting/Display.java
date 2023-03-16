@@ -34,7 +34,6 @@ public class Display {
 			switch (selection) {
 				case ('?') -> displayInstructionsMessage();
 				default -> {
-//					game.moveEnemiesRandom();
 					stateOfGame = movePlayer(selection);
 					if (stateOfGame == GameState.WIN) {
 						displayWin();
