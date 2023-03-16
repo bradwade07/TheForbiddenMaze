@@ -50,22 +50,23 @@ public class Point {
 	}
 
 	// Returns a copy of the new move location
-	public Point newMoveLocation(MoveDirection move){
+	public Point newMoveLocation(char move){
 		int newX = x;
 		int newY = y;
+		move = Character.toLowerCase(move);
 
 		switch(move){
-			case UP:
+			case 'w':
+				newY--;
+				break;
+			case 's':
 				newY++;
 				break;
-			case DOWN:
-				newY--;
-				break;
-			case RIGHT:
+			case 'd':
 				newX++;
 				break;
-			case LEFT:
-				newY--;
+			case 'a':
+				newX--;
 				break;
 			default:
 				// nothing happened

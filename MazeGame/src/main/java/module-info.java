@@ -5,6 +5,6 @@ module Group2 {
 
     opens Group2 to javafx.fxml;
     exports Group2;
-    exports UI;
+    //exports UI;
     opens UI to javafx.fxml;
 }
