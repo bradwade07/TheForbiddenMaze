@@ -28,7 +28,7 @@ public class Game {
 
 	public void start(int enemyCount, int rewardCount, int trapCount) {
 		myMaze = Maze.generateRandomizedMaze();
-		entityGenrator(enemyCount,rewardCount,trapCount);
+		entityGenerator(enemyCount,rewardCount,trapCount);
 		placeEntitiesOnMap();
 
 	}
@@ -53,8 +53,14 @@ public class Game {
 
 	private void placeEntitiesOnMap() {
 		myMaze.setEntity(player, player.getLocation());
-		for (int i = 0; i < enemyList.size(); i++) {
-			myMaze.setEntity(enemyList.get(i), enemyList.get(i).getLocation());
+		for (Enemy enemy : enemyList) {
+			myMaze.setEntity(enemy, enemy.getLocation());
+		}
+		for (Reward reward : rewardList) {
+			myMaze.setEntity(reward, reward.getLocation());
+		}
+		for (Trap trap : trapList) {
+			myMaze.setEntity(trap, trap.getLocation());
 		}
 	}
 
@@ -120,7 +126,7 @@ public class Game {
 		return myMaze.isCellOpen(playerLocation.newMoveLocation(move));
 	}
 
-	public void entityGenrator(int enemyCount, int rewardCount, int trapCount){ //calls entityMaker and checks if the entity is placeable
+	public void entityGenerator(int enemyCount, int rewardCount, int trapCount){ //calls entityMaker and checks if the entity is placeable
 		List<Point> usedPoints = new ArrayList<>();
 		Random random;
 		int x, y;

@@ -31,21 +31,21 @@ public class Maze {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				maze[i][j] = new Cell(i, j, CellType.barricade);
-				maze[i][j].setEntity(new Empty(EntityType.empty, new Point(i, j)));
 			}
 		}
 
 		for (int i = 0; i < ROWS; i++) {
 			maze[i][0].setCellType(CellType.wall);
-			maze[i][0].setEntity(new Empty(EntityType.empty, new Point(i, 0)));
 			maze[i][COLS - 1].setCellType(CellType.wall);
-			maze[i][COLS - 1].setEntity(new Empty(EntityType.empty, new Point(i, COLS - 1)));
 		}
 		for (int i = 0; i < COLS; i++) {
 			maze[0][i].setCellType(CellType.wall);
-			maze[0][i].setEntity(new Empty(EntityType.empty, new Point(0, i)));
 			maze[ROWS - 1][i].setCellType(CellType.wall);
-			maze[ROWS - 1][i].setEntity(new Empty(EntityType.empty, new Point(ROWS - 1, i)));
+		}
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				maze[i][j].setEntity(new Empty(EntityType.empty,new Point(i,j)));
+			}
 		}
 	}
 
@@ -181,10 +181,13 @@ public class Maze {
 			neighborCells.remove(choice);
 		}
 		// TODO: was made for mouse placement, see if the logic sticks
-//		maze[1][1].setCellType(CellType.path);
-//		maze[1][18].setCellType(CellType.path);
-//		maze[13][1].setCellType(CellType.path);
-//		maze[13][18].setCellType(CellType.path);
+		for (int i = 1; i < ROWS - 1; i++) {
+			maze[i][30].setCellType(CellType.path);
+		}
+		for (int i = 1; i < COLS - 1; i++) {
+			maze[16][i].setCellType(CellType.path);
+		}
+
 	}
 
 	public int getROWS() {
