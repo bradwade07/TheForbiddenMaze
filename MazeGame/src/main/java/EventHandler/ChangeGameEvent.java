@@ -1,6 +1,6 @@
 package EventHandler;
 
 public interface ChangeGameEvent {
-    public void onGameChange(GameRenderer gameRenderer);
+    public void onGameChange();
 }
 

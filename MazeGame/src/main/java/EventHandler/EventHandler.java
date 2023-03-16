@@ -37,7 +37,6 @@ public class EventHandler {
         this.gameChangeListeners = new ArrayList<>();
         this.keyEventsListeners = new ArrayList<>();
         myGame = new Game();
-        myGame.start(1,1,1); //TODO based on levels
 
         Rectangle2D screen = Screen.getPrimary().getBounds();
 
@@ -124,7 +123,6 @@ public class EventHandler {
     }
     public void Render_Terrain() {
 
-        System.out.println("Toby Apples");
         double cellWidth = screenHeight / 18;
 
         // Set top and bottom edge
@@ -144,5 +142,9 @@ public class EventHandler {
             //}
 
         }
+    }
+
+    public void gameInstance(){
+        myGame.start(1,1,1); //TODO based on levels
     }
 }

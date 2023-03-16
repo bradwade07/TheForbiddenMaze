@@ -17,45 +17,19 @@ public class Game {
 	private List<Enemy> enemyList;
 	private List<Reward> rewardList;
 	private List<Trap> trapList;
-	private Maze maze;
+	private Maze myMaze;
 
 	public Game() {
 		this.player =  new Player(EntityType.player, new Point(1, 1));
 		this.enemyList =new ArrayList<>();
 		this.rewardList = new ArrayList<>();
 		this.trapList = new ArrayList<>();
-		this.maze =Maze.generateRandomizedMaze();
 	}
 
 	public void start(int enemyCount, int rewardCount, int trapCount) {
-
+		myMaze = Maze.generateRandomizedMaze();
 		entityGenrator(enemyCount,rewardCount,trapCount);
 		placeEntitiesOnMap();
-
-	}
-
-	public void runGame(char move) {
-		boolean keepRunning = true;
-		do {
-			// get Player input
-			// move player
-			// move enemies
-			// update map?
-			// check collision
-			// check win conditions
-			MoveDirection selection = getUserInput();
-
-			switch (selection) {
-				case NONE:
-					// no movement
-					break;
-				default:
-//                    movePlayer(selection);
-			}
-
-			// other entities move
-			keepRunning = false;
-		} while (keepRunning);
 
 	}
 
@@ -87,7 +61,7 @@ public class Game {
 
 	public boolean hasPlayerWon() {
 		// TODO: and rewards are collected
-		return (player.getLocation().equals(maze.getExitCell()));
+		return (player.getLocation().equals(myMaze.getExitCell()));
 	}
 
 	public int getPlayerScore() {
@@ -95,14 +69,14 @@ public class Game {
 	}
 
 	private void placeEntitiesOnMap() {
-		maze.setEntity(player, player.getLocation());
+		myMaze.setEntity(player, player.getLocation());
 		for (int i = 0; i < enemyList.size(); i++) {
-			maze.setEntity(enemyList.get(i), enemyList.get(i).getLocation());
+			myMaze.setEntity(enemyList.get(i), enemyList.get(i).getLocation());
 		}
 	}
 
 	public CollisionType entityCollision(Point location1) { // subject to change based on other entities.
-		Entity entity1 = maze.getEntity(location1);
+		Entity entity1 = myMaze.getEntity(location1);
 		if (entity1.getEntityType().equals(EntityType.empty)) {
 			return CollisionType.noCollision;
 		} else if (entity1.getEntityType().equals(EntityType.enemy)) {
@@ -124,7 +98,7 @@ public class Game {
 
 		Point newLocation = player.getLocation().newMoveLocation(move);
 		CollisionType collision = entityCollision(newLocation);
-		Entity entity = maze.getEntity(newLocation);
+		Entity entity = myMaze.getEntity(newLocation);
 
 		switch (collision) {
 			case empty:
@@ -134,11 +108,11 @@ public class Game {
 				// todo animation for death maybe?
 				return;
 			case playerReward:
-				maze.setEntity(new Empty(EntityType.empty, newLocation), newLocation);
+				myMaze.setEntity(new Empty(EntityType.empty, newLocation), newLocation);
 //   TODO             player.incrementScore();
 				break;
 			case playerTrap:
-				maze.setEntity(new Empty(EntityType.empty, newLocation), newLocation);
+				myMaze.setEntity(new Empty(EntityType.empty, newLocation), newLocation);
 //  TODO              player.decrementScore();
 				break;
 			default:
@@ -150,13 +124,13 @@ public class Game {
 		int expectedX = newLocation.getX();
 		int expectedY = newLocation.getY();
 
-		maze.swapEntity(playerX, playerY, expectedX, expectedY);
+		myMaze.swapEntity(playerX, playerY, expectedX, expectedY);
 
 	}
 
 	public boolean isPlayerMoveValid(char move) {
 		Point playerLocation = player.getLocation();
-		return maze.isCellOpen(playerLocation.newMoveLocation(move));
+		return myMaze.isCellOpen(playerLocation.newMoveLocation(move));
 	}
 
 	public void entityGenrator(int enemyCount, int rewardCount, int trapCount){ //calls entityMaker and checks if the entity is placeable
@@ -168,10 +142,16 @@ public class Game {
 			boolean status = true;
 			while(status){
 				random = new Random();
-				x = random.nextInt();
+				x = random.nextInt(myMaze.getROWS());
 				random = new Random();
-				y = random.nextInt();
+				y = random.nextInt(myMaze.getCOLS());
 				newPoint = new Point(x,y);
+				if(usedPoints.size() == 0){
+					entityMaker(EntityType.enemy, newPoint, 0);
+					usedPoints.add(newPoint);
+					status = false;
+					break;
+				}
 				for(int j = 0; j < usedPoints.size(); j++){
 					if (!usedPoints.get(j).equals(newPoint)){
 						entityMaker(EntityType.enemy, newPoint, 0);
@@ -186,10 +166,16 @@ public class Game {
 			boolean status = true;
 			while(status){
 				random = new Random();
-				x = random.nextInt();
+				x = random.nextInt(myMaze.getROWS());
 				random = new Random();
-				y = random.nextInt();
+				y = random.nextInt(myMaze.getCOLS());
 				newPoint = new Point(x,y);
+				if(usedPoints.size() == 0){
+					entityMaker(EntityType.reward, newPoint, 0);
+					usedPoints.add(newPoint);
+					status = false;
+					break;
+				}
 				for(int j = 0; j < usedPoints.size(); j++){
 					if (!usedPoints.get(j).equals(newPoint)){
 						entityMaker(EntityType.reward, newPoint, 0); //set to zero but planned to hardcode it
@@ -204,10 +190,16 @@ public class Game {
 			boolean status = true;
 			while(status){
 				random = new Random();
-				x = random.nextInt();
+				x = random.nextInt(myMaze.getROWS());
 				random = new Random();
-				y = random.nextInt();
+				y = random.nextInt(myMaze.getCOLS());
 				newPoint = new Point(x,y);
+				if(usedPoints.size() == 0){
+					entityMaker(EntityType.trap, newPoint, 0);
+					usedPoints.add(newPoint);
+					status = false;
+					break;
+				}
 				for(int j = 0; j < usedPoints.size(); j++){
 					if (!usedPoints.get(j).equals(newPoint)){
 						entityMaker(EntityType.trap, newPoint, 0);//set to zero but planned to hardcode it
@@ -253,7 +245,7 @@ public class Game {
 				}
 			} else { //random movement
 				Random random = new Random();
-				int move = random.nextInt() % 4;
+				int move = random.nextInt(4);
 				switch (move) {
 					case 0 -> {
 						moveEntity(enemyLocation, 0, 1);
@@ -285,8 +277,10 @@ public class Game {
 	public void moveEntity(Point entityLocation, int addX, int addY) { // takes entity position and changes by adding X and/or Y
 		int oldX = entityLocation.getX();
 		int oldY = entityLocation.getY();
-		maze.swapEntity(oldX, oldY, oldX + addX, oldY + addY);
+		myMaze.swapEntity(oldX, oldY, oldX + addX, oldY + addY);
 	}
 
-
+	public Maze getMyMaze() {
+		return myMaze;
+	}
 }
