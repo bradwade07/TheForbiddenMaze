@@ -51,27 +51,27 @@ public class Point {
 
 	// Returns a copy of the new move location
 	public Point newMoveLocation(char move){
-		int newX = x;
-		int newY = y;
+		int vertical = this.x;
+		int horizontal = this.y;
 		move = Character.toLowerCase(move);
 
 		switch(move){
 			case 'w':
-				newY--;
+				vertical--;
 				break;
 			case 's':
-				newY++;
+				vertical++;
 				break;
 			case 'd':
-				newX++;
+				horizontal++;
 				break;
 			case 'a':
-				newX--;
+				horizontal--;
 				break;
 			default:
 				// nothing happened
 		}
-		return new Point(newX,newY);
+		return new Point(vertical,horizontal);
 	}
 
 }
