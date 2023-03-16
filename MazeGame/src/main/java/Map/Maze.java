@@ -208,8 +208,8 @@ public class Maze {
 	private boolean outOfRange(Point location) {
 		int x = location.getX();
 		int y = location.getY();
-		boolean outOfRangeX = (x < 0) || (x >= ROWS);
-		boolean outOfRangeY = (y < 0) || (y >= COLS);
+		boolean outOfRangeX = (x < 1) || (x >= ROWS);
+		boolean outOfRangeY = (y < 1) || (y >= COLS);
 		return (outOfRangeX || outOfRangeY);
 	}
 
@@ -230,7 +230,9 @@ public class Maze {
 
 		int x = location.getX();
 		int y = location.getY();
-		return (maze[x][y].getCellType() == CellType.path);
+
+		CellType cellType = maze[x][y].getCellType();
+		return (cellType == CellType.path || cellType == CellType.exit_cell);
 	}
 
 	public Entity getEntity(Point location) {
