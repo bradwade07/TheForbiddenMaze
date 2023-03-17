@@ -18,14 +18,14 @@ public class Game {
 	public final List<Reward> rewardList;
 	private final List<Trap> trapList;
 	private Maze myMaze;
-	boolean isCellOpen;
+	boolean isExitCellOpen;
 
 	public Game() {
 		this.player = new Player(EntityType.player, new Point(1, 1));
 		this.enemyList = new ArrayList<>();
 		this.rewardList = new ArrayList<>();
 		this.trapList = new ArrayList<>();
-		isCellOpen = false;
+		isExitCellOpen = false;
 	}
 
 	/**
@@ -56,9 +56,9 @@ public class Game {
 
 	public void setExitCell(){
 
-		if(rewardList.isEmpty() && isCellOpen == false){
+		if(rewardList.isEmpty() && isExitCellOpen == false){
 			myMaze.setExitCellOpen();
-			isCellOpen = true;
+			isExitCellOpen = true;
 		}
 	}
 
@@ -135,40 +135,45 @@ public class Game {
 	 * @param location
 	 * @return boolean to determine if there needs to be a swap
 	 */
-	private boolean checkEntityCollision(Entity entity, Point location) {
+	private MoveCheck checkEntityCollision(Entity entity, Point location) {
 		CollisionType collision = entityCollision(location);
-		boolean swapBack = false;
+		MoveCheck moveCheck = MoveCheck.validMove;
+		//boolean swapBack = false;
 		switch (collision) {
 			case noCollision:
+				moveCheck = MoveCheck.validMove;
 				break;
-			case player:
+			
+			case player://enemy moves to player
 				if (entity instanceof Enemy) {
 					killPlayer();
+					moveCheck = MoveCheck.killPlayer;
 				}
 				break;
 			case playerEnemy:
 				if (entity instanceof Player) {
 					killPlayer();
+					moveCheck = MoveCheck.killPlayer;
 				}
 				break;
 			case playerReward:
 				if (entity instanceof Player) {
 					collectReward(location);
 				}else if(entity instanceof Enemy){
-					swapBack = true;
+					moveCheck = MoveCheck.playerToReward;
 				}
 				break;
 			case playerTrap:
 				if (entity instanceof Player) {
 					steppedOnTrap(location);
 				}else if(entity instanceof Enemy){
-					swapBack = true;
+					moveCheck = MoveCheck.playerToTrap;
 				}
 				break;
 			default:
 				throw new RuntimeException("Game.java checkEntityCollision(): collision type is invalid");
 		}
-		return swapBack;
+		return moveCheck;
 	}
 
 	/**
@@ -363,12 +368,13 @@ public class Game {
 
 		Point oldLocation = entity.getLocation();
 		Point newLocation = entity.getLocation().newMoveLocation(move);
-		boolean swapBack = checkEntityCollision(entity, newLocation);
-
-		if(!swapBack){
+		MoveCheck moveCheck = checkEntityCollision(entity, newLocation);
+		
+		if(moveCheck == MoveCheck.validMove){
 			myMaze.swapEntity(oldLocation, newLocation);
+		} else if (moveCheck == MoveCheck.killPlayer) {
+			player.setAlive(false);
 		}
-
 	}
 
 	/**
@@ -469,6 +475,8 @@ public class Game {
 
 	private void killPlayer() {
 		player.setAlive(false);
+		Point playerLocation = player.getLocation();
+		getMyMaze().getMaze()[playerLocation.getX()][playerLocation.getY()].setEntity(new Empty(EntityType.empty,playerLocation));
 		// todo death animation?
 	}
 

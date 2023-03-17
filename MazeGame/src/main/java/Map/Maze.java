@@ -232,7 +232,8 @@ public class Maze {
 
 	public boolean isCellOpen(Point location) {
 		if (outOfRange(location)) {
-			return false;
+			if(!location.equals(exitCell))
+				return false;
 		}
 
 		int x = location.getX();
