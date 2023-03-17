@@ -1,6 +1,6 @@
 package State;
 
 public enum CollisionType {
-    playerEnemy, playerReward, playerTrap, noCollision
+    player, playerEnemy, playerReward, playerTrap, noCollision
 }
 
