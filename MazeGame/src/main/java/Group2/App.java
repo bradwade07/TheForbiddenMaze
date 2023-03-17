@@ -1,26 +1,39 @@
 package Group2;
 
+import EventHandler.EventHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import java.io.IOException;
 
 public class App extends Application {
+    private static String title = "Dungeon Maze";
+    private EventHandler eventHandler;
     @Override
     public void start(Stage stage) throws IOException {
         try {
-           // FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/main_menu.fxml"));
-           // Scene scene = new Scene(fxmlLoader.load(), 1920, 1080);
-            //stage.setTitle("Hello!");
-            //stage.setScene(scene);
-            //stage.show();
+            Rectangle2D screen = Screen.getPrimary().getBounds();
 
-            Parent root = FXMLLoader.load(getClass().getResource("/main_menu.fxml"));
-            Scene scene = new Scene(root, 1920, 1080);
+           double  screenWidth = screen.getMaxX();
+           double screenHeight = screen.getMaxY();
+
+            Group root = new Group();
+            Scene scene = new Scene(root, screenWidth, screenHeight);
+            Canvas canvas = new Canvas(screenWidth, screenHeight);
+
+            stage.setTitle(title);
+            stage.setFullScreen(true);
             stage.setScene(scene);
             stage.show();
+
+            eventHandler = new EventHandler(stage, root, scene, canvas);
         } catch (Exception e) {
             System.out.println(e);
         }
