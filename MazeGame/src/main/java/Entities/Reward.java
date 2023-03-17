@@ -7,10 +7,19 @@ public class Reward extends Entity{
 	private boolean active;
 	private int score;
 
+
 	public Reward(EntityType entityType, Point location, int score){
 		super(entityType, location);
 		active = true;
 		this.score = score;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public int getScore() {
+		return score;
 	}
 
 	public EntityType getEntityType() {
