@@ -11,27 +11,54 @@ import State.MoveDirection;
 public class Point {
 	private int x;
 	private int y;
+
+	/**
+	 * constructor for a Point object, has an x and y coordinate
+	 * @param x
+	 * @param y
+	 */
 	public Point(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
 
+	/**
+	 * Return x coordinate of a point
+	 * @return x
+	 */
 	public int getX() {
 		return x;
 	}
 
+	/**
+	 * Return y coordinate of a point
+	 * @return y
+	 */
 	public int getY() {
 		return y;
 	}
 
+	/**
+	 * Change the x coordinate of a point
+	 * @param x
+	 */
 	public void setX(int x) {
 		this.x = x;
 	}
 
+	/**
+	 * change the y coordinate of a point
+	 * @param y
+	 */
 	public void setY(int y) {
 		this.y = y;
 	}
 
+	/**
+	 * Override function to check if two points are equal
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null){
@@ -49,7 +76,11 @@ public class Point {
 		return (sameX && sameY) ;
 	}
 
-	// Returns a copy of the new move location
+	/**
+	 * Returns to a set of coordinates depending on a movement input
+	 * @param move
+	 * @return new Point(newX,newY)
+	 */
 	public Point newMoveLocation(MoveDirection move){
 		int newX = x;
 		int newY = y;
