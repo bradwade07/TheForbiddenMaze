@@ -13,9 +13,12 @@ public class Trap extends Entity{
         this.damage = damage;
     }
 
-    public void dealDamage(Player player){
-        active = false;
-        player.decrementScore(damage);
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public boolean trapStatus(){

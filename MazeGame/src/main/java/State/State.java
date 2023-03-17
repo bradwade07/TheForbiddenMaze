@@ -1,7 +1,5 @@
 package State;
 
-import Map.Maze;
-
 /**
  * Master State class that handles the current state of gameplay
  */

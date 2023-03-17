@@ -1,4 +1,4 @@
-package State;
+package Map;
 
 /**
  * Possible move directions for entities

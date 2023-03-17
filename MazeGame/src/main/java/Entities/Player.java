@@ -4,7 +4,7 @@ import Map.Point;
 
 /**
  * Player class that represents the Player entity
- * Class includes HP of the player and other dynamic entity
+ * Class includes score of the player and other dynamic entity methods
  */
 public class Player extends Entity {
     private int score;
@@ -13,13 +13,6 @@ public class Player extends Entity {
 //    private Spell currSpell;
 
 
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
 
     public Player(EntityType entityType, Point location){
         super(entityType,location);
@@ -27,7 +20,7 @@ public class Player extends Entity {
         alive = true;
     }
 
-    // decrement hp by amt and return new HP
+    // decrement score by amt and return new score
     public int decrementScore(int amt){
         score -= amt;
         // cant let health go below 0
@@ -37,14 +30,17 @@ public class Player extends Entity {
         return score;
     }
 
-    // increment hp by amt and return new HP
+    // increment score by amt and return new score
     public int incrementScore(int amt){
         score += amt;
-        // cant overheal
-        if (score > 100){
-            score = 100;
-        }
         return score;
+    }
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public int getScore() {
