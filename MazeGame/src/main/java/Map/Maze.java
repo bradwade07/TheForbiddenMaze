@@ -208,11 +208,16 @@ public class Maze {
 		maze[x][y] = cell;
 	}
 
+	/**
+	 * Checks if the point is outside of the map (including outer walls)
+	 * @param location
+	 * @return
+	 */
 	private boolean outOfRange(Point location) {
 		int x = location.getX();
 		int y = location.getY();
-		boolean outOfRangeX = (x < 0) || (x >= ROWS);
-		boolean outOfRangeY = (y < 0) || (y >= COLS);
+		boolean outOfRangeX = (x < 1) || (x >= ROWS - 1);
+		boolean outOfRangeY = (y < 1) || (y >= COLS - 1);
 		return (outOfRangeX || outOfRangeY);
 	}
 
@@ -233,7 +238,9 @@ public class Maze {
 
 		int x = location.getX();
 		int y = location.getY();
-		return (maze[x][y].getCellType() == CellType.path);
+
+		CellType cellType = maze[x][y].getCellType();
+		return (cellType == CellType.path || cellType == CellType.exit_cell);
 	}
 
 	public Entity getEntity(Point location) {
@@ -256,10 +263,49 @@ public class Maze {
 		return maze[x][y].getCellType();
 	}
 
-	public void swapEntity(int x1, int y1, int x2, int y2) {
-		Entity temp = maze[x1][y1].getEntity();
-		maze[x1][y1].setEntity(maze[x2][y2].getEntity());
-		maze[x2][y2].setEntity(temp);
+	/**
+	 * Swaps the entities at two points and updating accordingly
+	 * @param point1
+	 * @param point2
+	 */
+	public void swapEntity(Point point1, Point point2) {
+		int x1 = point1.getX();
+		int y1 = point1.getY();
+		int x2 = point2.getX();
+		int y2 = point2.getY();
+
+		Entity entity1 = maze[x1][y1].getEntity();
+		Entity entity2 = maze[x2][y2].getEntity();
+		maze[x1][y1].setEntity(entity2);
+		maze[x2][y2].setEntity(entity1);
+
+		Point temp = entity1.getLocation();
+
+
+		entity1.setLocation(entity2.getLocation());
+		entity2.setLocation(temp);
 
 	}
+
+	/**
+	 * Sets the Exit Cell open
+	 * TODO Create Exit Cell
+	 */
+	public void setExitCellOpen() {
+
+	}
+
+	/**
+	 * Removes all the rewards from the maze
+	 */
+	public void removeAllRewards(){
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				if(maze[i][j].getEntity().getEntityType() == EntityType.reward){
+					maze[i][j].setEntity(new Empty(EntityType.empty,new Point(i,j)));
+				}
+			}
+		}
+	}
+
 }
