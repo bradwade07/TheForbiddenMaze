@@ -15,15 +15,17 @@ public class Game {
 
 	private final Player player;
 	private final List<Enemy> enemyList;
-	private final List<Reward> rewardList;
+	public final List<Reward> rewardList;
 	private final List<Trap> trapList;
 	private Maze myMaze;
+	boolean isCellOpen;
 
 	public Game() {
 		this.player = new Player(EntityType.player, new Point(1, 1));
 		this.enemyList = new ArrayList<>();
 		this.rewardList = new ArrayList<>();
 		this.trapList = new ArrayList<>();
+		isCellOpen = false;
 	}
 
 	/**
@@ -37,7 +39,6 @@ public class Game {
 		myMaze = Maze.generateRandomizedMaze();
 		entityGenerator(enemyCount, rewardCount, trapCount);
 		placeEntitiesOnMap();
-
 	}
 
 	public boolean isPlayerAlive() {
@@ -49,17 +50,15 @@ public class Game {
 	}
 
 	public boolean hasPlayerWon() {
-		// TODO: check if player is in exit cell
-//        return (player.getLocation().equals(myMaze.getExitCell()));
-		return rewardList.isEmpty();
+        return (player.getLocation().equals(myMaze.getExitCell()));
 	}
 
 
-	public void setExitCellOpen(){
-		if(rewardList.isEmpty()){
-			// Testing purposes
-//            System.out.println("Game.java setExitCellOpen() called");
+	public void setExitCell(){
+
+		if(rewardList.isEmpty() && isCellOpen == false){
 			myMaze.setExitCellOpen();
+			isCellOpen = true;
 		}
 	}
 
@@ -91,6 +90,7 @@ public class Game {
 		Point newLocation = player.getLocation().newMoveLocation(move);
 
 		moveEntity(player, move);
+		setExitCell();
 	}
 
 	/**
@@ -138,8 +138,6 @@ public class Game {
 	private boolean checkEntityCollision(Entity entity, Point location) {
 		CollisionType collision = entityCollision(location);
 		boolean swapBack = false;
-
-//		System.out.println("Collision Type: " + collision);
 		switch (collision) {
 			case noCollision:
 				break;
@@ -168,7 +166,6 @@ public class Game {
 				}
 				break;
 			default:
-//                System.out.println("Collision: " + collision);
 				throw new RuntimeException("Game.java checkEntityCollision(): collision type is invalid");
 		}
 		return swapBack;
@@ -190,18 +187,18 @@ public class Game {
 			boolean status = true;
 			while (status) {
 				random = new Random();
-				x = random.nextInt(myMaze.getROWS());
+				x = 5 + random.nextInt(myMaze.getROWS() - 5);
 				random = new Random();
-				y = random.nextInt(myMaze.getCOLS());
+				y = 5 + random.nextInt(myMaze.getCOLS() - 5);
 				newPoint = new Point(x, y);
-				if (usedPoints.size() == 0) {
+				if (usedPoints.size() == 0 && myMaze.getMaze()[x][y].getCellType().equals(CellType.path)) {
 					entityMaker(EntityType.enemy, newPoint, 0);
 					usedPoints.add(newPoint);
 					status = false;
 					break;
 				}
 				for (int j = 0; j < usedPoints.size(); j++) {
-					if (!usedPoints.get(j).equals(newPoint)) {
+					if (!usedPoints.get(j).equals(newPoint) && myMaze.getMaze()[x][y].getCellType().equals(CellType.path)) {
 						entityMaker(EntityType.enemy, newPoint, 0);
 						usedPoints.add(newPoint);
 						status = false;
@@ -214,11 +211,11 @@ public class Game {
 			boolean status = true;
 			while (status) {
 				random = new Random();
-				x = random.nextInt(myMaze.getROWS());
+				x = 5 + random.nextInt(myMaze.getROWS() - 5);
 				random = new Random();
-				y = random.nextInt(myMaze.getCOLS());
+				y = 5 + random.nextInt(myMaze.getCOLS() - 5);
 				newPoint = new Point(x, y);
-				if (usedPoints.size() == 0) {
+				if (usedPoints.size() == 0 && myMaze.getMaze()[x][y].getCellType().equals(CellType.path)) {
 					// todo hardcoded for now, maybe have a level multipler later
 					entityMaker(EntityType.reward, newPoint, 100);
 					usedPoints.add(newPoint);
@@ -226,7 +223,7 @@ public class Game {
 					break;
 				}
 				for (int j = 0; j < usedPoints.size(); j++) {
-					if (!usedPoints.get(j).equals(newPoint)) {
+					if (!usedPoints.get(j).equals(newPoint) && myMaze.getMaze()[x][y].getCellType().equals(CellType.path)) {
 						entityMaker(EntityType.reward, newPoint, 100); //set to zero but planned to hardcode it
 						usedPoints.add(newPoint);
 						status = false;
@@ -239,18 +236,18 @@ public class Game {
 			boolean status = true;
 			while (status) {
 				random = new Random();
-				x = random.nextInt(myMaze.getROWS());
+				x = 5 + random.nextInt(myMaze.getROWS() - 5);
 				random = new Random();
-				y = random.nextInt(myMaze.getCOLS());
+				y = 5 + random.nextInt(myMaze.getCOLS() - 5);
 				newPoint = new Point(x, y);
-				if (usedPoints.size() == 0) {
+				if (usedPoints.size() == 0 && myMaze.getMaze()[x][y].getCellType().equals(CellType.path)) {
 					entityMaker(EntityType.trap, newPoint, 10);
 					usedPoints.add(newPoint);
 					status = false;
 					break;
 				}
 				for (int j = 0; j < usedPoints.size(); j++) {
-					if (!usedPoints.get(j).equals(newPoint)) {
+					if (!usedPoints.get(j).equals(newPoint) && myMaze.getMaze()[x][y].getCellType().equals(CellType.path)) {
 						entityMaker(EntityType.trap, newPoint, 10);//set to zero but planned to hardcode it
 						usedPoints.add(newPoint);
 						status = false;
@@ -499,5 +496,9 @@ public class Game {
 
 	public Maze getMyMaze() {
 		return myMaze;
+	}
+
+	public int getRewardListSize() {
+		return rewardList.size();
 	}
 }

@@ -187,7 +187,6 @@ public class Maze {
 		for (int i = 1; i < COLS - 1; i++) {
 			maze[16][i].setCellType(CellType.path);
 		}
-
 	}
 
 	public int getROWS() {
@@ -240,7 +239,7 @@ public class Maze {
 		int y = location.getY();
 
 		CellType cellType = maze[x][y].getCellType();
-		return (cellType == CellType.path || cellType == CellType.exit_cell);
+		return (cellType.equals(CellType.path) || cellType.equals(CellType.exit_cell));
 	}
 
 	public Entity getEntity(Point location) {
@@ -292,7 +291,24 @@ public class Maze {
 	 * TODO Create Exit Cell
 	 */
 	public void setExitCellOpen() {
+		List<Point> potentialExitCells = new ArrayList<>();
+		//Adding east walls in the list
+		for(int i =1; i < ROWS - 1;i++){
+			potentialExitCells.add(new Point(i,COLS - 1));
+		}
+		//Adding south walls in the list
+		for(int i =1; i < COLS - 1;i++){
+			potentialExitCells.add(new Point(ROWS - 1,i));
+		}
+		Random random = new Random();
+		Point choice = potentialExitCells.get(random.nextInt(potentialExitCells.size()));
 
+		int chosenX = choice.getX();
+		int chosenY = choice.getY();
+		if(maze[chosenX][chosenY].getCellType().equals(CellType.wall)){
+			maze[chosenX][chosenY].setCellType(CellType.exit_cell);
+			exitCell = choice;
+		}
 	}
 
 	/**
@@ -307,5 +323,4 @@ public class Maze {
 			}
 		}
 	}
-
 }

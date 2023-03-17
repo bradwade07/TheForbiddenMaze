@@ -25,15 +25,17 @@ public class Display {
 	public void runGame(){
 		game.start(4,4,4);
 		boolean keepRunning = true;
+		boolean rewardCheck = false;
 		GameState stateOfGame;
 		displayWelcomeMessage();
 		displayInstructionsMessage();
 		do {
+			game.runEnemyMovement();
 			printMaze();
 			char selection = getUserInput();
 			switch (selection) {
 				case('m') -> game.removeAllRewards();
-				case('e') -> game.setExitCellOpen();
+				case('e') -> game.setExitCell();
 				case ('?') -> displayInstructionsMessage();
 				default -> {
 					stateOfGame = movePlayer(selection);
@@ -48,7 +50,14 @@ public class Display {
 					}
 				}
 			}
-			game.runEnemyMovement();
+			//TODO: testing
+			System.out.println(game.getRewardListSize());
+			for(int i =0; i < game.getRewardListSize();i++){
+				System.out.println(game.rewardList.get(i).getLocation().getX() + " " + game.rewardList.get(i).getLocation().getY());
+			}
+			if(game.getRewardListSize() == 0){
+				game.setExitCell();
+			}
 
 		} while (keepRunning);
 	}
@@ -153,6 +162,8 @@ public class Display {
 					System.out.print("#");
 				} else if (cell.getCellType().equals(CellType.barricade)) {
 					System.out.print("#");
+				} else if (cell.getCellType().equals(CellType.exit_cell)) {
+					System.out.print(".");
 				} else if (cell.getCellType().equals(CellType.path)) {
 					if (cell.getEntity().getEntityType().equals(EntityType.player)) {
 						System.out.print("@");
