@@ -1,12 +1,11 @@
 package Map;
 
-import State.MoveDirection;
-
 /**
  * A class to contain the cell block number in a 2d space of cells and entities
  *
  * @author  Tawheed Sarker Aakash
- * */
+ *
+ */
 
 public class Point {
 	private int x;
@@ -49,23 +48,22 @@ public class Point {
 		return (sameX && sameY) ;
 	}
 
-	// Returns a copy of the new move location
-	public Point newMoveLocation(char move){
+	// Returns a copy of the new move location depending on move input
+	public Point newMoveLocation(MoveDirection move){
 		int vertical = this.x;
 		int horizontal = this.y;
-		move = Character.toLowerCase(move);
 
 		switch(move){
-			case 'w':
+			case UP:
 				vertical--;
 				break;
-			case 's':
+			case DOWN:
 				vertical++;
 				break;
-			case 'd':
+			case RIGHT:
 				horizontal++;
 				break;
-			case 'a':
+			case LEFT:
 				horizontal--;
 				break;
 			default:
