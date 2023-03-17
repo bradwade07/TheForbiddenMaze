@@ -23,10 +23,6 @@ public class Player extends Entity {
     // decrement score by amt and return new score
     public int decrementScore(int amt){
         score -= amt;
-        // cant let health go below 0
-        if (score < 0){
-            score = 0;
-        }
         return score;
     }
 
