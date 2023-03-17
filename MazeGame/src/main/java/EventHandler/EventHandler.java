@@ -48,10 +48,8 @@ public class EventHandler {
         scene = scene_p;
         canvas = canvas_p;
 
-        edge = new Image("/pit.png", 120, 120, false, false);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            Render_Game();
             if(key.getCode() == KeyCode.W) {
                 keyPressed('w');
             } else if (key.getCode() == KeyCode.A) {
@@ -65,7 +63,6 @@ public class EventHandler {
         });
 
         gameLoop();
-        RenderMenu();
     }
 
     public void gameLoop() {
@@ -112,17 +109,5 @@ public class EventHandler {
     }
 
     public void addKeyListener(KeyEvents keyEvent) {keyEventsListeners.add(keyEvent); }
-
-    // Graphics Methods
-    public void RenderMenu() {
-
-    }
-
-    public void Render_Game() {
-
-    }
-    public void Render_Terrain() {
-
-    }
 
 }
