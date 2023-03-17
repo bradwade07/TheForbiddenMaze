@@ -286,4 +286,26 @@ public class Maze {
 		entity2.setLocation(temp);
 
 	}
+
+	/**
+	 * Sets the Exit Cell open
+	 * TODO Create Exit Cell
+	 */
+	public void setExitCellOpen() {
+
+	}
+
+	/**
+	 * Removes all the rewards from the maze
+	 */
+	public void removeAllRewards(){
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				if(maze[i][j].getEntity().getEntityType() == EntityType.reward){
+					maze[i][j].setEntity(new Empty(EntityType.empty,new Point(i,j)));
+				}
+			}
+		}
+	}
+
 }

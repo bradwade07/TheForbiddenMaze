@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Display {
 	private final Game game;
 
-	private final char[] USER_KEYS = {'w','a','s','d', '?'};
+	private final char[] USER_KEYS = {'w','a','s','d', '?', 'm', 'e'};
 	private enum GameState {
 		WIN,
 		LOSE,
@@ -32,6 +32,8 @@ public class Display {
 			printMaze();
 			char selection = getUserInput();
 			switch (selection) {
+				case('m') -> game.removeAllRewards();
+				case('e') -> game.setExitCellOpen();
 				case ('?') -> displayInstructionsMessage();
 				default -> {
 					stateOfGame = movePlayer(selection);
@@ -59,12 +61,13 @@ public class Display {
 	private GameState movePlayer(char input) {
 		game.movePlayer(input);
 		GameState result;
-		if (game.isPlayerAlive()) {
-			result = GameState.RUNNING;
-		} else if (game.hasPlayerLost()) {
+
+		if (game.hasPlayerLost()) {
 			result = GameState.LOSE;
 		} else if (game.hasPlayerWon()) {
 			result = GameState.WIN;
+		}else if (game.isPlayerAlive()) {
+			result = GameState.RUNNING;
 		} else {
 			throw new IllegalArgumentException("Display.java movePlayer(): gameState invalid");
 		}
@@ -83,6 +86,8 @@ public class Display {
 		System.out.println("MOVES:");
 		System.out.println("\tUse W (up), A (left), S (down) and D (right) to move.");
 		System.out.println("\t? to reveal these instructions again");
+		System.out.println("\tm to move all rewards");
+		System.out.println("\te to open exit cell");
 		System.out.println("\t(You must press enter after each input).");
 	}
 
