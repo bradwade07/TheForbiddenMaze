@@ -2,8 +2,8 @@ package TextTesting;
 
 import Map.Cell;
 import Map.CellType;
-import State.*;
 import Entities.*;
+import State.Game;
 
 import java.util.Scanner;
 
@@ -23,7 +23,7 @@ public class Display {
 
 
 	public void runGame(){
-		game.start(1,1,1);
+		game.start(4,4,4);
 		boolean keepRunning = true;
 		GameState stateOfGame;
 		displayWelcomeMessage();
@@ -36,15 +36,17 @@ public class Display {
 				default -> {
 					stateOfGame = movePlayer(selection);
 					if (stateOfGame == GameState.WIN) {
+						printMaze();
 						displayWin();
 						keepRunning = false;
 					} else if (stateOfGame == GameState.LOSE) {
+						printMaze();
 						displayLoss();
 						keepRunning = false;
 					}
 				}
 			}
-			game.enemyMovement();
+			game.runEnemyMovement();
 
 		} while (keepRunning);
 	}
@@ -77,9 +79,11 @@ public class Display {
 		System.out.println("\t@: Player");
 		System.out.println("\t!: Enemy");
 		System.out.println("\t$: Reward");
+		System.out.println("\tX: Trap");
 		System.out.println("MOVES:");
 		System.out.println("\tUse W (up), A (left), S (down) and D (right) to move.");
-		System.out.println("\t(You must press enter after each move).");
+		System.out.println("\t? to reveal these instructions again");
+		System.out.println("\t(You must press enter after each input).");
 	}
 
 	public char getUserInput() {
