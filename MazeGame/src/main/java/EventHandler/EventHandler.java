@@ -39,10 +39,14 @@ public class EventHandler {
     private UI ui;
     private Game game;
 
+    /**
+     * EventHandler Contructor
+     * @param stage_p
+     * @param root_p
+     * @param scene_p
+     * @param canvas_p
+     */
     public EventHandler(Stage stage_p, Group root_p, Scene scene_p, Canvas canvas_p) {
-        this.menuChangeListeners = new ArrayList<>();
-        this.gameChangeListeners = new ArrayList<>();
-        this.keyEventsListeners = new ArrayList<>();
 
         Rectangle2D screen = Screen.getPrimary().getBounds();
 
@@ -88,6 +92,9 @@ public class EventHandler {
         ui = new UI(stage_p, scene_p, root_p, canvas_p);
     }
 
+    /**
+     * Starts the Game Loop. Every Loop it calls game tick and updates game UI[
+     */
     public void gameLoop() {
 
         Timer t = new Timer();
@@ -104,34 +111,5 @@ public class EventHandler {
         t.scheduleAtFixedRate(tt, new Date(), 200);
 
     }
-
-    public void startGameButton() {
-
-        for (ChangeGameEvent listener: gameChangeListeners) {
-
-        }
-    }
-
-    public void startMenuButton() {
-        for (ChangeMenuEvent listener: menuChangeListeners) {
-
-        }
-    }
-
-    public void keyPressed(char keycode) {
-        for (KeyEvents listener: keyEventsListeners) {
-            listener.onKeyPress(keycode);
-        }
-    }
-
-    public void addGameListener(ChangeGameEvent gameEvent) {
-        gameChangeListeners.add(gameEvent);
-    }
-
-    public void addMenuListener(ChangeMenuEvent menuEvent) {
-        menuChangeListeners.add(menuEvent);
-    }
-
-    public void addKeyListener(KeyEvents keyEvent) {keyEventsListeners.add(keyEvent); }
 
 }

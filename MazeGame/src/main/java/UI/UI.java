@@ -45,6 +45,13 @@ public class UI {
 	private Image reward;
 	private Image trap;
 
+	/**
+	 * Constructs UI. The stage MUST be the primary stage for the game.
+	 * @param stage_p
+	 * @param scene_p
+	 * @param group_p
+	 * @param canvas_p
+	 */
 	public UI(Stage stage_p, Scene scene_p, Group group_p, Canvas canvas_p) {
 		stage = stage_p;
 		scene = scene_p;
@@ -79,10 +86,16 @@ public class UI {
 		Game newGame = new Game();
 	}
 
+	/**
+	 *  Clears Canvas. It is easier to clear the canvas than make a new scene (it also is more efficient) so this is called every time we redraw any game scene
+	 */
 	private void ClearCanvas() {
 		graphicsContext.clearRect(0, 0, screenWidth, screenHeight);
 	}
 
+	/**
+	 * Renders the Menu
+	 */
 	public void RenderMenu() {
 		ClearCanvas();
 		graphicsContext.drawImage(background, 0, 0);
@@ -91,6 +104,15 @@ public class UI {
 		graphicsContext.drawImage(howToPlay, screenWidth / 7 * 3, screenHeight / 8 * 5);
 	}
 
+	/**
+	 * Renders game.
+	 * @param maze
+	 * @param player
+	 * @param enemyList
+	 * @param rewardList
+	 * @param trapList
+	 * @param score
+	 */
 	public void RenderGame(Maze maze, Player player, List<Enemy> enemyList, List<Reward> rewardList, List<Trap> trapList, int score) {
 		ClearCanvas();
 		Cell matrix[][] = maze.getMaze();
@@ -120,6 +142,13 @@ public class UI {
 		graphicsContext.strokeText("Score:"  + score, cellWidth * 15, cellWidth /2);
 	}
 
+	/**
+	 * Renders all entities in the game
+	 * @param player_e
+	 * @param enemies
+	 * @param rewardList
+	 * @param trapList
+	 */
 	public void RenderEntity(Player player_e, List<Enemy> enemies, List<Reward> rewardList, List<Trap> trapList) {
 		Point temp = player_e.getLocation();
 		graphicsContext.drawImage(player, temp.getY()*cellWidth, temp.getX()*cellWidth);
@@ -140,11 +169,17 @@ public class UI {
 		}
 	}
 
+	/**
+	 * Renders the how to play scene
+	 */
 	public void RenderHowToPlay() {
 		ClearCanvas();
 		graphicsContext.drawImage(howToPlayScreen, 0, 0);
 	}
 
+	/**
+	 * Renders the Game over Scene
+	 */
 	public void RenderGameOver() {
 		ClearCanvas();
 		graphicsContext.drawImage(gameOverScreen, 0, 0);
