@@ -71,7 +71,9 @@ public class EventHandler {
         });
 
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, (mouse) -> {
-            if (game)
+            if (true) {
+
+            }
         });
 
         ui = new UI(stage_p, scene_p, root_p, canvas_p);
