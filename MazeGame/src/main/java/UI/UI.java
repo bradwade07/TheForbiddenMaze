@@ -31,6 +31,8 @@ public class UI {
 
 	// IMAGES
 	private Image background;
+	private Image howToPlayScreen;
+	private Image gameOverScreen;
 	private Image title;
 	private Image playGame;
 	private Image howToPlay;
@@ -70,11 +72,11 @@ public class UI {
 		enemy = new Image("/skeleton.png", screenWidth / 32, screenHeight / 18, false, false);
 		reward = new Image("/crystal_01d.png", screenWidth / 32, screenHeight / 18, false, false);
 		trap = new Image("/spike_4.png", screenWidth / 32, screenHeight / 18, false, false);
-
+		howToPlayScreen = new Image("/HowToPlayScreen.jpg", screenWidth, screenHeight, false, false);
+		gameOverScreen = new Image("/GameOver.jpg", screenWidth, screenHeight, false, false);
 
 		RenderMenu();
 		Game newGame = new Game();
-		newGame.start(5, 5, 5);
 	}
 
 	private void ClearCanvas() {
@@ -89,7 +91,7 @@ public class UI {
 		graphicsContext.drawImage(howToPlay, screenWidth / 7 * 3, screenHeight / 8 * 5);
 	}
 
-	public void RenderGame(Maze maze, Player player, List<Enemy> enemyList, List<Reward> rewardList, List<Trap> trapList) {
+	public void RenderGame(Maze maze, Player player, List<Enemy> enemyList, List<Reward> rewardList, List<Trap> trapList, int score) {
 		ClearCanvas();
 		Cell matrix[][] = maze.getMaze();
 
@@ -115,6 +117,7 @@ public class UI {
 		}
 
 		RenderEntity(player, enemyList, rewardList, trapList);
+		graphicsContext.strokeText("Score:"  + score, cellWidth * 15, cellWidth /2);
 	}
 
 	public void RenderEntity(Player player_e, List<Enemy> enemies, List<Reward> rewardList, List<Trap> trapList) {
@@ -137,8 +140,14 @@ public class UI {
 		}
 	}
 
+	public void RenderHowToPlay() {
+		ClearCanvas();
+		graphicsContext.drawImage(howToPlayScreen, 0, 0);
+	}
 
-
-
+	public void RenderGameOver() {
+		ClearCanvas();
+		graphicsContext.drawImage(gameOverScreen, 0, 0);
+	}
 
 }
