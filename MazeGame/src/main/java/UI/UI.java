@@ -1,7 +1,13 @@
 package UI;
 
+import Entities.Enemy;
+import Entities.Player;
+import Entities.Reward;
+import Entities.Trap;
 import Map.Cell;
 import Map.Maze;
+import Map.Point;
+import State.Game;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,6 +16,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class UI {
 	private Stage stage;
@@ -30,6 +38,10 @@ public class UI {
 	private Image floor;
 	private Image barrier;
 	private Image portal;
+	private Image player;
+	private Image enemy;
+	private Image reward;
+	private Image trap;
 
 	public UI(Stage stage_p, Scene scene_p, Group group_p, Canvas canvas_p) {
 		stage = stage_p;
@@ -52,8 +64,17 @@ public class UI {
 		howToPlay = new Image("/howToPlay.png", screenWidth / 7, screenHeight / 8, false, false);
 		edge = new Image("/pit.png", screenWidth / 32, screenHeight / 18, false, false);
 		floor = new Image("/floor.png", screenWidth / 32, screenHeight / 18, false, false);
-		barrier = new Image("barrier.png", screenWidth / 34, screenHeight / 18, false, false);
+		barrier = new Image("/barrier.png", screenWidth / 34, screenHeight / 18, false, false);
 		portal = new Image("/portal.png", screenWidth / 32, screenHeight / 18, false, false);
+		player = new Image("/adventurer-idle-00.png", screenWidth / 32 / 2, screenHeight / 18, false, false);
+		enemy = new Image("/skeleton.png", screenWidth / 32, screenHeight / 18, false, false);
+		reward = new Image("/crystal_01d.png", screenWidth / 32, screenHeight / 18, false, false);
+		trap = new Image("/spike_4.png", screenWidth / 32, screenHeight / 18, false, false);
+
+
+		RenderMenu();
+		Game newGame = new Game();
+		newGame.start(5, 5, 5);
 	}
 
 	private void ClearCanvas() {
@@ -64,17 +85,17 @@ public class UI {
 		ClearCanvas();
 		graphicsContext.drawImage(background, 0, 0);
 		graphicsContext.drawImage(title, screenWidth / 3, screenHeight / 8);
-		graphicsContext.drawImage(playGame, screenWidth / 7 * 2, screenHeight / 8 * 2);
-		graphicsContext.drawImage(howToPlay, screenWidth / 7 * 2, screenHeight / 8 * 3);
+		graphicsContext.drawImage(playGame, screenWidth / 7 * 3, screenHeight / 8 * 3);
+		graphicsContext.drawImage(howToPlay, screenWidth / 7 * 3, screenHeight / 8 * 5);
 	}
 
-	public void RenderGame(Maze maze) {
+	public void RenderGame(Maze maze, Player player, List<Enemy> enemyList, List<Reward> rewardList, List<Trap> trapList) {
 		ClearCanvas();
 		Cell matrix[][] = maze.getMaze();
 
 		for (int i = 0; i < 32; i ++) {
 			for (int j = 0; j < 18; j++) {
-				switch (matrix[i][j].getCellType()) {
+				switch (matrix[j][i].getCellType()) {
 					case path:
 						graphicsContext.drawImage(floor, cellWidth * i, cellWidth * j);
 						break;
@@ -91,6 +112,28 @@ public class UI {
 						break;
 				}
 			}
+		}
+
+		RenderEntity(player, enemyList, rewardList, trapList);
+	}
+
+	public void RenderEntity(Player player_e, List<Enemy> enemies, List<Reward> rewardList, List<Trap> trapList) {
+		Point temp = player_e.getLocation();
+		graphicsContext.drawImage(player, temp.getX(), temp.getY());
+
+		for (Enemy enemy_e: enemies) {
+			temp = enemy_e.getLocation();
+			graphicsContext.drawImage(enemy, temp.getX(), temp.getY());
+		}
+
+		for (Reward reward_e: rewardList) {
+			temp = reward_e.getLocation();
+			graphicsContext.drawImage(reward, temp.getX(), temp.getY());
+		}
+
+		for (Trap trap_e: trapList) {
+			temp = trap_e.getLocation();
+			graphicsContext.drawImage(trap, temp.getX(), temp.getY());
 		}
 	}
 
