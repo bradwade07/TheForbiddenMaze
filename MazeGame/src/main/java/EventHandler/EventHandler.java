@@ -1,5 +1,6 @@
 package EventHandler;
 
+import State.Game;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -17,6 +19,7 @@ import static java.util.concurrent.TimeUnit.*;
 
 import java.util.*;
 import java.util.TimerTask;
+import UI.UI;
 
 public class EventHandler {
     public List<ChangeMenuEvent> menuChangeListeners;
@@ -33,6 +36,9 @@ public class EventHandler {
     private double screenWidth;
     private double screenHeight;
 
+    private UI ui;
+    private Game game;
+
     public EventHandler(Stage stage_p, Group root_p, Scene scene_p, Canvas canvas_p) {
         this.menuChangeListeners = new ArrayList<>();
         this.gameChangeListeners = new ArrayList<>();
@@ -48,6 +54,8 @@ public class EventHandler {
         scene = scene_p;
         canvas = canvas_p;
 
+        game = new Game();
+
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.W) {
@@ -62,7 +70,11 @@ public class EventHandler {
 
         });
 
-        gameLoop();
+        scene.addEventHandler(MouseEvent.MOUSE_CLICKED, (mouse) -> {
+            if (game)
+        });
+
+        ui = new UI(stage_p, scene_p, root_p, canvas_p);
     }
 
     public void gameLoop() {

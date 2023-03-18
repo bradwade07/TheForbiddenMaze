@@ -14,7 +14,7 @@ import javafx.scene.Parent;
 import java.io.IOException;
 
 public class App extends Application {
-    private static String title = "Dungeon Maze";
+    private static String title = "Forbidden Maze";
     private EventHandler eventHandler;
     @Override
     public void start(Stage stage) throws IOException {
