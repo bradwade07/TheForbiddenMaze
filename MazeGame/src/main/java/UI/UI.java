@@ -122,21 +122,21 @@ public class UI {
 
 	public void RenderEntity(Player player_e, List<Enemy> enemies, List<Reward> rewardList, List<Trap> trapList) {
 		Point temp = player_e.getLocation();
-		graphicsContext.drawImage(player, temp.getX(), temp.getY());
+		graphicsContext.drawImage(player, temp.getY()*cellWidth, temp.getX()*cellWidth);
 
 		for (Enemy enemy_e: enemies) {
 			temp = enemy_e.getLocation();
-			graphicsContext.drawImage(enemy, temp.getX(), temp.getY());
+			graphicsContext.drawImage(enemy, temp.getY()*cellWidth, temp.getX()*cellWidth);
 		}
 
 		for (Reward reward_e: rewardList) {
 			temp = reward_e.getLocation();
-			graphicsContext.drawImage(reward, temp.getX(), temp.getY());
+			graphicsContext.drawImage(reward, temp.getY()*cellWidth, temp.getX()*cellWidth);
 		}
 
 		for (Trap trap_e: trapList) {
 			temp = trap_e.getLocation();
-			graphicsContext.drawImage(trap, temp.getX(), temp.getY());
+			graphicsContext.drawImage(trap, temp.getY()*cellWidth, temp.getX()*cellWidth);
 		}
 	}
 

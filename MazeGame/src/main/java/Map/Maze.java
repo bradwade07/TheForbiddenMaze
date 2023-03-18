@@ -17,17 +17,21 @@ import java.util.Random;
 public class Maze {
 	private Cell[][] maze;
 
-	//TODO: update ROWS and COLS based on screen ratio values
 	private final int ROWS = 18;
 	private final int COLS = 32;
 	private Point exitCell;
 
-
+	/**
+	 * Constructor of a maze of specified dimensions ROWS x COLS
+	 */
 	public Maze() {
 		this.maze = new Cell[ROWS][COLS];
 	}
 
-	private void createCanvas() { //Creates the outer walls of the maze and sets the inner cells as wall to create the maze
+	/**
+	 * Begins the initialization of the maze, sets all the cells to barricade and then updates the perimeter to walls
+	 */
+	private void createCanvas() {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
 				maze[i][j] = new Cell(i, j, CellType.barricade);
@@ -49,12 +53,20 @@ public class Maze {
 		}
 	}
 
+	/**
+	 * Factory to instantiate a maze and make it
+	 * @return newMaze
+	 */
 	public static Maze generateRandomizedMaze() {
 		Maze newMaze = new Maze();
 		newMaze.createMaze();
 		return newMaze;
 	}
 
+	/**
+	 * Function using Randomized Prim's Algorithm to generate the maze
+	 * Takes the fact that all the inner cells were previously set to barricades and set them to paths
+	 */
 	public void createMaze() { //Using Randomized Prim's Algorithm to generate the maze
 		createCanvas();
 		List<Cell> neighborCells = new ArrayList<>();
@@ -180,28 +192,42 @@ public class Maze {
 			}
 			neighborCells.remove(choice);
 		}
-		// TODO: was made for mouse placement, see if the logic sticks
 		for (int i = 1; i < ROWS - 1; i++) {
 			maze[i][30].setCellType(CellType.path);
 		}
 		for (int i = 1; i < COLS - 1; i++) {
 			maze[16][i].setCellType(CellType.path);
 		}
-
 	}
 
+	/**
+	 * Return the ROWS count for maze
+	 * @return ROWS
+	 */
 	public int getROWS() {
 		return ROWS;
 	}
 
+	/**
+	 * Return the COLS count for maze
+	 * @return COLS
+	 */
 	public int getCOLS() {
 		return COLS;
 	}
 
+	/**
+	 * Return the maze as a 2d array of cells
+	 * @return maze
+	 */
 	public Cell[][] getMaze() {
 		return maze;
 	}
 
+	/**
+	 * pass in a cell and update Maze to include it at the new cells x and y coordinate
+	 * @param cell
+	 */
 	public void setCell(Cell cell) {
 		int x = cell.getLocation().getX();
 		int y = cell.getLocation().getY();
@@ -209,9 +235,9 @@ public class Maze {
 	}
 
 	/**
-	 * Checks if the point is outside of the map (including outer walls)
+	 * Checks if the point is outside the map (including outer walls)
 	 * @param location
-	 * @return
+	 * @return (outOfRangeX || outOfRangeY)
 	 */
 	private boolean outOfRange(Point location) {
 		int x = location.getX();
@@ -221,44 +247,60 @@ public class Maze {
 		return (outOfRangeX || outOfRangeY);
 	}
 
-//	public boolean isCellWall(Point location){ depricated by Tawheed. used for isCellOpen method
-//		if(outOfRange(location)){
-//			return false;
-//		}
-//		int x = location.getX();
-//		int y = location.getY();
-//
-//		return (maze[x][y].getCellType() == CellType.wall);
-//	}
-
+	/**
+	 * Check if the cell is open
+	 * @param location
+	 * @return
+	 */
 	public boolean isCellOpen(Point location) {
 		if (outOfRange(location)) {
-			return false;
+			if(!location.equals(exitCell))
+				return false;
 		}
 
 		int x = location.getX();
 		int y = location.getY();
 
 		CellType cellType = maze[x][y].getCellType();
-		return (cellType == CellType.path || cellType == CellType.exit_cell);
+		return (cellType.equals(CellType.path) || cellType.equals(CellType.exit_cell));
 	}
 
+	/**
+	 * Return the entity at a given location in the maze
+	 * @param location
+	 * @return Entity
+	 */
 	public Entity getEntity(Point location) {
 		int x = location.getX();
 		int y = location.getY();
 		return maze[x][y].getEntity();
 	}
 
+	/**
+	 * return the coordinate of the exit cell
+	 * @return exitCell
+	 */
 	public Point getExitCell() {
 		return exitCell;
 	}
 
+	/**
+	 * Set the entity at a specified location to a new entity passed in as a parameter
+	 * @param entity
+	 * @param location
+	 */
 	public void setEntity(Entity entity, Point location) {
 		int x = location.getX();//entity.getLocation().getX();
 		int y = location.getY();//entity.getLocation().getY();
 		maze[x][y].setEntity(entity);
 	}
 
+	/**
+	 * return the cell type at a given coordinate
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public CellType getCellType(int x, int y) {
 		return maze[x][y].getCellType();
 	}
@@ -289,10 +331,26 @@ public class Maze {
 
 	/**
 	 * Sets the Exit Cell open
-	 * TODO Create Exit Cell
 	 */
 	public void setExitCellOpen() {
+		List<Point> potentialExitCells = new ArrayList<>();
+		//Adding east walls in the list
+		for(int i =1; i < ROWS - 1;i++){
+			potentialExitCells.add(new Point(i,COLS - 1));
+		}
+		//Adding south walls in the list
+		for(int i =1; i < COLS - 1;i++){
+			potentialExitCells.add(new Point(ROWS - 1,i));
+		}
+		Random random = new Random();
+		Point choice = potentialExitCells.get(random.nextInt(potentialExitCells.size()));
 
+		int chosenX = choice.getX();
+		int chosenY = choice.getY();
+		if(maze[chosenX][chosenY].getCellType().equals(CellType.wall)){
+			maze[chosenX][chosenY].setCellType(CellType.exit_cell);
+			exitCell = choice;
+		}
 	}
 
 	/**
@@ -307,5 +365,4 @@ public class Maze {
 			}
 		}
 	}
-
 }

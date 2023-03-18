@@ -59,20 +59,29 @@ public class EventHandler {
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode() == KeyCode.W) {
-                keyPressed('w');
+                game.movePlayer('w');
             } else if (key.getCode() == KeyCode.A) {
-                keyPressed('a');
+                game.movePlayer('a');
             } else if (key.getCode() == KeyCode.S) {
-                keyPressed('s');
+                game.movePlayer('s');
             } else if (key.getCode() == KeyCode.D) {
-                keyPressed('d');
+                game.movePlayer('d');
             }
 
         });
 
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, (mouse) -> {
-            if (true) {
-
+            if (game.getGameState().equals(Game.GameState.gameStart) && mouse.getScreenX() >= screenWidth* 3/7 && mouse.getScreenX() <= screenWidth* 4/7) {
+                if(mouse.getScreenY() >= screenHeight* 3/8 && mouse.getScreenY() <= screenHeight* 4/8){
+                    game.setGameToRun();
+                    game.generateMap(2,1,3);
+                    ui.RenderGame(game.getMyMaze(),game.getPlayer(),game.getEnemyList(),game.getRewardList(),game.getTrapList(),game.getPlayerScore());
+                    gameLoop();
+                }
+                else if (mouse.getScreenY() >= screenHeight* 5/8 && mouse.getScreenY() <= screenHeight* 6/8) {
+                    game.setGameStateToHowToPlay();
+                    ui.RenderHowToPlay();
+                }
             }
         });
 
@@ -85,13 +94,14 @@ public class EventHandler {
         TimerTask tt = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Task Timer on Fixed Rate");
+                game.runOneTick();
+                ui.RenderGame(game.getMyMaze(),game.getPlayer(),game.getEnemyList(),game.getRewardList(),game.getTrapList(),game.getPlayerScore());
             }
 
 
         };
 
-        t.scheduleAtFixedRate(tt, new Date(), 1000);
+        t.scheduleAtFixedRate(tt, new Date(), 200);
 
     }
 

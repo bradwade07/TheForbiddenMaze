@@ -1,6 +1,7 @@
 package Group2;
 
 import EventHandler.EventHandler;
+import TextTesting.Display;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -21,8 +22,8 @@ public class App extends Application {
         try {
             Rectangle2D screen = Screen.getPrimary().getBounds();
 
-           double  screenWidth = screen.getMaxX();
-           double screenHeight = screen.getMaxY();
+            double  screenWidth = screen.getMaxX();
+            double screenHeight = screen.getMaxY();
 
             Group root = new Group();
             Scene scene = new Scene(root, screenWidth, screenHeight);
