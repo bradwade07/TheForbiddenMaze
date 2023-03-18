@@ -145,6 +145,6 @@ public class EventHandler {
     }
 
     public void gameInstance(){
-        myGame.start(1,1,1); //TODO based on levels
+        myGame.generateMap(1,1,1);
     }
 }

@@ -12,29 +12,51 @@ public class Cell {
 	private CellType cellType;
 	private Entity entity;
 
-
+	/**
+	 * Constructor for cell, has an x and y coordinate for the 2d maze array, and a CellType
+	 * @param x
+	 * @param y
+	 * @param cellType
+	 */
 	public Cell(int x, int y, CellType cellType) {
 		this.location = new Point(x,y);
 		this.cellType = cellType;
-		// TODO: update based on entity package(2)
-		//this.entity = new Empty(x,y);
 	}
 
+	/**
+	 * Return location of a cell
+	 * @return location
+	 */
 	public Point getLocation() {
 		return location;
 	}
 
-
+	/**
+	 * Return the cellType of a cell
+	 * @return cellType
+	 */
 	public CellType getCellType() {
 		return cellType;
 	}
 
+	/**
+	 * set the cellType of a cell
+	 * @param cellType
+	 */
 	public void setCellType(CellType cellType) {this.cellType = cellType;}
 
+	/**
+	 * return the entity attached to the cell
+	 * @return entity
+	 */
 	public Entity getEntity() {
 		return entity;
 	}
 
+	/**
+	 * Set the entity of the cell
+	 * @param entity
+	 */
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}

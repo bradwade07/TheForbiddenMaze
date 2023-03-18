@@ -2,185 +2,153 @@ package TextTesting;
 
 import Map.Cell;
 import Map.CellType;
-import Entities.*;
+import Entities.EntityType;
 import State.Game;
 
 import java.util.Scanner;
 
 public class Display {
-	private final Game game;
+    private final Game game;
 
-	private final char[] USER_KEYS = {'w','a','s','d', '?', 'm', 'e'};
-	private enum GameState {
-		WIN,
-		LOSE,
-		RUNNING
-	}
-
-	public Display(){
-		game = new Game();
-	}
+    private final char[] USER_KEYS = {'w', 'a', 's', 'd', '?', 'm'};
 
 
-	public void runGame(){
-		game.start(4,4,4);
-		boolean keepRunning = true;
-		boolean rewardCheck = false;
-		GameState stateOfGame;
-		displayWelcomeMessage();
-		displayInstructionsMessage();
-		do {
-			game.runEnemyMovement();
-			printMaze();
-			char selection = getUserInput();
-			switch (selection) {
-				case('m') -> game.removeAllRewards();
-				case('e') -> game.setExitCell();
-				case ('?') -> displayInstructionsMessage();
-				default -> {
-					stateOfGame = movePlayer(selection);
-					if (stateOfGame == GameState.WIN) {
-						printMaze();
-						displayWin();
-						keepRunning = false;
-					} else if (stateOfGame == GameState.LOSE) {
-						printMaze();
-						displayLoss();
-						keepRunning = false;
-					}
-				}
-			}
-			//TODO: testing
-			System.out.println(game.getRewardListSize());
-			for(int i =0; i < game.getRewardListSize();i++){
-				System.out.println(game.rewardList.get(i).getLocation().getX() + " " + game.rewardList.get(i).getLocation().getY());
-			}
-			if(game.getRewardListSize() == 0){
-				game.setExitCell();
-			}
-
-		} while (keepRunning);
-	}
+    public Display() {
+        game = new Game();
+    }
 
 
-	// Precondition: input is well-formed i.e. one of w, a, s, d
-	// Post-condition: player is moved given that the cell they wish
-	//                 to move to isn't a wall or out of bounds. The game's
-	//                 view is updated to match.
-	private GameState movePlayer(char input) {
-		game.movePlayer(input);
-		GameState result;
+    public void runGame() {
+        game.generateMap(4, 4, 4);
+        boolean keepRunning;
+        displayWelcomeMessage();
+        displayInstructionsMessage();
+        do {
+            printMaze();
+            char selection = getUserInput();
+            switch (selection) {
+                case ('m') -> game.removeAllRewards();
+                case ('?') -> displayInstructionsMessage();
+                default -> movePlayer(selection);
+            }
+            game.runOneTick();
+            keepRunning = game.isGameRunning();
+            if (game.isGameWon()) {
+                printMaze();
+                displayWin();
+            } else if (game.isGameLost()) {
+                printMaze();
+                displayLoss();
+            }
 
-		if (game.hasPlayerLost()) {
-			result = GameState.LOSE;
-		} else if (game.hasPlayerWon()) {
-			result = GameState.WIN;
-		}else if (game.isPlayerAlive()) {
-			result = GameState.RUNNING;
-		} else {
-			throw new IllegalArgumentException("Display.java movePlayer(): gameState invalid");
-		}
-		return result;
-	}
+        } while (keepRunning);
+    }
 
-	private void displayInstructionsMessage(){
-		System.out.println("INSTRUCTIONS: ");
-		System.out.println("\tCollect all the rewards before reaching Exit Cell!");
-		System.out.println("LEGEND:");
-		System.out.println("\t#: Wall");
-		System.out.println("\t@: Player");
-		System.out.println("\t!: Enemy");
-		System.out.println("\t$: Reward");
-		System.out.println("\tX: Trap");
-		System.out.println("MOVES:");
-		System.out.println("\tUse W (up), A (left), S (down) and D (right) to move.");
-		System.out.println("\t? to reveal these instructions again");
-		System.out.println("\tm to move all rewards");
-		System.out.println("\te to open exit cell");
-		System.out.println("\t(You must press enter after each input).");
-	}
+    // Precondition: input is well-formed i.e. one of w, a, s, d
+    // Post-condition: player is moved given that the cell they wish
+    //                 to move to isn't a wall or out of bounds. The game's
+    //                 view is updated to match.
+    private void movePlayer(char input) {
+        game.movePlayer(input);
+    }
 
-	public char getUserInput() {
-		Scanner userInput = new Scanner(System.in);
-		boolean formatValid;
-		char input;
-		do {
-			System.out.print("Enter your move [WASD?]: ");
-			input = userInput.next().trim().charAt(0);
-			input = Character.toLowerCase(input);
-			formatValid = isFormatValid(input);
+    private void displayInstructionsMessage() {
+        System.out.println("INSTRUCTIONS: ");
+        System.out.println("\tCollect all the rewards before reaching Exit Cell!");
+        System.out.println("LEGEND:");
+        System.out.println("\t#: Wall");
+        System.out.println("\t@: Player");
+        System.out.println("\t!: Enemy");
+        System.out.println("\t$: Reward");
+        System.out.println("\tX: Trap");
+        System.out.println("MOVES:");
+        System.out.println("\tUse W (up), A (left), S (down) and D (right) to move.");
+        System.out.println("\t? to reveal these instructions again");
+        System.out.println("\tm to move all rewards");
+        System.out.println("\te to open exit cell");
+        System.out.println("\t(You must press enter after each input).");
+    }
 
-		} while (!formatValid);
+    private char getUserInput() {
+        Scanner userInput = new Scanner(System.in);
+        boolean formatValid;
+        char input;
+        do {
+            System.out.print("Enter your move [WASD?]: ");
+            input = userInput.next().trim().charAt(0);
+            input = Character.toLowerCase(input);
+            formatValid = isFormatValid(input);
 
-		return input;
-	}
+        } while (!formatValid);
 
-	// checks if the input is in the correct format
-	private boolean isFormatValid(char input) {
-		boolean inputValid = false;
-		for (char ch : USER_KEYS) {
-			if (input == ch) {
-				inputValid = true;
-				break;
-			}
-		}
+        return input;
+    }
 
-		if (!inputValid) {
-			System.out.println("Invalid move. " +
-					"Please enter just A (left), S (down), D (right), or W (up).");
-		}
+    // checks if the input is in the correct format
+    private boolean isFormatValid(char input) {
+        boolean inputValid = false;
+        for (char ch : USER_KEYS) {
+            if (input == ch) {
+                inputValid = true;
+                break;
+            }
+        }
 
-		return inputValid;
-	}
+        if (!inputValid) {
+            System.out.println("Invalid move. " +
+                    "Please enter just A (left), S (down), D (right), or W (up).");
+        }
 
-	private void displayWelcomeMessage(){
-		System.out.println("----------------------------------------");
-		System.out.println( "Welcome to the Maze!");
-		System.out.println("----------------------------------------");
-	}
+        return inputValid;
+    }
 
-
-	private void displayLoss() {
-		System.out.println("I'm sorry, you've lost!");
-		System.out.println("GAME OVER; please try again.");
-	}
-
-	private void displayWin() {
-		System.out.println("Congratulations! You won!");
-	}
+    private void displayWelcomeMessage() {
+        System.out.println("----------------------------------------");
+        System.out.println("Welcome to the Maze!");
+        System.out.println("----------------------------------------");
+    }
 
 
+    private void displayLoss() {
+        System.out.println("I'm sorry, you've lost!");
+        System.out.println("GAME OVER; please try again.");
+    }
 
-	private void printMaze() {
-		System.out.println();
-		System.out.println("Maze: ");
-		for (int i = 0; i < game.getMyMaze().getROWS(); i++) {
-			for (int j = 0; j < game.getMyMaze().getCOLS(); j++) {
-				Cell cell = game.getMyMaze().getMaze()[i][j];
+    private void displayWin() {
+        System.out.println("Congratulations! You won!");
+    }
 
-				if (cell.getCellType().equals(CellType.wall)) {
-					System.out.print("#");
-				} else if (cell.getCellType().equals(CellType.barricade)) {
-					System.out.print("#");
-				} else if (cell.getCellType().equals(CellType.exit_cell)) {
-					System.out.print(".");
-				} else if (cell.getCellType().equals(CellType.path)) {
-					if (cell.getEntity().getEntityType().equals(EntityType.player)) {
-						System.out.print("@");
-					} else if (cell.getEntity().getEntityType().equals(EntityType.enemy)) {
-						System.out.print("!");
-					} else if (cell.getEntity().getEntityType().equals(EntityType.reward)) {
-						System.out.print("$");
-					} else if (cell.getEntity().getEntityType().equals(EntityType.trap)) {
-						System.out.print("X");
-					} else{
-						System.out.print(" ");
-					}
-				}
-			}
-			System.out.println();
 
-		}
-		System.out.println("Player Score: " + game.getPlayerScore());
-	}
+    private void printMaze() {
+        System.out.println();
+        System.out.println("Maze: ");
+        for (int i = 0; i < game.getMyMaze().getROWS(); i++) {
+            for (int j = 0; j < game.getMyMaze().getCOLS(); j++) {
+                Cell cell = game.getMyMaze().getMaze()[i][j];
+
+                if (cell.getCellType().equals(CellType.wall)) {
+                    System.out.print("#");
+                } else if (cell.getCellType().equals(CellType.barricade)) {
+                    System.out.print("#");
+                } else if (cell.getCellType().equals(CellType.exit_cell)) {
+                    System.out.print(".");
+                } else if (cell.getCellType().equals(CellType.path)) {
+                    if (cell.getEntity().getEntityType().equals(EntityType.player)) {
+                        System.out.print("@");
+                    } else if (cell.getEntity().getEntityType().equals(EntityType.enemy)) {
+                        System.out.print("!");
+                    } else if (cell.getEntity().getEntityType().equals(EntityType.reward)) {
+                        System.out.print("$");
+                    } else if (cell.getEntity().getEntityType().equals(EntityType.trap)) {
+                        System.out.print("X");
+                    } else {
+                        System.out.print(" ");
+                    }
+                }
+            }
+            System.out.println();
+
+        }
+        System.out.println("Player Score: " + game.getPlayerScore());
+    }
 }
