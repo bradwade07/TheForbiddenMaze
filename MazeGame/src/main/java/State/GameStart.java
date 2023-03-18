@@ -11,10 +11,5 @@ public class GameStart extends State{
         setNexState(GameState.gameStart);
     }
 
-    @Override
-    public void renderState() {
-
-    }
-
 }
 
