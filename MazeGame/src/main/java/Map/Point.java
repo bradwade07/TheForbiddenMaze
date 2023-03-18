@@ -9,49 +9,49 @@ package Map;
  * */
 
 public class Point {
-	private int x;
-	private int y;
+	private int Width;
+	private int Height;
 
 	/**
 	 * constructor for a Point object, has an x and y coordinate
-	 * @param x
-	 * @param y
+	 * @param width
+	 * @param height
 	 */
-	public Point(int x, int y){
-		this.x = x;
-		this.y = y;
+	public Point(int height, int width){
+		this.Height = height;
+		this.Width = width;
 	}
 
 	/**
 	 * Return x coordinate of a point
 	 * @return x
 	 */
-	public int getX() {
-		return x;
+	public int getWidth() {
+		return Width;
 	}
 
 	/**
 	 * Return y coordinate of a point
 	 * @return y
 	 */
-	public int getY() {
-		return y;
+	public int getHeight() {
+		return Height;
 	}
 
 	/**
 	 * Change the x coordinate of a point
-	 * @param x
+	 * @param width
 	 */
-	public void setX(int x) {
-		this.x = x;
+	public void setWidth(int width) {
+		this.Width = width;
 	}
 
 	/**
 	 * change the y coordinate of a point
-	 * @param y
+	 * @param height
 	 */
-	public void setY(int y) {
-		this.y = y;
+	public void setHeight(int height) {
+		this.Height = height;
 	}
 
 	/**
@@ -70,10 +70,10 @@ public class Point {
 
 		Point other = (Point) obj;
 
-		boolean sameX = (this.x == other.x);
-		boolean sameY = (this.y == other.y);
+		boolean sameWidth = (this.Width == other.Width);
+		boolean sameHeight = (this.Height == other.Height);
 
-		return (sameX && sameY) ;
+		return (sameWidth && sameHeight) ;
 	}
 
 	/**
@@ -82,26 +82,26 @@ public class Point {
 	 * @return new Point(newX,newY)
 	 */
 	public Point newMoveLocation(MoveDirection move){
-		int newX = x;
-		int newY = y;
+		int newWidth = Width;
+		int newHeight = Height;
 
 		switch(move){
 			case UP:
-				newX--;
+				newHeight--;
 				break;
 			case DOWN:
-				newX++;
+				newHeight++;
 				break;
 			case RIGHT:
-				newY++;
+				newWidth++;
 				break;
 			case LEFT:
-				newY--;
+				newWidth--;
 				break;
 			default:
 				// nothing happened
 		}
-		return new Point(newX,newY);
+		return new Point(newHeight,newWidth);
 	}
 
 }

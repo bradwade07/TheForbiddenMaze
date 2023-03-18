@@ -19,7 +19,7 @@ public class Display {
 
 
     public void runGame() {
-        game.generateMap(4, 4, 4);
+        game.generateMap(4, 1, 4);
         boolean keepRunning;
         displayWelcomeMessage();
         displayInstructionsMessage();
@@ -122,9 +122,10 @@ public class Display {
     private void printMaze() {
         System.out.println();
         System.out.println("Maze: ");
-        for (int i = 0; i < game.getMyMaze().getROWS(); i++) {
-            for (int j = 0; j < game.getMyMaze().getCOLS(); j++) {
-                Cell cell = game.getMyMaze().getMaze()[i][j];
+        for (int j = 0; j < game.getMyMaze().getHeight(); j++) {
+            for (int i = 0; i < game.getMyMaze().getWidth(); i++)
+             {
+                Cell cell = game.getMyMaze().getMaze()[j][i];
 
                 if (cell.getCellType().equals(CellType.wall)) {
                     System.out.print("#");
@@ -147,8 +148,11 @@ public class Display {
                 }
             }
             System.out.println();
-
         }
         System.out.println("Player Score: " + game.getPlayerScore());
+        for(int i =0; i < game.getRewardList().size();i++){
+            System.out.println("Cheese location " + game.getRewardList().get(i).getLocation().getHeight() + " " + game.getRewardList().get(i).getLocation().getWidth());
+        }
+
     }
 }

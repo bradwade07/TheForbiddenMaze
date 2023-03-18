@@ -117,29 +117,35 @@ public class UI {
 		ClearCanvas();
 		Cell matrix[][] = maze.getMaze();
 
-		for (int i = 0; i < 32; i ++) {
-			for (int j = 0; j < 18; j++) {
-				switch (matrix[j][i].getCellType()) {
+		for (int i = 0; i < maze.getHeight(); i++){
+			 for (int j = 0; j < maze.getWidth(); j++) {
+				switch (matrix[i][j].getCellType()) {
 					case path:
-						graphicsContext.drawImage(floor, cellWidth * i, cellWidth * j);
+						graphicsContext.drawImage(floor, cellWidth * j, cellWidth * i);
 						break;
 					case wall:
-						graphicsContext.drawImage(floor, cellWidth * i, cellWidth * j);
-						graphicsContext.drawImage(barrier, cellWidth * i, cellWidth * j);
+						graphicsContext.drawImage(floor, cellWidth * j, cellWidth * i);
+						graphicsContext.drawImage(barrier, cellWidth * j, cellWidth * i);
 						break;
 					case barricade:
-						graphicsContext.drawImage(edge, cellWidth * i, cellWidth * j);
+						graphicsContext.drawImage(edge, cellWidth * j, cellWidth * i);
 						break;
 					case exit_cell:
-						graphicsContext.drawImage(floor, cellWidth * i, cellWidth * j);
-						graphicsContext.drawImage(portal, cellWidth * i, cellWidth * j);
+						graphicsContext.drawImage(floor, cellWidth * j, cellWidth * i);
+						graphicsContext.drawImage(portal, cellWidth * j, cellWidth * i);
 						break;
 				}
 			}
 		}
 
 		RenderEntity(player, enemyList, rewardList, trapList);
-		graphicsContext.strokeText("Score:"  + score, cellWidth * 15, cellWidth /2);
+		if(score < 0){
+			graphicsContext.strokeText("Score:"  + 0, cellWidth * 15, cellWidth /2);
+		}
+		else{
+			graphicsContext.strokeText("Score:"  + score, cellWidth * 15, cellWidth /2);
+		}
+
 	}
 
 	/**
@@ -151,21 +157,21 @@ public class UI {
 	 */
 	public void RenderEntity(Player player_e, List<Enemy> enemies, List<Reward> rewardList, List<Trap> trapList) {
 		Point temp = player_e.getLocation();
-		graphicsContext.drawImage(player, temp.getY()*cellWidth, temp.getX()*cellWidth);
+		graphicsContext.drawImage(player, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 
 		for (Enemy enemy_e: enemies) {
 			temp = enemy_e.getLocation();
-			graphicsContext.drawImage(enemy, temp.getY()*cellWidth, temp.getX()*cellWidth);
+			graphicsContext.drawImage(enemy, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 		}
 
 		for (Reward reward_e: rewardList) {
 			temp = reward_e.getLocation();
-			graphicsContext.drawImage(reward, temp.getY()*cellWidth, temp.getX()*cellWidth);
+			graphicsContext.drawImage(reward, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 		}
 
 		for (Trap trap_e: trapList) {
 			temp = trap_e.getLocation();
-			graphicsContext.drawImage(trap, temp.getY()*cellWidth, temp.getX()*cellWidth);
+			graphicsContext.drawImage(trap, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 		}
 	}
 

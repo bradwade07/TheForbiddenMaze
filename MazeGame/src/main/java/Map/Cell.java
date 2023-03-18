@@ -13,13 +13,13 @@ public class Cell {
 	private Entity entity;
 
 	/**
-	 * Constructor for cell, has an x and y coordinate for the 2d maze array, and a CellType
-	 * @param x
-	 * @param y
+	 * Constructor for cell, has an width and height coordinate for the 2d maze array, and a CellType
+	 * @param width
+	 * @param height
 	 * @param cellType
 	 */
-	public Cell(int x, int y, CellType cellType) {
-		this.location = new Point(x,y);
+	public Cell(int height, int width, CellType cellType) {
+		this.location = new Point(height,width);
 		this.cellType = cellType;
 	}
 
