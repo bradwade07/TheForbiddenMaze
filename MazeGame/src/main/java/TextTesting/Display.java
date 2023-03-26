@@ -128,9 +128,8 @@ public class Display {
 
                 if (cell.getCellType().equals(CellType.wall)) {
                     System.out.print("#");
-                } else if (cell.getCellType().equals(CellType.barricade)) {
-                    System.out.print("#");
-                } else if (cell.getCellType().equals(CellType.exit_cell)) {
+                }
+                else if (cell.getCellType().equals(CellType.exit_cell)) {
                     System.out.print(".");
                 } else if (cell.getCellType().equals(CellType.path)) {
                     if (cell.getEntity().getEntityType().equals(EntityType.player)) {
