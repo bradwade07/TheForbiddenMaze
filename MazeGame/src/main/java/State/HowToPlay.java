@@ -5,7 +5,7 @@ package State;
 public class HowToPlay extends State{
 	public HowToPlay() {
 		super();
-		setNexState(GameState.howToPlay);
+		setNexState(MenuState.howToPlay);
 	}
 
 }

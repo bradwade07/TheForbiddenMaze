@@ -7,7 +7,7 @@ public class GameOver extends State{
 
     public GameOver() {
         super();
-        setNexState(GameState.gameOver);
+        setNexState(MenuState.gameOver);
     }
 }
 

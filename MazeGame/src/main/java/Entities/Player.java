@@ -44,10 +44,6 @@ public class Player extends Entity {
      */
     public int decrementScore(int amt){
         score -= amt;
-        // cant let health go below 0
-        if (score < 0){
-            score = 0;
-        }
         return score;
     }
 
@@ -58,10 +54,6 @@ public class Player extends Entity {
      */
     public int incrementScore(int amt){
         score += amt;
-        // cant overheal
-        if (score > 100){
-            score = 100;
-        }
         return score;
     }
 

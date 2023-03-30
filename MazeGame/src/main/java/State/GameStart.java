@@ -8,7 +8,7 @@ public class GameStart extends State{
 
     public GameStart() {
         super();
-        setNexState(GameState.gameStart);
+        setNexState(MenuState.gameStart);
     }
 
 }

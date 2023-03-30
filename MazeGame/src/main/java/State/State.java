@@ -9,7 +9,7 @@ public abstract class State {
 
 //    protected UI ui;
 
-    public GameState nextState;
+    public MenuState nextState;
 
     public State() {
     }
@@ -23,10 +23,10 @@ public abstract class State {
     }
 
 
-    public void setNexState(GameState state) {
+    public void setNexState(MenuState state) {
         this.nextState = state;
     }
-    public GameState getNextState(){
+    public MenuState getNextState(){
         return this.nextState;
     }
 
