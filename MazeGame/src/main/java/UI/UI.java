@@ -49,9 +49,12 @@ public class UI {
 	private const double scoreXMultiplier = 15;
 	private const double scoreYMultiplier = 0.5;
 
-	// These are what we multiply sceen height and width by to get size of a cell that makes up the maze
+	// These are what we multiply screen height and width by to get size of a cell that makes up the maze
 	private const double screenWidthMultiplier = 1/32;
 	private const double screenHeightMultiplier = 1/18;
+
+	// These are what we multiply  width by to get where the howToPlay and playGame buttons are rendered
+	private const double buttonLocationMultiplierX = 3/7;
 
 	/**
 	 * Constructs UI. The stage MUST be the primary stage for the game.
@@ -107,8 +110,8 @@ public class UI {
 		ClearCanvas();
 		graphicsContext.drawImage(background, 0, 0);
 		graphicsContext.drawImage(title, screenWidth / 3, screenHeight / 8);
-		graphicsContext.drawImage(playGame, screenWidth / 7 * 3, screenHeight / 8 * 3);
-		graphicsContext.drawImage(howToPlay, screenWidth / 7 * 3, screenHeight / 8 * 5);
+		graphicsContext.drawImage(playGame, screenWidth * buttonLocationMultiplierX, screenHeight / 8 * 3);
+		graphicsContext.drawImage(howToPlay, screenWidth * buttonLocationMultiplierX, screenHeight / 8 * 5);
 	}
 
 	/**
