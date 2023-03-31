@@ -49,6 +49,10 @@ public class UI {
 	private const double scoreXMultiplier = 15;
 	private const double scoreYMultiplier = 0.5;
 
+	// These are what we multiply sceen height and width by to get size of a cell that makes up the maze
+	private const double screenWidthMultiplier = 1/32;
+	private const double screenHeightMultiplier = 1/18;
+
 	/**
 	 * Constructs UI. The stage MUST be the primary stage for the game.
 	 * @param stage_p
@@ -69,20 +73,20 @@ public class UI {
 
 		screenWidth = screen.getMaxX();
 		screenHeight = screen.getMaxY();
-		cellWidth = screenWidth / 32;
+		cellWidth = screenWidth * screenWidthMultiplier;
 
 		background = new Image("/Castle.jpg", screenWidth, screenHeight, false, false);
 		title = new Image("/Title.png", screenWidth / 3, screenHeight / 8, false, false);
 		playGame = new Image("/startGame.png", screenWidth / 7, screenHeight / 8, false, false);
 		howToPlay = new Image("/howToPlay.png", screenWidth / 7, screenHeight / 8, false, false);
-		edge = new Image("/pit.png", screenWidth / 32, screenHeight / 18, false, false);
-		floor = new Image("/floor.png", screenWidth / 32, screenHeight / 18, false, false);
-		barrier = new Image("/barrier.png", screenWidth / 34, screenHeight / 18, false, false);
-		portal = new Image("/portal.png", screenWidth / 32, screenHeight / 18, false, false);
-		player = new Image("/adventurer-idle-00.png", screenWidth / 32 / 2, screenHeight / 18, false, false);
-		enemy = new Image("/skeleton.png", screenWidth / 32, screenHeight / 18, false, false);
-		reward = new Image("/crystal_01d.png", screenWidth / 32, screenHeight / 18, false, false);
-		trap = new Image("/spike_4.png", screenWidth / 32, screenHeight / 18, false, false);
+		edge = new Image("/pit.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
+		floor = new Image("/floor.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
+		barrier = new Image("/barrier.png", screenWidth / 34, screenHeight * screenHeightMultiplier, false, false);
+		portal = new Image("/portal.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
+		player = new Image("/adventurer-idle-00.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
+		enemy = new Image("/skeleton.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
+		reward = new Image("/crystal_01d.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
+		trap = new Image("/spike_4.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
 		howToPlayScreen = new Image("/HowToPlayScreen.jpg", screenWidth, screenHeight, false, false);
 		gameOverScreen = new Image("/GameOver.jpg", screenWidth, screenHeight, false, false);
 
