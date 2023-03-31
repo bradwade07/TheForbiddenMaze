@@ -78,22 +78,26 @@ public class UI {
 		screenHeight = screen.getMaxY();
 		cellWidth = screenWidth * screenWidthMultiplier;
 
-		background = new Image("/Castle.jpg", screenWidth, screenHeight, false, false);
-		title = new Image("/Title.png", screenWidth / 3, screenHeight / 8, false, false);
-		playGame = new Image("/startGame.png", screenWidth / 7, screenHeight / 8, false, false);
-		howToPlay = new Image("/howToPlay.png", screenWidth / 7, screenHeight / 8, false, false);
-		edge = new Image("/pit.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
-		floor = new Image("/floor.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
-		barrier = new Image("/barrier.png", screenWidth / 34, screenHeight * screenHeightMultiplier, false, false);
-		portal = new Image("/portal.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
-		player = new Image("/adventurer-idle-00.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
-		enemy = new Image("/skeleton.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
-		reward = new Image("/crystal_01d.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
-		trap = new Image("/spike_4.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier, false, false);
-		howToPlayScreen = new Image("/HowToPlayScreen.jpg", screenWidth, screenHeight, false, false);
-		gameOverScreen = new Image("/GameOver.jpg", screenWidth, screenHeight, false, false);
+		background = ImportImage("/Castle.jpg", screenWidth, screenHeight);
+		title = ImportImage("/Title.png", screenWidth / 3, screenHeight / 8);
+		playGame = ImportImage("/startGame.png", screenWidth / 7, screenHeight / 8);
+		howToPlay = ImportImage("/howToPlay.png", screenWidth / 7, screenHeight / 8);
+		edge = ImportImage("/pit.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		floor = ImportImage("/floor.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		barrier = ImportImage("/barrier.png", screenWidth / 34, screenHeight * screenHeightMultiplier);
+		portal = ImportImage("/portal.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		player = ImportImage("/adventurer-idle-00.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		enemy = ImportImage("/skeleton.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		reward = ImportImage("/crystal_01d.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		trap = ImportImage("/spike_4.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		howToPlayScreen = ImportImage("/HowToPlayScreen.jpg", screenWidth, screenHeight);
+		gameOverScreen = ImportImage("/GameOver.jpg", screenWidth, screenHeight);
 
 		RenderMenu();
+	}
+
+	Image ImportImage(string name, width, height) {
+		return new Image(name, width, height, false, false);
 	}
 
 	/**
