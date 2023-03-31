@@ -83,7 +83,6 @@ public class UI {
 		gameOverScreen = new Image("/GameOver.jpg", screenWidth, screenHeight, false, false);
 
 		RenderMenu();
-		Game newGame = new Game();
 	}
 
 	/**
