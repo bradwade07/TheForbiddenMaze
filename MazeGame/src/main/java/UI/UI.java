@@ -45,6 +45,10 @@ public class UI {
 	private Image reward;
 	private Image trap;
 
+	// These are what we multiply cell width to get the location where to render score
+	private const double scoreXMultiplier = 15;
+	private const double scoreYMultiplier = 0.5;
+
 	/**
 	 * Constructs UI. The stage MUST be the primary stage for the game.
 	 * @param stage_p
@@ -139,10 +143,10 @@ public class UI {
 
 		RenderEntity(player, enemyList, rewardList, trapList);
 		if(score < 0){
-			graphicsContext.strokeText("Score:"  + 0, cellWidth * 15, cellWidth /2);
+			graphicsContext.strokeText("Score:"  + 0, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
 		}
 		else{
-			graphicsContext.strokeText("Score:"  + score, cellWidth * 15, cellWidth /2);
+			graphicsContext.strokeText("Score:"  + score, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
 		}
 
 	}
