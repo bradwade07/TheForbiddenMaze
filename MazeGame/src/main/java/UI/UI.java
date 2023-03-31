@@ -169,19 +169,16 @@ public class UI {
 		Point temp = player_e.getLocation();
 		graphicsContext.drawImage(player, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 
-		for (Enemy enemy_e: enemies) {
-			temp = enemy_e.getLocation();
-			graphicsContext.drawImage(enemy, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
-		}
+		RenderEntitySet(enemies, enemy);
+		RenderEntitySet(rewardList, reward);
+		RenderEntitySet(trapList, trap);
+	}
 
-		for (Reward reward_e: rewardList) {
-			temp = reward_e.getLocation();
-			graphicsContext.drawImage(reward, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
-		}
-
-		for (Trap trap_e: trapList) {
-			temp = trap_e.getLocation();
-			graphicsContext.drawImage(trap, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
+	public void RenderEntitySet(List<Entity> entities, Image entityRaster) {
+		Point temp;
+		for (Entity e: entities) {
+			temp = e.getLocation();
+			graphicsContext.drawImage(entityRaster, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 		}
 	}
 
