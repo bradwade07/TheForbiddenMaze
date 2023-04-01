@@ -106,6 +106,10 @@ public class EventHandler {
             public void run() {
                 game.runOneTick();
                 ui.RenderGame(game.getMyMaze(),game.getPlayer(),game.getEnemyList(),game.getRewardList(),game.getTrapList(),game.getPlayerScore());
+                if (game.isGameLost()) {
+                    ui.RenderGameOver();
+                    return;
+                }
             }
 
 
