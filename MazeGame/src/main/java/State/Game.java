@@ -258,84 +258,53 @@ public class Game {
      * @param trapCount
      */
     private void entityGenerator(int enemyCount, int rewardCount, int trapCount) { //calls entityMaker and checks if the entity is placeable
-        List<Point> usedPoints = new ArrayList<>();
-        Random random;
-        int width, height;
-        Point newPoint;
         while (enemyList.size() < enemyCount) {
-            boolean status = true;
-            while (status) {
-                random = new Random();
-                width = 5 + random.nextInt(myMaze.getWidth() - 5);
-                random = new Random();
-                height = 5 + random.nextInt(myMaze.getHeight() - 5);
-                newPoint = new Point( height, width);
-                if (usedPoints.size() == 0 && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
-                    entityMaker(EntityType.enemy, newPoint, 0);
-                    usedPoints.add(newPoint);
-                    status = false;
-                    break;
-                }
-                for (int j = 0; j < usedPoints.size(); j++) {
-                    if (!usedPoints.get(j).equals(newPoint) && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
-                        entityMaker(EntityType.enemy, newPoint, 0);
-                        usedPoints.add(newPoint);
-                        status = false;
-                        break;
-                    }
-                }
-            }
+            placeEntityRandomlyOnMap(EntityType.enemy, 0);
         }
         while (rewardList.size() < rewardCount) {
-            boolean status = true;
-            while (status) {
-                random = new Random();
-                width = 5 + random.nextInt(myMaze.getWidth() - 5);
-                random = new Random();
-                height = 5 + random.nextInt(myMaze.getHeight() - 5);
-                newPoint = new Point(height, width);
-                if (usedPoints.size() == 0 && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
-                    // todo hardcoded for now, maybe have a level multipler later
-                    entityMaker(EntityType.reward, newPoint, REWARD_SCORE);
-                    usedPoints.add(newPoint);
-                    status = false;
-                    break;
-                }
-                for (int j = 0; j < usedPoints.size(); j++) {
-                    if (!usedPoints.get(j).equals(newPoint) && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
-                        entityMaker(EntityType.reward, newPoint, REWARD_SCORE); //set to zero but planned to hardcode it
-                        usedPoints.add(newPoint);
-                        status = false;
-                        break;
-                    }
-                }
+            placeEntityRandomlyOnMap(EntityType.reward, REWARD_SCORE);
             }
-        }
         TRAP_DAMAGE = (((rewardList.size()*REWARD_SCORE) + 100)/trapCount) + 1;
-        while (trapList.size() < trapCount) {
-            boolean status = true;
-            while (status) {
-                random = new Random();
-                width = 5 + random.nextInt(myMaze.getWidth() - 5);
-                random = new Random();
-                height = 5 + random.nextInt(myMaze.getHeight() - 5);
-                newPoint = new Point(height, width);
-                if (usedPoints.size() == 0 && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
-                    entityMaker(EntityType.trap, newPoint, TRAP_DAMAGE);
+        while (trapList.size() < trapCount){
+            placeEntityRandomlyOnMap(EntityType.trap, TRAP_DAMAGE);
+        }
+    }
+
+
+    /**
+     * Places an entity randomly on the map
+     * @param entityType
+     * @param score
+     */
+    private void placeEntityRandomlyOnMap(EntityType entityType, int score){
+        List<Point> usedPoints = new ArrayList<>();
+        int width, height;
+        Point newPoint;
+        boolean status = true;
+        Random random;
+        while(status){
+            random = new Random();
+            width = 5 + random.nextInt(myMaze.getWidth() - 5);
+            random = new Random();
+            height = 5 + random.nextInt(myMaze.getHeight() - 5);
+            newPoint = new Point( height, width);
+            if (usedPoints.size() == 0 && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
+                entityMaker(entityType, newPoint, score);
+                usedPoints.add(newPoint);
+                status = false;
+                break;
+            }
+            for (int j = 0; j < usedPoints.size(); j++) {
+                if (!usedPoints.get(j).equals(newPoint) && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
+                    entityMaker(entityType, newPoint, score);
                     usedPoints.add(newPoint);
                     status = false;
                     break;
                 }
-                for (int j = 0; j < usedPoints.size(); j++) {
-                    if (!usedPoints.get(j).equals(newPoint) && myMaze.getMaze()[height][width].getCellType().equals(CellType.path)) {
-                        entityMaker(EntityType.trap, newPoint, TRAP_DAMAGE);//set to zero but planned to hardcode it
-                        usedPoints.add(newPoint);
-                        status = false;
-                        break;
-                    }
-                }
             }
         }
+
+
     }
 
     /**
