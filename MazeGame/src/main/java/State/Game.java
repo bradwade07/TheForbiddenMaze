@@ -29,7 +29,7 @@ public class Game {
 
 
     public enum MoveCheck {
-        validMove, killPlayer, playerToTrap, playerToReward
+        validMove, killPlayer, enemyToTrap, enemyToReward
     }
 
     public Game() {
@@ -176,7 +176,7 @@ public class Game {
             if (isPlayerinRange(playerLocation, enemyLocation)) { //follow player
                 move = getEnemyFollowMovement(enemy, playerLocation);
             } else { //random movement
-                move = getEnemyRandomMovement(enemy);
+                move = getEntityRandomMovement(enemy);
             }
             Point newEnemyLocation = enemyLocation.newMoveLocation(move);
             moveEntity(enemy, move);
@@ -228,12 +228,8 @@ public class Game {
             case playerReward:
                 if (entity instanceof Player) {
                     collectReward(location);
-                    //player.addScore(REWARD_SCORE);
-                    //TODO clean
-//                    System.out.println("instance of player hit :" + player.getScore());
-//                    System.out.println("reward: " + REWARD_SCORE);
                 } else if (entity instanceof Enemy) {
-                    moveCheck = MoveCheck.playerToReward;
+                    moveCheck = MoveCheck.enemyToReward;
                 }
                 break;
             case playerTrap:
@@ -241,7 +237,7 @@ public class Game {
                     steppedOnTrap(location);
                     //player.addScore(TRAP_DAMAGE);
                 } else if (entity instanceof Enemy) {
-                    moveCheck = MoveCheck.playerToTrap;
+                    moveCheck = MoveCheck.enemyToTrap;
                 }
                 break;
             default:
@@ -365,7 +361,7 @@ public class Game {
      * @param entity
      * @return move
      */
-    private MoveDirection getEnemyRandomMovement(Entity entity) {
+    private MoveDirection getEntityRandomMovement(Entity entity) {
         MoveDirection move = MoveDirection.NONE;
         do {
             Random random = new Random();
@@ -426,6 +422,12 @@ public class Game {
         } else if (moveCheck == MoveCheck.killPlayer) {
             myMaze.swapEntity(oldLocation, newLocation);
             killPlayer();
+        }else if(moveCheck == MoveCheck.enemyToReward
+                || moveCheck == MoveCheck.enemyToTrap){
+            Entity entityCollided = myMaze.getEntity(newLocation);
+            MoveDirection newMove = getEntityRandomMovement(entityCollided);
+            newLocation = newLocation.newMoveLocation(move);
+            myMaze.swapEntity(oldLocation, newLocation);
         }
     }
 
@@ -529,7 +531,7 @@ public class Game {
         player.setAlive(false);
         Point playerLocation = player.getLocation();
         //getMyMaze().getMaze()[playerLocation.getHeight()][playerLocation.getWidth()].setEntity(new Empty(EntityType.empty, playerLocation));
-       myMaze.setEntity(new Empty(EntityType.empty, playerLocation), playerLocation);
+        myMaze.setEntity(new Empty(EntityType.empty, playerLocation), playerLocation);
     }
 
     /**
