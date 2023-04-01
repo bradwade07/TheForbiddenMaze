@@ -422,6 +422,8 @@ public class Game {
         } else if (moveCheck == MoveCheck.killPlayer) {
             myMaze.swapEntity(oldLocation, newLocation);
             killPlayer();
+
+        // if enemy moves collide with rewards and traps
         }else if(moveCheck == MoveCheck.enemyToReward
                 || moveCheck == MoveCheck.enemyToTrap){
             Entity entityCollided = myMaze.getEntity(newLocation);
