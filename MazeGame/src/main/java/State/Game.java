@@ -33,7 +33,7 @@ public class Game {
     }
 
     public Game() {
-        this.player = new Player(EntityType.player, new Point(1, 1));
+        this.player = new Player(EntityType.player, new Point(1,1));
         this.enemyList = new ArrayList<>();
         this.rewardList = new ArrayList<>();
         this.trapList = new ArrayList<>();
@@ -51,6 +51,7 @@ public class Game {
      */
     public void generateMap(int enemyCount, int rewardCount, int trapCount) {
         myMaze = Maze.generateRandomizedMaze();
+        this.player.setLocation(new Point(getMyMaze().getHeight()/2, getMyMaze().getWidth()/2));
         entityGenerator(enemyCount, rewardCount, trapCount);
         placeEntitiesOnMap();
     }
