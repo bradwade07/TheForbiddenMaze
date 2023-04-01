@@ -18,15 +18,15 @@ import java.util.Random;
 public class Maze {
 	private Cell[][] maze;
 
-	private final int Height = 18;
-	private final int Width = 32;
+	private final int HEIGHT = 18;
+	private final int WIDTH = 32;
 	private Point exitCell;
 
 	/**
 	 * Constructor of a maze of specified dimensions ROWS x COLS
 	 */
 	public Maze() {
-		this.maze = new Cell[Height][Width];
+		this.maze = new Cell[HEIGHT][WIDTH];
 		do{
 			makeRandomMaze();
 		} while (!hasAllCornersConnected()
@@ -43,19 +43,19 @@ public class Maze {
 	}
 
 	private void makeSidesOpenForExitCell() {
-		for(int i =1; i< Height - 2; i++){
+		for(int i = 1; i< HEIGHT - 2; i++){
 				maze[i][1].setCellType(CellType.path);
-				maze[i][Width - 2].setCellType(CellType.path);
+				maze[i][WIDTH - 2].setCellType(CellType.path);
 		}
-		for(int i =1; i< Width - 2; i++){
+		for(int i = 1; i< WIDTH - 2; i++){
 			maze[1][i].setCellType(CellType.path);
-			maze[Height - 2][i].setCellType(CellType.path);
+			maze[HEIGHT - 2][i].setCellType(CellType.path);
 		}
 	}
 
 	private void addLoopsToMaze() {
-		for (int i = 1; i < Height - 1; i++) {
-			for (int j = 1; j < Width - 1; j++) {
+		for (int i = 1; i < HEIGHT - 1; i++) {
+			for (int j = 1; j < WIDTH - 1; j++) {
 				boolean isWall = maze[i][j].isWallOrBarricade() || maze[i][j].isWallOrBarricade();
 				if (isWall) {
 					boolean shouldRemove = Math.random() <= 0.5;
@@ -88,28 +88,28 @@ public class Maze {
 	 * Begins the initialization of the maze, sets all the cells to barricade and then updates the perimeter to walls
 	 */
 	private void createCanvas() {
-		for (int i = 0; i < Height; i++) {
-			for (int j = 0; j < Width; j++) {
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int j = 0; j < WIDTH; j++) {
 				maze[i][j] = new Cell(new Point(i, j), CellType.barricade);
 			}
 		}
-		for (int i = 0; i < Height; i++) {
+		for (int i = 0; i < HEIGHT; i++) {
 			maze[i][0].setCellType(CellType.wall);
-			maze[i][Width - 1].setCellType(CellType.wall);
+			maze[i][WIDTH - 1].setCellType(CellType.wall);
 		}
-		for (int i = 0; i < Width; i++) {
+		for (int i = 0; i < WIDTH; i++) {
 			maze[0][i].setCellType(CellType.wall);
-			maze[Height - 1][i].setCellType(CellType.wall);
+			maze[HEIGHT - 1][i].setCellType(CellType.wall);
 		}
-		for (int i = 0; i < Height; i++) {
-			for (int j = 0; j < Width; j++) {
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int j = 0; j < WIDTH; j++) {
 				maze[i][j].setEntity(new Empty(EntityType.empty,new Point(i,j)));
 			}
 		}
 	}
 	private void buildMazePaths() {
 		List<Point> candidates = new ArrayList<>();
-		candidates.add(new Point(Height/2, Width/2));
+		candidates.add(new Point(HEIGHT /2, WIDTH /2));
 		while(candidates.size() > 0){
 			// Randomly pick a candidate cell to investigate.
 			Collections.shuffle(candidates);
@@ -137,12 +137,12 @@ public class Maze {
 	private boolean okToRemoveWall(Point location) {
 		int width = location.getWidth();
 		int height = location.getHeight();
-		if(width == 32 || height == 18){ return false;}
+		if(width == WIDTH || height == HEIGHT){ return false;}
 		boolean isWall = maze[height][width].isWallOrBarricade() || maze[height][width].isWallOrBarricade();
 		boolean isTop = (height == 0);
-		boolean isBottom = (height == Height - 1);
+		boolean isBottom = (height == HEIGHT - 1);
 		boolean isLeft = (width == 0);
-		boolean isRight = (width == Width - 1);
+		boolean isRight = (width == WIDTH - 1);
 		boolean isEdge = isTop || isBottom || isLeft || isRight;
 
 		if (!isWall || isEdge) {
@@ -166,9 +166,9 @@ public class Maze {
 	}
 	private boolean hasAllCornersConnected(){
 		final Point LOCATION_TOP_LEFT     = new Point(1, 1);
-		final Point LOCATION_TOP_RIGHT    = new Point(Height - 2, 1);
-		final Point LOCATION_BOTTOM_LEFT  = new Point(1, Width - 2);
-		final Point LOCATION_BOTTOM_RIGHT = new Point(Height - 2, Width - 2);
+		final Point LOCATION_TOP_RIGHT    = new Point(HEIGHT - 2, 1);
+		final Point LOCATION_BOTTOM_LEFT  = new Point(1, WIDTH - 2);
+		final Point LOCATION_BOTTOM_RIGHT = new Point(HEIGHT - 2, WIDTH - 2);
 
 		PathFinder pathfinder = new PathFinder(maze);
 
@@ -182,8 +182,8 @@ public class Maze {
 		PathFinder pathfinder = new PathFinder(maze);
 
 		// to all possible open spaces
-		for (int y = 1; y < Width - 1; y++) {
-			for (int x = 1; x < Height - 1; x++) {
+		for (int y = 1; y < WIDTH - 1; y++) {
+			for (int x = 1; x < HEIGHT - 1; x++) {
 				Point loc = new Point(x, y);
 				boolean openCell = !isCellAWall(loc);
 				boolean hasNoPath = !pathfinder.hasPath(LOCATION_TOP_LEFT, loc);
@@ -357,7 +357,7 @@ public class Maze {
 	 * @return ROWS
 	 */
 	public int getHeight() {
-		return Height;
+		return HEIGHT;
 	}
 
 	/**
@@ -365,7 +365,7 @@ public class Maze {
 	 * @return COLS
 	 */
 	public int getWidth() {
-		return Width;
+		return WIDTH;
 	}
 
 	/**
@@ -394,8 +394,8 @@ public class Maze {
 	private boolean outOfRange(Point location) {
 		int width = location.getWidth();
 		int height = location.getHeight();
-		boolean outOfRangeWidth = (width < 1) || (width >= Width - 1);
-		boolean outOfRangeHeight = (height < 1) || (height >= Height - 1);
+		boolean outOfRangeWidth = (width < 1) || (width >= WIDTH - 1);
+		boolean outOfRangeHeight = (height < 1) || (height >= HEIGHT - 1);
 		return (outOfRangeWidth || outOfRangeHeight);
 	}
 
@@ -487,12 +487,12 @@ public class Maze {
 	public void setExitCellOpen() {
 		List<Point> potentialExitCells = new ArrayList<>();
 		//Adding east walls in the list
-		for(int i = 1; i < Height - 1; i++){
-			potentialExitCells.add(new Point(i, Width - 1));
+		for(int i = 1; i < HEIGHT - 1; i++){
+			potentialExitCells.add(new Point(i, WIDTH - 1));
 		}
 		//Adding south walls in the list
-		for(int i = 1; i < Width - 1; i++){
-			potentialExitCells.add(new Point(Height - 1, i));
+		for(int i = 1; i < WIDTH - 1; i++){
+			potentialExitCells.add(new Point(HEIGHT - 1, i));
 		}
 		Random random = new Random();
 		Point choice = potentialExitCells.get(random.nextInt(potentialExitCells.size()));
@@ -509,8 +509,8 @@ public class Maze {
 	 * Removes all the rewards from the maze
 	 */
 	public void removeAllRewards(){
-		for (int i = 0; i < Width; i++) {
-			for (int j = 0; j < Height; j++) {
+		for (int i = 0; i < WIDTH; i++) {
+			for (int j = 0; j < HEIGHT; j++) {
 				if(maze[j][i].getEntity().getEntityType() == EntityType.reward){
 					maze[j][i].setEntity(new Empty(EntityType.empty,new Point(j,i)));
 				}
