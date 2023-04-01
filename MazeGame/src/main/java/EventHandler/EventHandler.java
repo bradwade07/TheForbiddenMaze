@@ -70,6 +70,9 @@ public class EventHandler {
                 game.movePlayer('s');
             } else if (key.getCode() == KeyCode.D) {
                 game.movePlayer('d');
+            } else if (key.getCode() == KeyCode.E && game.getGameState().equals(Game.GameState.howToPlay)) {
+                game.setGameStateToStart();
+                ui.RenderMenu();
             }
 
         });
