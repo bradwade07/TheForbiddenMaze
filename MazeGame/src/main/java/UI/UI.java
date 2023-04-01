@@ -1,9 +1,6 @@
 package UI;
 
-import Entities.Enemy;
-import Entities.Player;
-import Entities.Reward;
-import Entities.Trap;
+import Entities.*;
 import Map.Cell;
 import Map.Maze;
 import Map.Point;
@@ -46,15 +43,15 @@ public class UI {
 	private Image trap;
 
 	// These are what we multiply cell width to get the location where to render score
-	private const double scoreXMultiplier = 15;
-	private const double scoreYMultiplier = 0.5;
+	private final double scoreXMultiplier = 15.0;
+	private final double scoreYMultiplier = 0.5;
 
 	// These are what we multiply screen height and width by to get size of a cell that makes up the maze
-	private const double screenWidthMultiplier = 1/32;
-	private const double screenHeightMultiplier = 1/18;
+	private final double screenWidthMultiplier = 1.0/32.0;
+	private final double screenHeightMultiplier = 1.0/18.0;
 
 	// These are what we multiply  width by to get where the howToPlay and playGame buttons are rendered
-	private const double buttonLocationMultiplierX = 3/7;
+	private final double buttonLocationMultiplierX = 3.0/7.0;
 
 	/**
 	 * Constructs UI. The stage MUST be the primary stage for the game.
@@ -96,7 +93,7 @@ public class UI {
 		RenderMenu();
 	}
 
-	Image ImportImage(string name, width, height) {
+	Image ImportImage(String name, double width, double height) {
 		return new Image(name, width, height, false, false);
 	}
 
@@ -178,9 +175,9 @@ public class UI {
 		RenderEntitySet(trapList, trap);
 	}
 
-	public void RenderEntitySet(List<Entity> entities, Image entityRaster) {
+	public <T extends  Entity> void RenderEntitySet(List<T> entities, Image entityRaster) {
 		Point temp;
-		for (Entity e: entities) {
+		for (T e: entities) {
 			temp = e.getLocation();
 			graphicsContext.drawImage(entityRaster, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 		}
