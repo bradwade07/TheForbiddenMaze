@@ -51,7 +51,7 @@ public class Game {
     public void reset(int enemyCount, int rewardCount, int trapCount){
         setGameStateToStart();
         resetEntityLists();
-        resetPlayerScore();
+        resetPlayer();
         isExitCellOpen = false;
         generateMap(enemyCount, rewardCount, trapCount);
     }
@@ -101,7 +101,6 @@ public class Game {
     }
 
     public boolean isGameRunning() {
-//		System.out.println("GameState: " + gameState);
         return (gameState == GameState.RUNNING);
     }
 
@@ -647,8 +646,10 @@ public class Game {
         this.trapList.clear();
     }
 
-    private void resetPlayerScore(){
-        player.setScore(0);
+    private void resetPlayer(){
+        player.setScore(100);
+        player.setAlive(true);
+        player.setLocation(new Point(1, 1));
     }
 
     public Player getPlayer() {
