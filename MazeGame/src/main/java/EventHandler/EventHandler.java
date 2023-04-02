@@ -89,6 +89,15 @@ public class EventHandler {
                     game.setGameStateToHowToPlay();
                     ui.RenderHowToPlay();
                 }
+            } else if (game.getGameState().equals(Game.GameState.LOST) && mouse.getScreenX() >= screenWidth / 7 * 3 && mouse.getScreenX() <= screenWidth / 7 * 4) {
+                if (mouse.getScreenY() >= screenHeight / 9 * 5 && mouse.getScreenY() <= screenHeight / 9 * 5 + screenHeight / 10) {
+                    game.setGameToRun();
+                    ui.RenderGame(game.getMyMaze(),game.getPlayer(),game.getEnemyList(),game.getRewardList(),game.getTrapList(),game.getPlayerScore());
+                    gameLoop();
+                } else if (mouse.getScreenY() >= screenHeight / 9 * 6 && mouse.getScreenY() <= screenHeight / 9 * 6 + screenHeight / 10) {
+                    game.setGameStateToStart();
+                    ui.RenderMenu();
+                }
             }
         });
 
@@ -101,14 +110,16 @@ public class EventHandler {
     public void gameLoop() {
 
         Timer t = new Timer();
+
         TimerTask tt = new TimerTask() {
             @Override
             public void run() {
                 game.runOneTick();
                 ui.RenderGame(game.getMyMaze(),game.getPlayer(),game.getEnemyList(),game.getRewardList(),game.getTrapList(),game.getPlayerScore());
+
                 if (game.isGameLost()) {
                     ui.RenderGameOver();
-                    return;
+                    t.cancel();
                 }
             }
 

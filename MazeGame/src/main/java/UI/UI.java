@@ -41,6 +41,8 @@ public class UI {
 	private Image enemy;
 	private Image reward;
 	private Image trap;
+	private Image playAgainButton;
+	private Image quitButton;
 
 	// These are what we multiply cell width to get the location where to render score
 	private final double scoreXMultiplier = 15.0;
@@ -89,6 +91,8 @@ public class UI {
 		trap = ImportImage("/spike_4.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
 		howToPlayScreen = ImportImage("/HowToPlayScreen.jpg", screenWidth, screenHeight);
 		gameOverScreen = ImportImage("/GameOver.jpg", screenWidth, screenHeight);
+		playAgainButton = ImportImage("/PlayAgain.jpg", screenWidth / 7, screenHeight / 10);
+		quitButton = ImportImage("/Quit.jpg", screenWidth / 7, screenHeight / 10);
 
 		RenderMenu();
 	}
@@ -197,6 +201,8 @@ public class UI {
 	public void RenderGameOver() {
 		ClearCanvas();
 		graphicsContext.drawImage(gameOverScreen, 0, 0);
+		graphicsContext.drawImage(playAgainButton, screenWidth / 7 * 3, screenHeight / 9 * 5);
+		graphicsContext.drawImage(quitButton, screenWidth / 7 * 3, screenHeight / 9 * 6);
 	}
 
 }
