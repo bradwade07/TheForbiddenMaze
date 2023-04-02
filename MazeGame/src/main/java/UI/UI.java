@@ -84,6 +84,9 @@ public class UI {
 		title = ImportImage("/Title.png", screenWidth / 3, screenHeight / 8);
 		playGame = ImportImage("/startGame.png", screenWidth / 7, screenHeight / 8);
 		howToPlay = ImportImage("/howToPlay.png", screenWidth / 7, screenHeight / 8);
+
+		RenderMenu();
+
 		edge = ImportImage("/pit.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
 		floor = ImportImage("/floor.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
 		barrier = ImportImage("/barrier.png", screenWidth / 34, screenHeight * screenHeightMultiplier);
@@ -97,7 +100,6 @@ public class UI {
 		playAgainButton = ImportImage("/PlayAgain.jpg", screenWidth / 7, screenHeight / 10);
 		quitButton = ImportImage("/Quit.jpg", screenWidth / 7, screenHeight / 10);
 
-		RenderMenu();
 	}
 
 	Image ImportImage(String name, double width, double height) {
