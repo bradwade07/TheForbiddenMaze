@@ -19,6 +19,8 @@ import static java.util.concurrent.TimeUnit.*;
 
 import java.util.*;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
 import UI.UI;
 
 public class EventHandler {
@@ -75,6 +77,11 @@ public class EventHandler {
                 ui.RenderMenu();
             }
 
+            try {
+                MILLISECONDS.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, (mouse) -> {
