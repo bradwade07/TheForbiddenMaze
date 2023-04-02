@@ -1,9 +1,6 @@
 package UI;
 
-import Entities.Enemy;
-import Entities.Player;
-import Entities.Reward;
-import Entities.Trap;
+import Entities.*;
 import Map.Cell;
 import Map.Maze;
 import Map.Point;
@@ -14,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -44,6 +44,19 @@ public class UI {
 	private Image enemy;
 	private Image reward;
 	private Image trap;
+	private Image playAgainButton;
+	private Image quitButton;
+
+	// These are what we multiply cell width to get the location where to render score
+	private final double scoreXMultiplier = 15.0;
+	private final double scoreYMultiplier = 0.5;
+
+	// These are what we multiply screen height and width by to get size of a cell that makes up the maze
+	private final double screenWidthMultiplier = 1.0/32.0;
+	private final double screenHeightMultiplier = 1.0/18.0;
+
+	// These are what we multiply  width by to get where the howToPlay and playGame buttons are rendered
+	private final double buttonLocationMultiplierX = 3.0/7.0;
 
 	/**
 	 * Constructs UI. The stage MUST be the primary stage for the game.
@@ -65,25 +78,32 @@ public class UI {
 
 		screenWidth = screen.getMaxX();
 		screenHeight = screen.getMaxY();
-		cellWidth = screenWidth / 32;
+		cellWidth = screenWidth * screenWidthMultiplier;
 
-		background = new Image("/Castle.jpg", screenWidth, screenHeight, false, false);
-		title = new Image("/Title.png", screenWidth / 3, screenHeight / 8, false, false);
-		playGame = new Image("/startGame.png", screenWidth / 7, screenHeight / 8, false, false);
-		howToPlay = new Image("/howToPlay.png", screenWidth / 7, screenHeight / 8, false, false);
-		edge = new Image("/pit.png", screenWidth / 32, screenHeight / 18, false, false);
-		floor = new Image("/floor.png", screenWidth / 32, screenHeight / 18, false, false);
-		barrier = new Image("/barrier.png", screenWidth / 34, screenHeight / 18, false, false);
-		portal = new Image("/portal.png", screenWidth / 32, screenHeight / 18, false, false);
-		player = new Image("/adventurer-idle-00.png", screenWidth / 32 / 2, screenHeight / 18, false, false);
-		enemy = new Image("/skeleton.png", screenWidth / 32, screenHeight / 18, false, false);
-		reward = new Image("/crystal_01d.png", screenWidth / 32, screenHeight / 18, false, false);
-		trap = new Image("/spike_4.png", screenWidth / 32, screenHeight / 18, false, false);
-		howToPlayScreen = new Image("/HowToPlayScreen.jpg", screenWidth, screenHeight, false, false);
-		gameOverScreen = new Image("/GameOver.jpg", screenWidth, screenHeight, false, false);
+		background = ImportImage("/Castle.jpg", screenWidth, screenHeight);
+		title = ImportImage("/Title.png", screenWidth / 3, screenHeight / 8);
+		playGame = ImportImage("/startGame.png", screenWidth / 7, screenHeight / 8);
+		howToPlay = ImportImage("/howToPlay.png", screenWidth / 7, screenHeight / 8);
 
 		RenderMenu();
-		Game newGame = new Game();
+
+		edge = ImportImage("/pit.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		floor = ImportImage("/floor.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		barrier = ImportImage("/barrier.png", screenWidth / 34, screenHeight * screenHeightMultiplier);
+		portal = ImportImage("/portal.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		player = ImportImage("/adventurer-idle-00.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		enemy = ImportImage("/skeleton.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		reward = ImportImage("/crystal_01d.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		trap = ImportImage("/spike_4.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
+		howToPlayScreen = ImportImage("/HowToPlayScreen.jpg", screenWidth, screenHeight);
+		gameOverScreen = ImportImage("/GameOver.jpg", screenWidth, screenHeight);
+		playAgainButton = ImportImage("/PlayAgain.jpg", screenWidth / 7, screenHeight / 10);
+		quitButton = ImportImage("/Quit.jpg", screenWidth / 7, screenHeight / 10);
+
+	}
+
+	Image ImportImage(String name, double width, double height) {
+		return new Image(name, width, height, false, false);
 	}
 
 	/**
@@ -100,8 +120,8 @@ public class UI {
 		ClearCanvas();
 		graphicsContext.drawImage(background, 0, 0);
 		graphicsContext.drawImage(title, screenWidth / 3, screenHeight / 8);
-		graphicsContext.drawImage(playGame, screenWidth / 7 * 3, screenHeight / 8 * 3);
-		graphicsContext.drawImage(howToPlay, screenWidth / 7 * 3, screenHeight / 8 * 5);
+		graphicsContext.drawImage(playGame, screenWidth * buttonLocationMultiplierX, screenHeight / 8 * 3);
+		graphicsContext.drawImage(howToPlay, screenWidth * buttonLocationMultiplierX, screenHeight / 8 * 5);
 	}
 
 	/**
@@ -139,11 +159,13 @@ public class UI {
 		}
 
 		RenderEntity(player, enemyList, rewardList, trapList);
+		graphicsContext.setFont(new Font("Verdana", 30));
+		graphicsContext.setFill(Color.WHITE);
 		if(score < 0){
-			graphicsContext.strokeText("Score:"  + 0, cellWidth * 15, cellWidth /2);
+			graphicsContext.fillText("Score:"  + 0, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
 		}
 		else{
-			graphicsContext.strokeText("Score:"  + score, cellWidth * 15, cellWidth /2);
+			graphicsContext.fillText("Score:"  + score, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
 		}
 
 	}
@@ -159,19 +181,16 @@ public class UI {
 		Point temp = player_e.getLocation();
 		graphicsContext.drawImage(player, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 
-		for (Enemy enemy_e: enemies) {
-			temp = enemy_e.getLocation();
-			graphicsContext.drawImage(enemy, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
-		}
+		RenderEntitySet(enemies, enemy);
+		RenderEntitySet(rewardList, reward);
+		RenderEntitySet(trapList, trap);
+	}
 
-		for (Reward reward_e: rewardList) {
-			temp = reward_e.getLocation();
-			graphicsContext.drawImage(reward, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
-		}
-
-		for (Trap trap_e: trapList) {
-			temp = trap_e.getLocation();
-			graphicsContext.drawImage(trap, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
+	public <T extends  Entity> void RenderEntitySet(List<T> entities, Image entityRaster) {
+		Point temp;
+		for (T e: entities) {
+			temp = e.getLocation();
+			graphicsContext.drawImage(entityRaster, temp.getWidth()*cellWidth, temp.getHeight()*cellWidth);
 		}
 	}
 
@@ -189,6 +208,8 @@ public class UI {
 	public void RenderGameOver() {
 		ClearCanvas();
 		graphicsContext.drawImage(gameOverScreen, 0, 0);
+		graphicsContext.drawImage(playAgainButton, screenWidth / 7 * 3, screenHeight / 9 * 5);
+		graphicsContext.drawImage(quitButton, screenWidth / 7 * 3, screenHeight / 9 * 6);
 	}
 
 }

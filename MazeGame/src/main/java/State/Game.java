@@ -21,9 +21,9 @@ public class Game {
 	boolean isExitCellOpen;
 	GameState gameState;
 
-	public enum GameState {
-		WIN, LOST, RUNNING, IDLE, gameOver,gameStart,howToPlay
-	}
+    public enum GameState {
+        WIN, LOST, RUNNING, IDLE, gameOver,gameStart,howToPlay
+    }
 
 
 	public enum MoveCheck {
@@ -53,6 +53,19 @@ public class Game {
 		entityGenerator(enemyCount, rewardCount, trapCount);
 		placeEntitiesOnMap();
 	}
+    /**
+     *  Resets the game to its initial values and generates a new map
+     * @param enemyCount - amount of enemies to generate
+     * @param rewardCount - amount of rewards to generate
+     * @param trapCount - amount of traps to generate
+     */
+    public void reset(int enemyCount, int rewardCount, int trapCount){
+        setGameStateToStart();
+        resetEntityLists();
+        resetPlayer();
+        isExitCellOpen = false;
+        generateMap(enemyCount, rewardCount, trapCount);
+    }
 
 	public GameState getGameState() {
 		return gameState;
@@ -85,10 +98,9 @@ public class Game {
 		return rewardList;
 	}
 
-	public boolean isGameRunning() {
-//		System.out.println("GameState: " + gameState);
-		return (gameState == GameState.RUNNING);
-	}
+    public boolean isGameRunning() {
+        return (gameState == GameState.RUNNING);
+    }
 
 	public boolean isGameIdle(){
 		return (gameState == GameState.IDLE);
@@ -603,9 +615,21 @@ public class Game {
 		return game;
 	}
 
-	public Player getPlayer() {
-		return player;
-	}
+    private void resetEntityLists(){
+        this.enemyList.clear();
+        this.rewardList.clear();
+        this.trapList.clear();
+    }
+
+    private void resetPlayer(){
+        player.setScore(100);
+        player.setAlive(true);
+        player.setLocation(new Point(1, 1));
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
 
 	public List<Enemy> getEnemyList() {
 		return enemyList;

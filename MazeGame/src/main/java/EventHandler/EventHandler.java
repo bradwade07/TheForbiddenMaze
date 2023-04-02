@@ -19,6 +19,8 @@ import static java.util.concurrent.TimeUnit.*;
 
 import java.util.*;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
 import UI.UI;
 
 public class EventHandler {
@@ -70,8 +72,16 @@ public class EventHandler {
                 game.movePlayer('s');
             } else if (key.getCode() == KeyCode.D) {
                 game.movePlayer('d');
+            } else if (key.getCode() == KeyCode.E && game.getGameState().equals(Game.GameState.howToPlay)) {
+                game.setGameStateToStart();
+                ui.RenderMenu();
             }
 
+            try {
+                MILLISECONDS.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         scene.addEventHandler(MouseEvent.MOUSE_CLICKED, (mouse) -> {
@@ -86,6 +96,17 @@ public class EventHandler {
                     game.setGameStateToHowToPlay();
                     ui.RenderHowToPlay();
                 }
+            } else if (game.getGameState().equals(Game.GameState.LOST) && mouse.getScreenX() >= screenWidth / 7 * 3 && mouse.getScreenX() <= screenWidth / 7 * 4) {
+                if (mouse.getScreenY() >= screenHeight / 9 * 5 && mouse.getScreenY() <= screenHeight / 9 * 5 + screenHeight / 10) {
+                    game.reset(5, 5, 5);
+                    game.setGameToRun();
+                    ui.RenderGame(game.getMyMaze(),game.getPlayer(),game.getEnemyList(),game.getRewardList(),game.getTrapList(),game.getPlayerScore());
+                    gameLoop();
+                } else if (mouse.getScreenY() >= screenHeight / 9 * 6 && mouse.getScreenY() <= screenHeight / 9 * 6 + screenHeight / 10) {
+                    game.setGameStateToStart();
+                    game.reset(5, 5, 5);
+                    ui.RenderMenu();
+                }
             }
         });
 
@@ -98,11 +119,17 @@ public class EventHandler {
     public void gameLoop() {
 
         Timer t = new Timer();
+
         TimerTask tt = new TimerTask() {
             @Override
             public void run() {
                 game.runOneTick();
                 ui.RenderGame(game.getMyMaze(),game.getPlayer(),game.getEnemyList(),game.getRewardList(),game.getTrapList(),game.getPlayerScore());
+                System.out.println(game.getPlayerScore());
+                if (game.isGameLost()) {
+                    ui.RenderGameOver();
+                    t.cancel();
+                }
             }
 
 
