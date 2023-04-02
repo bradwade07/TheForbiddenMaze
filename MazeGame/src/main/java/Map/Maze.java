@@ -44,8 +44,8 @@ public class Maze {
 
 	private void makeSidesOpenForExitCell() {
 		for(int i = 1; i< HEIGHT - 2; i++){
-				maze[i][1].setCellType(CellType.path);
-				maze[i][WIDTH - 2].setCellType(CellType.path);
+			maze[i][1].setCellType(CellType.path);
+			maze[i][WIDTH - 2].setCellType(CellType.path);
 		}
 		for(int i = 1; i< WIDTH - 2; i++){
 			maze[1][i].setCellType(CellType.path);
