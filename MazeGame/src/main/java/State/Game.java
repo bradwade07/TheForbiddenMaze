@@ -43,9 +43,9 @@ public class Game {
 	/**
 	 * Starts the level and instantiates everything in the level
 	 *
-	 * @param enemyCount
-	 * @param rewardCount
-	 * @param trapCount
+	 * @param enemyCount - enemy count to spawn enemies
+	 * @param rewardCount - reward count to spawn rewards
+	 * @param trapCount - trap count to spawn traps
 	 */
 	public void generateMap(int enemyCount, int rewardCount, int trapCount) {
 		myMaze = Maze.generateRandomizedMaze();
@@ -59,7 +59,7 @@ public class Game {
 	}
 
 	/**
-	 * Runs one tick of the game, contains enemy movement and checks the current gamestate
+	 * Runs one tick of the game, contains enemy movement and checks the current gameState
 	 */
 
 
@@ -149,7 +149,7 @@ public class Game {
 	/**
 	 * Moves the player entity
 	 *
-	 * @param input
+	 * @param input - takes a char input to move the player in the map
 	 */
 	public void movePlayer(char input) {
 		input = Character.toLowerCase(input);
@@ -171,7 +171,7 @@ public class Game {
 		for (Enemy enemy : enemyList) {
 			Point enemyLocation = enemy.getLocation();
 			MoveDirection move;
-			//if (isPlayerinRange(playerLocation, enemyLocation)) { //follow player
+			//if (isPlayerInRange(playerLocation, enemyLocation)) { //follow player
 				move = getEnemyFollowMovement(enemy, playerLocation);
 //			} else { //random movement
 //				move = getEntityRandomMovement(enemy);
@@ -201,8 +201,8 @@ public class Game {
 	/**
 	 * Checks the entity collision at a  specific point
 	 *
-	 * @param entity
-	 * @param location
+	 * @param entity - the entity that collides at the point
+	 * @param location - location of the collision
 	 * @return boolean to determine if there needs to be a swap
 	 */
 	private MoveCheck checkEntityCollision(Entity entity, Point location) {
@@ -243,9 +243,9 @@ public class Game {
 	/**
 	 * Generates the entities at the start of the level
 	 *
-	 * @param enemyCount
-	 * @param rewardCount
-	 * @param trapCount
+	 * @param enemyCount - enemy count to generate enemies
+	 * @param rewardCount - reward count to generate rewards
+	 * @param trapCount - trap count to generate rewards
 	 */
 	private void entityGenerator(int enemyCount, int rewardCount, int trapCount) { //calls entityMaker and checks if the entity is placeable
 		while (enemyList.size() < enemyCount) {
@@ -264,8 +264,8 @@ public class Game {
 
 	/**
 	 * Places an entity randomly on the map
-	 * @param entityType
-	 * @param score
+	 * @param entityType - entity type to place on map
+	 * @param score - the score that the entity holds
 	 */
 	private void placeEntityRandomlyOnMap(EntityType entityType, int score){
 		List<Point> usedPoints = new ArrayList<>();
@@ -301,9 +301,9 @@ public class Game {
 	/**
 	 * Creates the appropriate entity dependent on entityType
 	 *
-	 * @param entityType
-	 * @param location
-	 * @param score
+	 * @param entityType - entity type to create
+	 * @param location - location of entity to spawn
+	 * @param score - score that the entity holds
 	 */
 	private void entityMaker(EntityType entityType, Point location, int score) {
 		if (entityType.equals(EntityType.enemy)) {
@@ -323,9 +323,9 @@ public class Game {
 	/**
 	 * Returns a valid enemy follow movement move
 	 *
-	 * @param entityThatFollows
-	 * @param followLocation
-	 * @return move
+	 * @param entityThatFollows - the entity that follows the follow location
+	 * @param followLocation - the target location for the entity to follow
+	 * @return move - move direction to follow
 	 */
 	private MoveDirection getEnemyFollowMovement(Entity entityThatFollows, Point followLocation) {
 		Point entityLocation = entityThatFollows.getLocation();
@@ -343,11 +343,13 @@ public class Game {
 			}
 			MoveDirection aMove = MoveDirection.NONE;
 			MoveDirection move = MoveDirection.NONE;
-			if(move.equals(MoveDirection.NONE) && checkMove(height - 1, width) && !oldMove.equals(MoveDirection.DOWN)){
+			if(move.equals(MoveDirection.NONE) && checkMove(height - 1, width)
+					&& !oldMove.equals(MoveDirection.DOWN) ){
 				move = MoveDirection.UP;
 				aMove = recursiveEnemyMovement(height - 1, width, followLocation, move);
 			}
-			if(move.equals(MoveDirection.NONE) && checkMove(height + 1, width) && !oldMove.equals(MoveDirection.UP)){
+			if(move.equals(MoveDirection.NONE) && checkMove(height + 1, width)
+					&& !oldMove.equals(MoveDirection.UP)){
 				move = MoveDirection.DOWN;
 				aMove = recursiveEnemyMovement(height + 1, width, followLocation, move);
 			}
@@ -359,6 +361,7 @@ public class Game {
 				move = MoveDirection.RIGHT;
 				aMove = recursiveEnemyMovement(height, width + 1, followLocation, move);
 			}
+			System.out.println("Move Direction: " + move);
 			return move;
 		}
 		return MoveDirection.NONE;
@@ -367,8 +370,8 @@ public class Game {
 	/**
 	 * Returns a valid enemy random movement move
 	 *
-	 * @param entity
-	 * @return move
+	 * @param entity - entity to move
+	 * @return move - valid move direction of the entity
 	 */
 	private MoveDirection getEntityRandomMovement(Entity entity) {
 		MoveDirection move = MoveDirection.NONE;
@@ -376,18 +379,11 @@ public class Game {
 			Random random = new Random();
 			int randomInt = random.nextInt(4);
 			switch (randomInt) {
-				case 0 -> {
-					move = MoveDirection.UP;
-				}
-				case 1 -> {
-					move = MoveDirection.RIGHT;
-				}
-				case 2 -> {
-					move = MoveDirection.DOWN;
-				}
-				case 3 -> {
-					move = MoveDirection.LEFT;
-				}
+				case 0 -> move = MoveDirection.UP;
+				case 1 -> move = MoveDirection.RIGHT;
+				case 2 -> move = MoveDirection.DOWN;
+				case 3 -> move = MoveDirection.LEFT;
+
 			}
 		} while (!isEntityMoveValid(entity, move));
 
@@ -397,16 +393,16 @@ public class Game {
 	/**
 	 * Checks if the player location is within 5 cells of the location given
 	 *
-	 * @param playerlocation
-	 * @param enemyLocation
-	 * @return
+	 * @param playerLocation - location of the player
+	 * @param enemyLocation - location of the enemy
+	 * @return boolean whether player is within 5 cells of the entity location
 	 */
-	private boolean isPlayerinRange(Point playerlocation, Point enemyLocation) {
-		int playerlocationWidth = playerlocation.getWidth();
-		int playerlocationHeight = playerlocation.getHeight();
+	private boolean isPlayerInRange(Point playerLocation, Point enemyLocation) {
+		int playerLocationWidth = playerLocation.getWidth();
+		int playerLocationHeight = playerLocation.getHeight();
 		int enemyLocationWidth = enemyLocation.getWidth();
 		int enemyLocationHeight = enemyLocation.getHeight();
-		return (Math.abs(playerlocationWidth - enemyLocationWidth) == 5 || Math.abs(playerlocationHeight - enemyLocationHeight) == 5);//checks if player is in 5 cell of every direction
+		return (Math.abs(playerLocationWidth - enemyLocationWidth) == 5 || Math.abs(playerLocationHeight - enemyLocationHeight) == 5);//checks if player is in 5 cell of every direction
 
 	}
 
@@ -414,8 +410,8 @@ public class Game {
 	 * Entity given is moved depending on direction
 	 * Precondition: Move should be valid
 	 *
-	 * @param entity
-	 * @param move
+	 * @param entity - entity to move
+	 * @param move - the direction in which the entity moves
 	 */
 	private void moveEntity(Entity entity, MoveDirection move) { // takes entity position and changes by adding X and/or Y
 		if (!isEntityMoveValid(entity, move)) {
@@ -437,7 +433,7 @@ public class Game {
 				|| moveCheck == MoveCheck.enemyToTrap){
 			Entity entityCollided = myMaze.getEntity(newLocation);
 			MoveDirection newMove = getEntityRandomMovement(entityCollided);
-			newLocation = newLocation.newMoveLocation(move);
+			newLocation = newLocation.newMoveLocation(newMove);
 			myMaze.swapEntity(oldLocation, newLocation);
 		}
 	}
@@ -445,9 +441,9 @@ public class Game {
 	/**
 	 * Checks if the entity move is valid
 	 *
-	 * @param entity
-	 * @param move
-	 * @return moveValid
+	 * @param entity - entity to check the move
+	 * @param move - move direction to check
+	 * @return moveValid - whether the move is valid or not
 	 */
 	private boolean isEntityMoveValid(Entity entity, MoveDirection move) {
 		Point entityLocation = entity.getLocation();
@@ -459,10 +455,10 @@ public class Game {
 
 	/**
 	 * Method is called when an entity moves,
-	 * Checks the collisiontype at location
+	 * Checks the collisionType at location
 	 *
-	 * @param location
-	 * @return collisiontype
+	 * @param location - location of the collision
+	 * @return collisionType that occurred
 	 */
 	private CollisionType entityCollision(Point location) { // subject to change based on other entities.
 		Entity entity1 = myMaze.getEntity(location);
@@ -482,8 +478,8 @@ public class Game {
 	/**
 	 * Converts char to MoveDirection enum
 	 *
-	 * @param input
-	 * @return move
+	 * @param input - char input to convert to MoveDirection
+	 * @return move - MoveDirection to return
 	 */
 	private MoveDirection convertCharToMoveDirection(char input) {
 		input = Character.toLowerCase(input);
@@ -499,8 +495,8 @@ public class Game {
 	/**
 	 * Returns reward at location
 	 *
-	 * @param location
-	 * @return reward
+	 * @param location - location of the reward
+	 * @return reward - reward at location
 	 */
 	private Reward getReward(Point location) {
 		for (Reward reward : rewardList) {
@@ -514,8 +510,8 @@ public class Game {
 	/**
 	 * Returns trap at location
 	 *
-	 * @param location
-	 * @return trap
+	 * @param location - location of the trap
+	 * @return trap - trap at location
 	 */
 	private Trap getTrap(Point location) {
 		for (Trap trap : trapList) {
@@ -537,22 +533,30 @@ public class Game {
 	/**
 	 * Called when player steps on a reward
 	 *
-	 * @param location
+	 * @param location - location of reward
 	 */
 	private void collectReward(Point location) {
 		Reward reward = getReward(location);
+		if(reward.getEntityType() != EntityType.reward){
+			throw new RuntimeException("Game.java steppedOnTrap(): EntityType is not a trap!");
+		}
 		myMaze.setEntity(new Empty(EntityType.empty, location), location);
 		player.incrementScore(reward.getScore());
 		rewardList.remove(reward);
+
+
 	}
 
 	/**
 	 * Called when player steps on a trap
 	 *
-	 * @param location
+	 * @param location - location of trap
 	 */
 	private void steppedOnTrap(Point location) {
 		Trap trap = getTrap(location);
+		if(trap.getEntityType() != EntityType.trap){
+			throw new RuntimeException("Game.java steppedOnTrap(): EntityType is not a trap!");
+		}
 		myMaze.setEntity(new Empty(EntityType.empty, location), location);
 		player.decrementScore(trap.getDamage());
 		if(player.getScore() < 0){
