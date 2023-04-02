@@ -43,6 +43,20 @@ public class Game {
 
 
     /**
+     *  Resets the game to its initial values and generates a new map
+     * @param enemyCount - amount of enemies to generate
+     * @param rewardCount - amount of rewards to generate
+     * @param trapCount - amount of traps to generate
+     */
+    public void reset(int enemyCount, int rewardCount, int trapCount){
+        setGameStateToStart();
+        resetEntityLists();
+        resetPlayerScore();
+        isExitCellOpen = false;
+        generateMap(enemyCount, rewardCount, trapCount);
+    }
+
+    /**
      * Starts the level and instantiates everything in the level
      *
      * @param enemyCount
@@ -625,6 +639,16 @@ public class Game {
             game = GameState.WIN;
         }
             return game;
+    }
+
+    private void resetEntityLists(){
+        this.enemyList.clear();
+        this.rewardList.clear();
+        this.trapList.clear();
+    }
+
+    private void resetPlayerScore(){
+        player.setScore(0);
     }
 
     public Player getPlayer() {
