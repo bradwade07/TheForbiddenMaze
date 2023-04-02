@@ -11,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -154,11 +157,13 @@ public class UI {
 		}
 
 		RenderEntity(player, enemyList, rewardList, trapList);
+		graphicsContext.setFont(new Font("Verdana", 30));
+		graphicsContext.setFill(Color.WHITE);
 		if(score < 0){
-			graphicsContext.strokeText("Score:"  + 0, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
+			graphicsContext.fillText("Score:"  + 0, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
 		}
 		else{
-			graphicsContext.strokeText("Score:"  + score, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
+			graphicsContext.fillText("Score:"  + score, cellWidth * scoreXMultiplier, cellWidth * scoreYMultiplier);
 		}
 
 	}
