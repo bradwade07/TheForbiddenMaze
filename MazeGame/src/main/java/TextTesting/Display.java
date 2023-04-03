@@ -150,9 +150,6 @@ public class Display {
             System.out.println();
         }
         System.out.println("Player Score: " + game.getPlayerScore());
-        for(int i =0; i < game.getRewardList().size();i++){
-            System.out.println("Cheese location " + game.getRewardList().get(i).getLocation().getHeight() + " " + game.getRewardList().get(i).getLocation().getWidth());
-        }
 
     }
 }

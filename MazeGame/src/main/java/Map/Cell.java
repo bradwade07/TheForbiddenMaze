@@ -14,12 +14,11 @@ public class Cell {
 
 	/**
 	 * Constructor for cell, has an width and height coordinate for the 2d maze array, and a CellType
-	 * @param width
-	 * @param height
+	 * @param location
 	 * @param cellType
 	 */
-	public Cell(int height, int width, CellType cellType) {
-		this.location = new Point(height,width);
+	public Cell(Point location, CellType cellType) {
+		this.location = location;
 		this.cellType = cellType;
 	}
 
@@ -60,5 +59,7 @@ public class Cell {
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
-
+	public boolean isWallOrBarricade(){
+		return cellType.equals(CellType.wall) || cellType.equals(CellType.barricade);
+	}
 }
