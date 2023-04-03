@@ -33,6 +33,7 @@ public class UI {
 	private Image background;
 	private Image howToPlayScreen;
 	private Image gameOverScreen;
+	private Image gameWonScreen;
 	private Image title;
 	private Image playGame;
 	private Image howToPlay;
@@ -97,6 +98,7 @@ public class UI {
 		trap = ImportImage("/spike_4.png", screenWidth * screenWidthMultiplier, screenHeight * screenHeightMultiplier);
 		howToPlayScreen = ImportImage("/HowToPlayScreen.jpg", screenWidth, screenHeight);
 		gameOverScreen = ImportImage("/GameOver.jpg", screenWidth, screenHeight);
+		gameWonScreen = ImportImage("/GameWon.jpg", screenWidth, screenHeight);
 		playAgainButton = ImportImage("/PlayAgain.jpg", screenWidth / 7, screenHeight / 10);
 		quitButton = ImportImage("/Quit.jpg", screenWidth / 7, screenHeight / 10);
 
@@ -208,6 +210,16 @@ public class UI {
 	public void RenderGameOver() {
 		ClearCanvas();
 		graphicsContext.drawImage(gameOverScreen, 0, 0);
+		graphicsContext.drawImage(playAgainButton, screenWidth / 7 * 3, screenHeight / 9 * 5);
+		graphicsContext.drawImage(quitButton, screenWidth / 7 * 3, screenHeight / 9 * 6);
+	}
+
+	/**
+	 * Renders the Game Won Scene
+	 */
+	public void RenderGameWon(){
+		ClearCanvas();
+		graphicsContext.drawImage(gameWonScreen, 0, 0);
 		graphicsContext.drawImage(playAgainButton, screenWidth / 7 * 3, screenHeight / 9 * 5);
 		graphicsContext.drawImage(quitButton, screenWidth / 7 * 3, screenHeight / 9 * 6);
 	}
