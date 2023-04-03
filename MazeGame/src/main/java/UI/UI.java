@@ -47,6 +47,8 @@ public class UI {
 	private Image trap;
 	private Image playAgainButton;
 	private Image quitButton;
+	private Image playAgainButtonWon;
+	private Image quitButtonWon;
 
 	// These are what we multiply cell width to get the location where to render score
 	private final double scoreXMultiplier = 15.0;
@@ -101,6 +103,8 @@ public class UI {
 		gameWonScreen = ImportImage("/GameWon.jpg", screenWidth, screenHeight);
 		playAgainButton = ImportImage("/PlayAgain.jpg", screenWidth / 7, screenHeight / 10);
 		quitButton = ImportImage("/Quit.jpg", screenWidth / 7, screenHeight / 10);
+		quitButtonWon = ImportImage("/QuitWon.jpg", screenWidth / 7, screenHeight / 10);
+		playAgainButtonWon = ImportImage("PlayAgainWon.jpg", screenWidth / 7, screenHeight / 10);
 
 	}
 
@@ -220,8 +224,8 @@ public class UI {
 	public void RenderGameWon(){
 		ClearCanvas();
 		graphicsContext.drawImage(gameWonScreen, 0, 0);
-		graphicsContext.drawImage(playAgainButton, screenWidth / 7 * 3, screenHeight / 9 * 5);
-		graphicsContext.drawImage(quitButton, screenWidth / 7 * 3, screenHeight / 9 * 6);
+		graphicsContext.drawImage(playAgainButtonWon, screenWidth / 7 * 3, screenHeight / 9 * 5);
+		graphicsContext.drawImage(quitButtonWon, screenWidth / 7 * 3, screenHeight / 9 * 6);
 	}
 
 }
