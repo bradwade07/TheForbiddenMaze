@@ -5,6 +5,7 @@ import Map.*;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +21,11 @@ public class Game {
 	private Maze myMaze;
 	boolean isExitCellOpen;
 	GameState gameState;
+	List<Point> usedPoints = new ArrayList<>();
+	private int initialEnemyListSize;
+	private int initialRewardListSize;
+	private int initialTrapListSize;
+
 
     public enum GameState {
         WIN, LOST, RUNNING, IDLE, gameOver,gameStart,howToPlay
@@ -49,9 +55,11 @@ public class Game {
 	 */
 	public void generateMap(int enemyCount, int rewardCount, int trapCount) {
 		myMaze = Maze.generateRandomizedMaze();
-		this.player.setLocation(new Point(getMyMaze().getHeight()/2, getMyMaze().getWidth()/2));
 		entityGenerator(enemyCount, rewardCount, trapCount);
 		placeEntitiesOnMap();
+		initialEnemyListSize = enemyCount;
+		initialRewardListSize = rewardCount;
+		initialTrapListSize = trapCount;
 	}
     /**
      *  Resets the game to its initial values and generates a new map
@@ -59,12 +67,13 @@ public class Game {
      * @param rewardCount - amount of rewards to generate
      * @param trapCount - amount of traps to generate
      */
-    public void reset(int enemyCount, int rewardCount, int trapCount){
+    public void reset(int enemyCount, int rewardCount, int trapCount, boolean isFullReset){
         setGameStateToStart();
         resetEntityLists();
-        resetPlayer();
+        resetPlayer(isFullReset);
         isExitCellOpen = false;
         generateMap(enemyCount, rewardCount, trapCount);
+
     }
 
 	public GameState getGameState() {
@@ -184,7 +193,7 @@ public class Game {
 			Point enemyLocation = enemy.getLocation();
 			MoveDirection move;
 			//if (isPlayerInRange(playerLocation, enemyLocation)) { //follow player
-				move = getEnemyFollowMovement(enemy, playerLocation);
+				move = getEnemyFollowMovement(enemy);
 //			} else { //random movement
 //				move = getEntityRandomMovement(enemy);
 //			}
@@ -247,6 +256,7 @@ public class Game {
 					moveCheck = MoveCheck.enemyToTrap;
 				}
 			}
+
 			default -> throw new RuntimeException("Game.java checkEntityCollision(): collision type is invalid");
 		}
 		return moveCheck;
@@ -280,7 +290,6 @@ public class Game {
 	 * @param score - the score that the entity holds
 	 */
 	private void placeEntityRandomlyOnMap(EntityType entityType, int score){
-		List<Point> usedPoints = new ArrayList<>();
 		int width, height;
 		Point newPoint;
 		boolean status = true;
@@ -336,48 +345,96 @@ public class Game {
 	 * Returns a valid enemy follow movement move
 	 *
 	 * @param entityThatFollows - the entity that follows the follow location
-	 * @param followLocation - the target location for the entity to follow
 	 * @return move - move direction to follow
 	 */
-	private MoveDirection getEnemyFollowMovement(Entity entityThatFollows, Point followLocation) {
+	private MoveDirection getEnemyFollowMovement(Entity entityThatFollows) {
 		Point entityLocation = entityThatFollows.getLocation();
-		return recursiveEnemyMovement(entityLocation.getHeight(), entityLocation.getWidth(), followLocation, MoveDirection.NONE);
-	}
-	private boolean checkMove(int height, int width){
-		return myMaze.getMaze()[height][width].getCellType().equals(CellType.path);
+		Point playerLocation = player.getLocation();
+		int down = Math.abs(playerLocation.getHeight() - entityLocation.getHeight() - 1);
+		int up = Math.abs(playerLocation.getHeight() - entityLocation.getHeight() + 1);
+		int right = Math.abs(playerLocation.getWidth() - entityLocation.getWidth() - 1);
+		int left = Math.abs(playerLocation.getWidth() - entityLocation.getWidth() + 1);
+		List<Integer> moveList = new ArrayList<>();
+		moveList.add(up);
+		moveList.add(down);
+		moveList.add(left);
+		moveList.add(right);
+		Collections.sort(moveList);
+		for(int i =0; i < moveList.size(); i++){
+			if(moveList.get(i).equals(up)){
+				if(isEntityMoveValid(entityThatFollows, MoveDirection.UP)){
+					return MoveDirection.UP;
+				}
+			}
+			else if(moveList.get(i).equals(down)){
+				if(isEntityMoveValid(entityThatFollows, MoveDirection.DOWN)){
+					return MoveDirection.DOWN;
+				}
+			}
+			else if(moveList.get(i).equals(left)){
+				if(isEntityMoveValid(entityThatFollows, MoveDirection.LEFT)){
+					return MoveDirection.LEFT;
+				}
+			}
+			else if(moveList.get(i).equals(right)){
+				if(isEntityMoveValid(entityThatFollows, MoveDirection.RIGHT)){
+					return MoveDirection.RIGHT;
+				}
+			}
 
-	}
-	private MoveDirection recursiveEnemyMovement(int height, int width, Point followLocation, MoveDirection oldMove){
-		System.out.println(height + " " + width);
-		if(myMaze.getMaze()[height][width].getCellType().equals(CellType.path)){
-			if(height == followLocation.getHeight() && width == followLocation.getWidth()){
-				return MoveDirection.UP; //any works just pass a legal move
-			}
-			MoveDirection aMove = MoveDirection.NONE;
-			MoveDirection move = MoveDirection.NONE;
-			if(move.equals(MoveDirection.NONE) && checkMove(height - 1, width)
-					&& !oldMove.equals(MoveDirection.DOWN) ){
-				move = MoveDirection.UP;
-				aMove = recursiveEnemyMovement(height - 1, width, followLocation, move);
-			}
-			if(move.equals(MoveDirection.NONE) && checkMove(height + 1, width)
-					&& !oldMove.equals(MoveDirection.UP)){
-				move = MoveDirection.DOWN;
-				aMove = recursiveEnemyMovement(height + 1, width, followLocation, move);
-			}
-			if(move.equals(MoveDirection.NONE) && checkMove(height, width - 1) && !oldMove.equals(MoveDirection.RIGHT)){
-				move =MoveDirection.LEFT;
-				aMove = recursiveEnemyMovement(height, width - 1, followLocation, move);
-			}
-			if(move.equals(MoveDirection.NONE) && checkMove(height, width + 1) && !oldMove.equals(MoveDirection.LEFT)) {
-				move = MoveDirection.RIGHT;
-				aMove = recursiveEnemyMovement(height, width + 1, followLocation, move);
-			}
-			System.out.println("Move Direction: " + move);
-			return move;
 		}
 		return MoveDirection.NONE;
+
+//		int height = entityLocation.getHeight() - followLocation.getHeight();
+//		int width =  entityLocation.getWidth() - followLocation.getWidth();
+//		if(Math.abs(height) < Math.abs(width) && height != 0){
+//			if(height < 0){
+//				return MoveDirection.DOWN;
+//			}
+//			else{ return MoveDirection.UP;}
+//		}
+//		else{
+//			if(width < 0){
+//				return MoveDirection.LEFT;
+//			}
+//			else{return MoveDirection.RIGHT;}
+//		}
 	}
+//	private boolean checkMove(int height, int width){
+//		return myMaze.getMaze()[height][width].getCellType().equals(CellType.path);
+//
+//	}
+//	private MoveDirection recursiveEnemyMovement(int height, int width, Point followLocation, MoveDirection oldMove){
+//		System.out.println(height + " " + width);
+//		if(myMaze.getMaze()[height][width].getCellType().equals(CellType.path)){
+//			if(height == followLocation.getHeight() && width == followLocation.getWidth()){
+//				return MoveDirection.UP; //any works just pass a legal move
+//			}
+//			MoveDirection aMove = MoveDirection.NONE;
+//			MoveDirection move = MoveDirection.NONE;
+//			if(move.equals(MoveDirection.NONE) && checkMove(height - 1, width)
+//					&& !oldMove.equals(MoveDirection.DOWN) ){
+//				move = MoveDirection.UP;
+//				aMove = recursiveEnemyMovement(height - 1, width, followLocation, move);
+//			}
+//			if(move.equals(MoveDirection.NONE) && checkMove(height + 1, width)
+//					&& !oldMove.equals(MoveDirection.UP)){
+//				move = MoveDirection.DOWN;
+//				aMove = recursiveEnemyMovement(height + 1, width, followLocation, move);
+//			}
+//			if(move.equals(MoveDirection.NONE) && checkMove(height, width - 1) && !oldMove.equals(MoveDirection.RIGHT)){
+//				move =MoveDirection.LEFT;
+//				aMove = recursiveEnemyMovement(height, width - 1, followLocation, move);
+//			}
+//			if(move.equals(MoveDirection.NONE) && checkMove(height, width + 1) && !oldMove.equals(MoveDirection.LEFT)) {
+//				move = MoveDirection.RIGHT;
+//				aMove = recursiveEnemyMovement(height, width + 1, followLocation, move);
+//			}
+//			System.out.println("Move Direction: " + move);
+//			return move;
+//		}
+//		return MoveDirection.NONE;
+//	}
 
 	/**
 	 * Returns a valid enemy random movement move
@@ -572,8 +629,6 @@ public class Game {
 		myMaze.setEntity(new Empty(EntityType.empty, location), location);
 		player.decrementScore(trap.getDamage());
 		if(player.getScore() < 0){
-			System.out.println(player.getScore());
-//            player.setScore(0);
 			killPlayer();
 		}
 		trapList.remove(trap);
@@ -616,15 +671,18 @@ public class Game {
 	}
 
     private void resetEntityLists(){
+		this.usedPoints.clear();
         this.enemyList.clear();
         this.rewardList.clear();
         this.trapList.clear();
     }
 
-    private void resetPlayer(){
-        player.setScore(100);
+    private void resetPlayer(boolean isFullReset){
         player.setAlive(true);
         player.setLocation(new Point(1, 1));
+		if(isFullReset){
+			player.setScore(100);
+		}
     }
 
     public Player getPlayer() {
@@ -637,5 +695,17 @@ public class Game {
 
 	public List<Trap> getTrapList() {
 		return trapList;
+	}
+
+	public int getInitialEnemyListSize() {
+		return initialEnemyListSize;
+	}
+
+	public int getInitialRewardListSize() {
+		return initialRewardListSize;
+	}
+
+	public int getInitialTrapListSize() {
+		return initialTrapListSize;
 	}
 }
