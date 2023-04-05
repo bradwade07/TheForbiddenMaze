@@ -30,3 +30,8 @@ Computing ID: jla797
 Student Number: 301472967
 
 ----------------------------------
+(I couldn't get maven working on my laptop so i couldn't test this out. I use Intellij to run the app normally)
+To build package: mvn package
+To test: mvn test
+To run: mvn clean package
+        java -jar target/test-1.0-SNAPSHOT.jar
