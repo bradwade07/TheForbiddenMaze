@@ -30,17 +30,27 @@ class CellTest {
         assertEquals(CellType.wall, c.getCellType());
     }
 
-//    @Test
-//    void getEntity() {
-//        Cell c = new Cell(5,10,CellType.path);
-//        c.setEntity(new Entity(EntityType.player, new Point(5,10)));
-//        assertEquals(new Entity(EntityType.player, new Point(5,10)), c.getEntity());
-//    }
-//
-//    @Test
-//    void setEntity() {
-//        Cell c = new Cell(5,10,CellType.path);
-//        c.setEntity(new Entity(EntityType.enemy, new Point(5,10)));
-//        assertEquals(new Entity(EntityType.enemy, new Point(5,10)), c.getEntity());
-//    }
+    @Test
+    void getEntity() {
+        Cell c = new Cell(new Point(5,10),CellType.path);
+        Entity e = new Entity(EntityType.player, new Point(5,10));
+        c.setEntity(e);
+        assertEquals(e.getEntityType(), c.getEntity().getEntityType());
+    }
+
+    @Test
+    void setEntity() {
+        Cell c = new Cell(new Point(5,10),CellType.path);
+        Entity e = new Entity(EntityType.player, new Point(5,10));
+        c.setEntity(e);
+        assertEquals(e, c.getEntity());
+    }
+
+    @Test
+    void isWallOrBarricade() {
+        Cell c = new Cell(new Point(5,10),CellType.path);
+        assertFalse(c.isWallOrBarricade());
+        c.setCellType(CellType.wall);
+        assertTrue(c.isWallOrBarricade());
+    }
 }
