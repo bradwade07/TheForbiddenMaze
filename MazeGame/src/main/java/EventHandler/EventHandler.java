@@ -115,7 +115,7 @@ public class EventHandler {
                     gameLoop();
                 } else if (mouse.getScreenY() >= screenHeight / 9 * 6 && mouse.getScreenY() <= screenHeight / 9 * 6 + screenHeight / 10) {
                     game.setGameStateToStart();
-                    game.reset(2, 1, 3, true);
+                    game.reset(2, 1, 3, false);
                     ui.RenderMenu();
                 }
             }
