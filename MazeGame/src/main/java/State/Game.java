@@ -26,16 +26,24 @@ public class Game {
 	private int initialRewardListSize;
 	private int initialTrapListSize;
 
-
+	/**
+	 * Enum representing the different states of the game.
+	 */
     public enum GameState {
         WIN, LOST, RUNNING, IDLE, gameOver,gameStart,howToPlay
     }
 
-
+	/**
+	 * Enum representing the different types of moves that can be made by the player.
+	 */
 	public enum MoveCheck {
 		validMove, killPlayer, enemyToTrap, enemyToReward
 	}
 
+	/**
+	 * Constructor for Game class.
+	 * Initializes the player, enemy list, reward list, trap list, and sets the initial game state to "gameStart".
+	 */
 	public Game() {
 		this.player = new Player(EntityType.player, new Point(1,1));
 		this.enemyList = new ArrayList<>();
@@ -76,6 +84,10 @@ public class Game {
 
     }
 
+	/**
+	 * Retrieves the current game state.
+	 * @return the current GameState of the Game object
+	 */
 	public GameState getGameState() {
 		return gameState;
 	}
@@ -83,8 +95,6 @@ public class Game {
 	/**
 	 * Runs one tick of the game, contains enemy movement and checks the current gameState
 	 */
-
-
 	public void runOneTick() {
 		runEnemyMovement();
 		updateGameState();
@@ -95,30 +105,56 @@ public class Game {
 
 	}
 
+	/**
+	 * Retrieves the current Maze object.
+	 * @return the current Maze object of the Game object
+	 */
 	public Maze getMyMaze() {
 		return myMaze;
 	}
-
+	/**
+	 * Retrieves the current size of the reward list.
+	 * @return the current size of the reward list
+	 */
 	private int getRewardListSize() {
 		return rewardList.size();
 	}
 
+	/**
+	 * RRetrieves the list of rewards in the game.
+	 * @return the list of rewards in the game
+	 */
 	public List<Reward> getRewardList() {
 		return rewardList;
 	}
-
+	/**
+	 * Checks whether the game is currently running.
+	 * @return true if the game is running, false otherwise
+	 */
     public boolean isGameRunning() {
         return (gameState == GameState.RUNNING);
     }
 
+	/**
+	 * Checks whether the game is currently idle.
+	 * @return true if the game is idle, false otherwise
+	 */
 	public boolean isGameIdle(){
 		return (gameState == GameState.IDLE);
 	}
 
+	/**
+	 * Checks whether the game has been won.
+	 * @return true if the game has been won, false otherwise
+	 */
 	public boolean isGameWon(){
 		return (gameState == GameState.WIN);
 	}
 
+	/**
+	 * Checks whether the game has been lost.
+	 * @return true if the game has been lost, false otherwise
+	 */
 	public boolean isGameLost(){
 		return (gameState == GameState.LOST);
 	}
@@ -137,12 +173,23 @@ public class Game {
 		gameState = GameState.RUNNING;
 	}
 
+	/**
+	 * Sets the current game state to game over.
+	 */
 	public void setGameStateToOver(){
 		gameState = GameState.gameOver;
 	}
+
+	/**
+	 * Sets the current game state to game start.
+	 */
 	public void setGameStateToStart(){
 		gameState = GameState.gameStart;
 	}
+
+	/**
+	 * Sets the current game state to how to play.
+	 */
 	public void setGameStateToHowToPlay(){
 		gameState = GameState.howToPlay;
 	}
@@ -157,12 +204,19 @@ public class Game {
 	}
 
 
-	// For testing purposes
+	/**
+	 * Removes all rewards from the game by removing them from the maze and clearing the reward list.
+	 */
 	public void removeAllRewards() {
 		myMaze.removeAllRewards();
 		rewardList.removeAll(rewardList);
 	}
 
+	/**
+	 * Returns the current score of the player.
+	 *
+	 * @return The player's score.
+	 */
 	public int getPlayerScore() {
 		return player.getScore();
 	}
@@ -384,57 +438,7 @@ public class Game {
 
 		}
 		return MoveDirection.NONE;
-
-//		int height = entityLocation.getHeight() - followLocation.getHeight();
-//		int width =  entityLocation.getWidth() - followLocation.getWidth();
-//		if(Math.abs(height) < Math.abs(width) && height != 0){
-//			if(height < 0){
-//				return MoveDirection.DOWN;
-//			}
-//			else{ return MoveDirection.UP;}
-//		}
-//		else{
-//			if(width < 0){
-//				return MoveDirection.LEFT;
-//			}
-//			else{return MoveDirection.RIGHT;}
-//		}
 	}
-//	private boolean checkMove(int height, int width){
-//		return myMaze.getMaze()[height][width].getCellType().equals(CellType.path);
-//
-//	}
-//	private MoveDirection recursiveEnemyMovement(int height, int width, Point followLocation, MoveDirection oldMove){
-//		System.out.println(height + " " + width);
-//		if(myMaze.getMaze()[height][width].getCellType().equals(CellType.path)){
-//			if(height == followLocation.getHeight() && width == followLocation.getWidth()){
-//				return MoveDirection.UP; //any works just pass a legal move
-//			}
-//			MoveDirection aMove = MoveDirection.NONE;
-//			MoveDirection move = MoveDirection.NONE;
-//			if(move.equals(MoveDirection.NONE) && checkMove(height - 1, width)
-//					&& !oldMove.equals(MoveDirection.DOWN) ){
-//				move = MoveDirection.UP;
-//				aMove = recursiveEnemyMovement(height - 1, width, followLocation, move);
-//			}
-//			if(move.equals(MoveDirection.NONE) && checkMove(height + 1, width)
-//					&& !oldMove.equals(MoveDirection.UP)){
-//				move = MoveDirection.DOWN;
-//				aMove = recursiveEnemyMovement(height + 1, width, followLocation, move);
-//			}
-//			if(move.equals(MoveDirection.NONE) && checkMove(height, width - 1) && !oldMove.equals(MoveDirection.RIGHT)){
-//				move =MoveDirection.LEFT;
-//				aMove = recursiveEnemyMovement(height, width - 1, followLocation, move);
-//			}
-//			if(move.equals(MoveDirection.NONE) && checkMove(height, width + 1) && !oldMove.equals(MoveDirection.LEFT)) {
-//				move = MoveDirection.RIGHT;
-//				aMove = recursiveEnemyMovement(height, width + 1, followLocation, move);
-//			}
-//			System.out.println("Move Direction: " + move);
-//			return move;
-//		}
-//		return MoveDirection.NONE;
-//	}
 
 	/**
 	 * Returns a valid enemy random movement move
@@ -642,14 +646,26 @@ public class Game {
 		gameState = getCurrentGameState();
 	}
 
+	/**
+	 * Returns true if the player is alive; otherwise, returns false.
+	 * @return True if the player is alive; otherwise, false.
+	 */
 	private boolean isPlayerAlive() {
 		return player.isAlive();
 	}
 
+	/**
+	 * Returns true if the player has lost the game; otherwise, returns false.
+	 * @return True if the player has lost the game; otherwise, false.
+	 */
 	private boolean hasPlayerLost() {
 		return (getPlayerScore() < 0 || !isPlayerAlive());
 	}
 
+	/**
+	 * Returns true if the player has won the game; otherwise, returns false.
+	 * @return True if the player has won the game; otherwise, false.
+	 */
 	private boolean hasPlayerWon() {
 		return (player.getLocation().equals(myMaze.getExitCell()));
 	}
@@ -670,6 +686,9 @@ public class Game {
 		return game;
 	}
 
+	/**
+	 * Clears all the entity lists and resets the used points list.
+	 */
     private void resetEntityLists(){
 		this.usedPoints.clear();
         this.enemyList.clear();
@@ -677,6 +696,10 @@ public class Game {
         this.trapList.clear();
     }
 
+	/**
+	 * Resets the player's location and state. If isFullReset is true, the player's score is also set to 100.
+	 * @param isFullReset True if a full reset is required; otherwise, false.
+	 */
     private void resetPlayer(boolean isFullReset){
         player.setAlive(true);
         player.setLocation(new Point(1, 1));
@@ -685,26 +708,50 @@ public class Game {
 		}
     }
 
+	/**
+	 * Returns the player object.
+	 * @return The player object.
+	 */
     public Player getPlayer() {
         return player;
     }
 
+	/**
+	 * Returns a list of all enemies in the game.
+	 * @return A list of all enemies in the game.
+	 */
 	public List<Enemy> getEnemyList() {
 		return enemyList;
 	}
 
+	/**
+	 * Returns a list of all traps in the game.
+	 * @return A list of all traps in the game.
+	 */
 	public List<Trap> getTrapList() {
 		return trapList;
 	}
 
+	/**
+	 * Returns the initial size of the enemy list.
+	 * @return The initial size of the enemy list.
+	 */
 	public int getInitialEnemyListSize() {
 		return initialEnemyListSize;
 	}
 
+	/**
+	 * Returns the initial size of the reward list.
+	 * @return The initial size of the reward list.
+	 */
 	public int getInitialRewardListSize() {
 		return initialRewardListSize;
 	}
 
+	/**
+	 * Returns the initial size of the trap list.
+	 * @return The initial size of the trap list.
+	 */
 	public int getInitialTrapListSize() {
 		return initialTrapListSize;
 	}
