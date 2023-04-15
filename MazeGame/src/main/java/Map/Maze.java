@@ -31,8 +31,10 @@ public class Maze {
 			makeRandomMaze();
 		} while (!hasAllCornersConnected()
 				|| !hasPathToAllOpenCells());
-//				|| hasOpen2x2Square() || hasWalled2x2Square());
 	}
+	/**
+	 * Creates the maze using Randomized Prim's Algorithm.
+	 */
 	private void makeRandomMaze() {
 		createCanvas();
 		buildMazePaths();
@@ -41,7 +43,9 @@ public class Maze {
 		makeSidesOpenForExitCell();
 
 	}
-
+	/**
+	 * Makes the sides open for the exit cell.
+	 */
 	private void makeSidesOpenForExitCell() {
 		for(int i = 1; i< HEIGHT - 2; i++){
 			maze[i][1].setCellType(CellType.path);
@@ -52,7 +56,9 @@ public class Maze {
 			maze[HEIGHT - 2][i].setCellType(CellType.path);
 		}
 	}
-
+	/**
+	 * Adds loops to the maze.
+	 */
 	private void addLoopsToMaze() {
 		for (int i = 1; i < HEIGHT - 1; i++) {
 			for (int j = 1; j < WIDTH - 1; j++) {
@@ -67,7 +73,13 @@ public class Maze {
 			}
 		}
 	}
-
+	/**
+	 * Determines if removing a wall would make an empty square.
+	 *
+	 * @param width the width of the wall to remove
+	 * @param height the height of the wall to remove
+	 * @return {@code true} if removing the wall would make an empty square; {@code false} otherwise
+	 */
 	private boolean removalMakesEmptySquare(int width, int height) {
 		for (int dHeight = -1; dHeight <= 1; dHeight += 2) {
 			for (int dWidth = -1; dWidth <= 1; dWidth +=2) {
@@ -82,8 +94,6 @@ public class Maze {
 		return false;
 
 	}
-
-
 	/**
 	 * Begins the initialization of the maze, sets all the cells to barricade and then updates the perimeter to walls
 	 */
@@ -107,24 +117,20 @@ public class Maze {
 			}
 		}
 	}
+	/**
+	 * Builds the maze pathways
+	 */
 	private void buildMazePaths() {
 		List<Point> candidates = new ArrayList<>();
 		candidates.add(new Point(HEIGHT /2, WIDTH /2));
 		while(candidates.size() > 0){
-			// Randomly pick a candidate cell to investigate.
 			Collections.shuffle(candidates);
 			Point location = candidates.get(0);
 			candidates.remove(0);
-
-			// Remove the wall, if possible
 			if (okToRemoveWall(location)) {
 				int height = location.getHeight();
 				int width  = location.getWidth();
-
-				//Remove wall
 				maze[height][width].setCellType(CellType.path);
-
-				//Add surrounding squares to list to explore
 				candidates.add(new Point(height + 1, width));
 				candidates.add(new Point(height - 1, width));
 				candidates.add(new Point(height, width + 1));
@@ -133,7 +139,10 @@ public class Maze {
 
 		}
 	}
-
+	/**
+	 * Determines if its okay to remove a wall
+	 * @param location the location of the cell
+	 */
 	private boolean okToRemoveWall(Point location) {
 		int width = location.getWidth();
 		int height = location.getHeight();
@@ -153,7 +162,11 @@ public class Maze {
 		boolean breaksMaze = (countWallsAroundCell(location) <= MIN_WALL_COUNT_WHEN_NOT_CONNECTED);
 		return !breaksMaze;
 	}
-
+	/**
+	 * Counts how many walls around the cell
+	 * @param location the location of the cell
+	 * @return wallCount
+	 */
 	private int countWallsAroundCell(Point location) {
 		int width = location.getWidth();
 		int height = location.getHeight();
@@ -164,6 +177,9 @@ public class Maze {
 		wallCount += (maze[height][width-1].isWallOrBarricade() || maze[height][width-1].isWallOrBarricade()) ? 1 : 0;
 		return wallCount;
 	}
+	/**
+	 * Determines if all the corners of the maze is connected
+	 */
 	private boolean hasAllCornersConnected(){
 		final Point LOCATION_TOP_LEFT     = new Point(1, 1);
 		final Point LOCATION_TOP_RIGHT    = new Point(HEIGHT - 2, 1);
@@ -176,12 +192,12 @@ public class Maze {
 				&& pathfinder.hasPath(LOCATION_TOP_LEFT, LOCATION_BOTTOM_LEFT)
 				&& pathfinder.hasPath(LOCATION_TOP_LEFT, LOCATION_BOTTOM_RIGHT);
 	}
+	/**
+	 * Determines if all thc cells are accessible
+	 */
 	private boolean hasPathToAllOpenCells(){
-		// Path from top left (user starting point):
 		final Point LOCATION_TOP_LEFT = new Point(1, 1);
 		PathFinder pathfinder = new PathFinder(maze);
-
-		// to all possible open spaces
 		for (int y = 1; y < WIDTH - 1; y++) {
 			for (int x = 1; x < HEIGHT - 1; x++) {
 				Point loc = new Point(x, y);
@@ -194,7 +210,9 @@ public class Maze {
 		}
 		return true;
 	}
-
+	/**
+	 * Determines if a cell is of type wall
+	 */
 	private boolean isCellAWall(Point loc) {
 		if (outOfRange(loc)) {
 			return false;
@@ -214,143 +232,6 @@ public class Maze {
 		//newMaze.createMaze();
 		return newMaze;
 	}
-
-	/**
-	 * Function using Randomized Prim's Algorithm to generate the maze
-	 * Takes the fact that all the inner cells were previously set to barricades and set them to paths
-	 */
-//	public void createMaze() { //Using Randomized Prim's Algorithm to generate the maze
-//		createCanvas();
-//		List<Cell> neighborCells = new ArrayList<>();
-//		Cell currentCell = maze[1][1];
-//		currentCell.setCellType(CellType.path);
-//
-//		Cell northNeighbor = null, eastNeighbor = null, westNeighbor = null, southNeighbor = null;
-//		if (currentCell.getLocation().getHeight() - 2 > 0) {
-//			northNeighbor = maze[currentCell.getLocation().getHeight() - 2][currentCell.getLocation().getWidth()];
-//		}
-//		if (currentCell.getLocation().getWidth() + 2 < Width - 1) {
-//			eastNeighbor = maze[currentCell.getLocation().getHeight()][currentCell.getLocation().getWidth() + 2];
-//		}
-//		if (currentCell.getLocation().getWidth() - 2 > 0) {
-//			westNeighbor = maze[currentCell.getLocation().getHeight()][currentCell.getLocation().getWidth() - 2];
-//		}
-//		if (currentCell.getLocation().getHeight() + 2 < Height - 1) {
-//			southNeighbor = maze[currentCell.getLocation().getHeight() + 2][currentCell.getLocation().getWidth()];
-//		}
-//
-//		if (northNeighbor != null) {
-//			if (!northNeighbor.getCellType().equals(CellType.wall) || !northNeighbor.getCellType().equals(CellType.barricade)) {
-//				neighborCells.add(northNeighbor);
-//			}
-//		}
-//		if (eastNeighbor != null) {
-//			if (!eastNeighbor.getCellType().equals(CellType.wall) || !eastNeighbor.getCellType().equals(CellType.barricade)) {
-//				neighborCells.add(eastNeighbor);
-//			}
-//		}
-//		if (westNeighbor != null) {
-//			if (!westNeighbor.getCellType().equals(CellType.wall) || !westNeighbor.getCellType().equals(CellType.barricade)) {
-//				neighborCells.add(westNeighbor);
-//			}
-//		}
-//		if (southNeighbor != null) {
-//			if (!southNeighbor.getCellType().equals(CellType.wall) || !southNeighbor.getCellType().equals(CellType.barricade)) {
-//				neighborCells.add(southNeighbor);
-//			}
-//		}
-//		while (neighborCells.size() > 0) {
-//			Random random = new Random();
-//			int choice = Math.abs(random.nextInt()) % neighborCells.size();
-//			currentCell = neighborCells.get(choice);
-//			currentCell.setCellType(CellType.path);
-//			Point currentCellLocation = currentCell.getLocation();
-//			random = new Random();
-//			int choice2;
-//			boolean status = true;
-//			while (status) { //This loop chooses from 1 of the 4 neighboring cells of the chosen neighborCell and connects tries to connect back to the generated maze structure
-//				choice2 = Math.abs(random.nextInt()) % 4;
-//				switch (choice2) {
-//					case 0 -> {
-//						if ((currentCellLocation.getHeight() + 2 < Height - 1) && maze[currentCellLocation.getHeight() + 2][currentCellLocation.getWidth()].getCellType().equals(CellType.path)) {
-//							maze[currentCellLocation.getHeight() + 1][currentCellLocation.getWidth()].setCellType(CellType.path);
-//							status = false;
-//
-//						}
-//					}
-//					case 1 -> {
-//						if ((currentCellLocation.getHeight() - 2 > 0) && maze[currentCellLocation.getHeight() - 2][currentCellLocation.getWidth()].getCellType().equals(CellType.path)) {
-//							maze[currentCellLocation.getHeight() - 1][currentCellLocation.getWidth()].setCellType(CellType.path);
-//							status = false;
-//						}
-//					}
-//					case 2 -> {
-//						if ((currentCellLocation.getWidth() + 2 < Width - 1) && maze[currentCellLocation.getHeight()][currentCellLocation.getWidth() + 2].getCellType().equals(CellType.path)) {
-//							maze[currentCellLocation.getHeight()][currentCellLocation.getWidth() + 1].setCellType(CellType.path);
-//							status = false;
-//						}
-//					}
-//					case 3 -> {
-//						if ((currentCellLocation.getWidth() - 2 > 0) && maze[currentCellLocation.getHeight()][currentCellLocation.getWidth() - 2].getCellType().equals(CellType.path)) {
-//							maze[currentCellLocation.getHeight()][currentCellLocation.getWidth() - 1].setCellType(CellType.path);
-//							status = false;
-//						}
-//					}
-//				}
-//			}
-//
-//			//this set of 4 if else blocks chooses potential neighbors to be added to the neighborCells list
-//			if (currentCell.getLocation().getHeight() - 2 > 0) {
-//				northNeighbor = maze[currentCell.getLocation().getHeight() - 2][currentCell.getLocation().getWidth()];
-//			} else {
-//				northNeighbor = null;
-//			}
-//			if (currentCell.getLocation().getWidth() + 2 < Width - 1) {
-//				eastNeighbor = maze[currentCell.getLocation().getHeight()][currentCell.getLocation().getWidth() + 2];
-//			} else {
-//				eastNeighbor = null;
-//			}
-//			if (currentCell.getLocation().getWidth() - 2 > 0) {
-//				westNeighbor = maze[currentCell.getLocation().getHeight()][currentCell.getLocation().getWidth() - 2];
-//			} else {
-//				westNeighbor = null;
-//			}
-//			if (currentCell.getLocation().getHeight() + 2 < Height - 1) {
-//				southNeighbor = maze[currentCell.getLocation().getHeight() + 2][currentCell.getLocation().getWidth()];
-//			} else {
-//				southNeighbor = null;
-//			}
-//
-//			//this set of 4 if statements check if the potential neighbors can be added by checking conditions required before adding
-//			if (northNeighbor != null && !northNeighbor.getCellType().equals(CellType.path)) {
-//				if (!northNeighbor.getCellType().equals(CellType.wall) || !northNeighbor.getCellType().equals(CellType.barricade)) {
-//					neighborCells.add(northNeighbor);
-//				}
-//			}
-//			if (eastNeighbor != null && !eastNeighbor.getCellType().equals(CellType.path)) {
-//				if (!eastNeighbor.getCellType().equals(CellType.wall) || !eastNeighbor.getCellType().equals(CellType.barricade)) {
-//					neighborCells.add(eastNeighbor);
-//				}
-//			}
-//			if (westNeighbor != null && !westNeighbor.getCellType().equals(CellType.path)) {
-//				if (!westNeighbor.getCellType().equals(CellType.wall) || !westNeighbor.getCellType().equals(CellType.barricade)) {
-//					neighborCells.add(westNeighbor);
-//				}
-//			}
-//			if (southNeighbor != null && !southNeighbor.getCellType().equals(CellType.path)) {
-//				if (!southNeighbor.getCellType().equals(CellType.wall) || !southNeighbor.getCellType().equals(CellType.barricade)) {
-//					neighborCells.add(southNeighbor);
-//				}
-//			}
-//			neighborCells.remove(choice);
-//		}
-//		for (int i = 1; i < Height - 1; i++) {
-//			maze[i][Width - 2].setCellType(CellType.path);
-//		}
-//		for (int i = 1; i < Width - 1; i++) {
-//			maze[Height - 2][i].setCellType(CellType.path);
-//		}
-//	}
 
 	/**
 	 * Return the ROWS count for maze
