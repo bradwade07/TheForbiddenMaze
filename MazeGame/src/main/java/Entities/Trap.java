@@ -70,6 +70,11 @@ public class Trap extends Entity{
     public void setLocation(Point location) {
         super.setLocation(location);
     }
+
+    /**
+     * get the damage from a trap, calls supers function
+     *
+     */
     public int getDamage(){
         return this.damage;
     }
